@@ -2,7 +2,7 @@
 using System.Text;
 using Microsoft.Extensions.ObjectPool;
 
-namespace SharpSourceFinderCore
+namespace Tokeiya3.SharpSourceFinderCore
 {
 	public interface IDiscriminatedElement
 	{
