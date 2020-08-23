@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.ObjectPool;
 
@@ -6,10 +6,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public interface IDiscriminatedElement
 	{
-		public static ObjectPool<StringBuilder> StringBuilderPool { get; } =
-			new DefaultObjectPool<StringBuilder>(new StringBuilderPooledObjectPolicy());
-
-		public static IDiscriminatedElement Root { get; } = new ImaginaryRoot();
 
 		string Identity { get; }
 
@@ -20,19 +16,13 @@ namespace Tokeiya3.SharpSourceFinderCore
 		void Describe(StringBuilder stringBuilder);
 		string Describe();
 
-		private class ImaginaryRoot : IDiscriminatedElement
-		{
-			public void Describe(StringBuilder stringBuilder) =>
-				throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support any methods and properties.");
+		IEnumerable<IDiscriminatedElement> Ancestors();
+		IEnumerable<IDiscriminatedElement> AncestorsAndSelf();
 
-			public string Describe() =>
-				throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support any methods and properties.");
+		IEnumerable<IDiscriminatedElement> Children();
+		IEnumerable<IDiscriminatedElement> Descendants();
+		IEnumerable<IDiscriminatedElement> DescendantsAndSelf();
 
-			public string Identity =>
-				throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support any methods and properties.");
 
-			public IDiscriminatedElement Parent =>
-				throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support any methods and properties.");
-		}
 	}
 }

@@ -4,17 +4,17 @@ using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
-using static Tokeiya3.SharpSourceFinderCore.IDiscriminatedElement;
+using static Tokeiya3.SharpSourceFinderCore.DiscriminatedElement;
 
 
 namespace SharpSourceFinderCoreTests
 {
 	// ReSharper disable once InconsistentNaming
-	public class IDiscriminatedElementTests
+	public class ImaginaryRootTests
 	{
 		private readonly ITestOutputHelper _output;
 
-		public IDiscriminatedElementTests(ITestOutputHelper output) => _output = output;
+		public ImaginaryRootTests(ITestOutputHelper output) => _output = output;
 
 		[Fact]
 		public void RootTest()
@@ -24,16 +24,14 @@ namespace SharpSourceFinderCoreTests
 
 			Assert.Throws<NotSupportedException>(() => Root.Describe());
 			Assert.Throws<NotSupportedException>(() => Root.Describe(new StringBuilder()));
-		}
 
-		[Fact]
-		public void StringBuilderPoolTest()
-		{
-			var bld = StringBuilderPool.Get();
-			bld.Append("hello world");
+			Assert.Throws<NotSupportedException>(() => Root.Ancestors());
+			Assert.Throws<NotSupportedException>(() => Root.AncestorsAndSelf());
 
-			StringBuilderPool.Return(bld);
-			bld.Length.Is(0);
+			Assert.Throws<NotSupportedException>(() => Root.Descendants());
+			Assert.Throws<NotSupportedException>(() => Root.DescendantsAndSelf());
+
+			Assert.Throws<NotSupportedException>(() => Root.Children());
 
 		}
 

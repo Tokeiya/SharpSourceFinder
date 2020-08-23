@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="IDiscriminatedElement.cs~RF1beed8c2.TMP" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.7.0" />
 		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="3.1.7" />
 	</ItemGroup>
