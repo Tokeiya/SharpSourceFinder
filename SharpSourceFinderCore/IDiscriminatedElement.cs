@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using Microsoft.Extensions.ObjectPool;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
 	public interface IDiscriminatedElement
 	{
-
 		string Identity { get; }
 
 		IDiscriminatedElement Parent { get; }
@@ -22,7 +20,5 @@ namespace Tokeiya3.SharpSourceFinderCore
 		IEnumerable<IDiscriminatedElement> Children();
 		IEnumerable<IDiscriminatedElement> Descendants();
 		IEnumerable<IDiscriminatedElement> DescendantsAndSelf();
-
-
 	}
 }

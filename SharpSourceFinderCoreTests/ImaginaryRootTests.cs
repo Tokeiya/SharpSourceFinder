@@ -1,7 +1,5 @@
 using System;
 using System.Text;
-using ChainingAssertion;
-using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
 using static Tokeiya3.SharpSourceFinderCore.DiscriminatedElement;
@@ -32,9 +30,6 @@ namespace SharpSourceFinderCoreTests
 			Assert.Throws<NotSupportedException>(() => Root.DescendantsAndSelf());
 
 			Assert.Throws<NotSupportedException>(() => Root.Children());
-
 		}
-
-
 	}
 }

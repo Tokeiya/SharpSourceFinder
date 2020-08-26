@@ -33,6 +33,5 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public IDiscriminatedElement Parent =>
 			throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support any methods and properties.");
-
 	}
 }

@@ -1,15 +1,12 @@
-﻿using Xunit;
-using Tokeiya3.SharpSourceFinderCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using ChainingAssertion;
+using Xunit;
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests
 {
 	public class SourceFileTests
 	{
-		[Fact()]
+		[Fact]
 		public void SourceFileTest()
 		{
 			var expected = @"G:\Some\Bar.cs";
@@ -19,7 +16,6 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 
 			Assert.Throws<ArgumentException>(() => new SourceFile(""));
 			Assert.Throws<ArgumentException>(() => new SourceFile("  "));
-
 		}
 	}
 }

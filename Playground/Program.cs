@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace Playground
 {
@@ -13,16 +12,10 @@ namespace Playground
 			{
 				var elem = root.AddChild(i.ToString());
 
-				for (int j = 0; j < 5; j++)
-				{
-					elem.AddChild((j + 10).ToString());
-				}
+				for (int j = 0; j < 5; j++) elem.AddChild((j + 10).ToString());
 			}
 
-			foreach (var elem in root.FullScratch())
-			{
-				Console.WriteLine($"{elem?.Root?.Path??"root"} {elem.Path}");	
-			}
+			foreach (var elem in root.FullScratch()) Console.WriteLine($"{elem?.Root?.Path ?? "root"} {elem.Path}");
 		}
 	}
 }

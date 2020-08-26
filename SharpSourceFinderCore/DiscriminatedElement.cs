@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using System.Text;
-using System.Threading;
 using Microsoft.Extensions.ObjectPool;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public abstract class DiscriminatedElement:IDiscriminatedElement
+	public abstract class DiscriminatedElement : IDiscriminatedElement
 	{
-		public static IDiscriminatedElement Root { get; } = new ImaginaryRoot();
-
-		protected static ObjectPool<StringBuilder> StringBuilderPool { get; } = new DefaultObjectPool<StringBuilder>(new StringBuilderPooledObjectPolicy());
-
-
 		protected DiscriminatedElement(string identity) => (Parent, Identity) = (Root, identity);
 
 		protected DiscriminatedElement(IDiscriminatedElement parent, string identity)
 		{
-			if(parent is ImaginaryRoot) throw new ArgumentException($"parent can't accept DiscriminatedElement.Root .");
+			if (parent is ImaginaryRoot) throw new ArgumentException("parent can't accept DiscriminatedElement.Root .");
 			(Parent, Identity) = (parent, identity);
-
 		}
+
+		public static IDiscriminatedElement Root { get; } = new ImaginaryRoot();
+
+		protected static ObjectPool<StringBuilder> StringBuilderPool { get; } =
+			new DefaultObjectPool<StringBuilder>(new StringBuilderPooledObjectPolicy());
+
 		public string Identity { get; }
 		public IDiscriminatedElement Parent { get; }
 		public abstract void Describe(StringBuilder stringBuilder);
@@ -34,7 +32,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 			{
 				Describe(bld);
 				return bld.ToString();
-
 			}
 			finally
 			{
@@ -44,22 +41,16 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public IEnumerable<IDiscriminatedElement> Ancestors()
 		{
-			if(Parent is ImaginaryRoot) yield break;
+			if (Parent is ImaginaryRoot) yield break;
 
-			for (var piv=Parent;!(piv is ImaginaryRoot);piv=piv.Parent)
-			{
-				yield return piv;
-			}
+			for (var piv = Parent; !(piv is ImaginaryRoot); piv = piv.Parent) yield return piv;
 		}
 
 		public IEnumerable<IDiscriminatedElement> AncestorsAndSelf()
 		{
 			yield return this;
 
-			foreach (var elem in Ancestors())
-			{
-				yield return elem;
-			}
+			foreach (var elem in Ancestors()) yield return elem;
 		}
 
 		public abstract IEnumerable<IDiscriminatedElement> Children();
@@ -70,11 +61,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 			yield return this;
 
-			foreach (var elem in Descendants())
-			{
-				yield return elem;
-			}
+			foreach (var elem in Descendants()) yield return elem;
 		}
-
 	}
 }
