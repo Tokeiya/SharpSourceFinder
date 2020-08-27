@@ -1,21 +1,45 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Tokeiya3.SharpSourceFinderCore;
 
 namespace Playground
 {
+	class Hoge : CSharpSyntaxVisitor<IDiscriminatedElement>
+	{
+		public override IDiscriminatedElement Visit(SyntaxNode? node)
+		{
+			return base.Visit(node);
+		}
+
+		public override IDiscriminatedElement VisitUsingDirective(UsingDirectiveSyntax node)
+		{
+
+			return base.VisitUsingDirective(node);
+		}
+	}
+
+	class Walker : CSharpSyntaxWalker
+	{
+		public override void VisitUsingDirective(UsingDirectiveSyntax node)
+		{
+			var tmp = node.Name.ChildTokens().First();
+
+			base.VisitUsingDirective(node);
+		}
+	}
 	class Program
 	{
 		static void Main(string[] args)
 		{
-			var root = new Folder(null, "root");
+			var scr = File.ReadAllText("ParseSample.cs");
 
-			for (int i = 0; i < 5; i++)
-			{
-				var elem = root.AddChild(i.ToString());
+			var tree = CSharpSyntaxTree.ParseText(scr);
 
-				for (int j = 0; j < 5; j++) elem.AddChild((j + 10).ToString());
-			}
-
-			foreach (var elem in root.FullScratch()) Console.WriteLine($"{elem?.Root?.Path ?? "root"} {elem.Path}");
+			var list = tree.GetCompilationUnitRoot().ChildNodes().OfType<UsingDirectiveSyntax>().Select(x=>x.Name).ToList();
 		}
 	}
 }

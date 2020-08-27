@@ -97,7 +97,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			{
 			}
 
-			public override string ToString() => Identity;
+			public override string ToString() => Representation;
 		}
 	}
 }

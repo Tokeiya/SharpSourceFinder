@@ -5,7 +5,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public interface IDiscriminatedElement
 	{
-		string Identity { get; }
+		string Representation { get; }
 
 		IDiscriminatedElement Parent { get; }
 

@@ -18,7 +18,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override void Describe(StringBuilder stringBuilder)
 		{
-			foreach (var elem in ChildElements) stringBuilder.Append(elem.Identity).Append('.');
+			foreach (var elem in ChildElements) stringBuilder.Append(elem.Representation).Append('.');
 
 			stringBuilder.Extract(..(stringBuilder.Length - 1));
 		}

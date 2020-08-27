@@ -21,9 +21,9 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			var actual = names.Descendants().ToArray();
 			actual.Length.Is(3);
 
-			actual[0].Identity.Is("System");
-			actual[1].Identity.Is("Collections");
-			actual[2].Identity.Is("Generics");
+			actual[0].Representation.Is("System");
+			actual[1].Representation.Is("Collections");
+			actual[2].Representation.Is("Generics");
 		}
 
 		[Fact]

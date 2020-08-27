@@ -8,6 +8,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 		}
 
-		public override void Describe(StringBuilder stringBuilder) => stringBuilder.Append(Identity);
+		public override void Describe(StringBuilder stringBuilder) => stringBuilder.Append(Representation);
 	}
 }

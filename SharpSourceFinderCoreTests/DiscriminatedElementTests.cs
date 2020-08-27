@@ -9,13 +9,13 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 {
 	public class DiscriminatedElementTests
 	{
-		private const string ExpectedIdentity = "ExpectedSample";
-		private const string ExpectedParentIdentity = "ExpectedParent";
+		private const string ExpectedRepresentation = "ExpectedSample";
+		private const string ExpectedParentRepresentation = "ExpectedParent";
 
 
-		private static readonly IDiscriminatedElement ExpectedParent = new TestTarget(ExpectedParentIdentity);
+		private static readonly IDiscriminatedElement ExpectedParent = new TestTarget(ExpectedParentRepresentation);
 
-		private static IDiscriminatedElement CreateExpectedSample() => new TestTarget(ExpectedParent, ExpectedIdentity);
+		private static IDiscriminatedElement CreateExpectedSample() => new TestTarget(ExpectedParent, ExpectedRepresentation);
 
 
 		[Fact]
@@ -30,7 +30,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		[Fact]
 		public void DescribeTest()
 		{
-			CreateExpectedSample().Describe().Is(ExpectedIdentity);
+			CreateExpectedSample().Describe().Is(ExpectedRepresentation);
 		}
 
 
@@ -72,6 +72,14 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			expected[0].Is(element);
 		}
 
+		[Fact]
+		public void RepresentationTest()
+		{
+			var element = CreateExpectedSample();
+			element.Representation.Is(ExpectedRepresentation);
+		}
+
+
 		class TestTarget : DiscriminatedElement
 		{
 			public TestTarget(string identity) : base(identity)
@@ -84,7 +92,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 
 			public bool DescendantsFlag { get; private set; }
 
-			public override void Describe(StringBuilder stringBuilder) => stringBuilder.Append(Identity);
+			public override void Describe(StringBuilder stringBuilder) => stringBuilder.Append(Representation);
 
 
 			public override IEnumerable<IDiscriminatedElement> Children() => throw new NotSupportedException();
