@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ChainingAssertion;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ChainingAssertion;
 using Xunit;
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests

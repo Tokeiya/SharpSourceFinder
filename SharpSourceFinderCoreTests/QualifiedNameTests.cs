@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using ChainingAssertion;
+using System.Linq;
 using System.Text;
-using ChainingAssertion;
 using Xunit;
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests

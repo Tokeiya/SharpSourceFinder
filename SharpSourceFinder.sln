@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSourceFinderCore", "SharpSourceFinderCore\SharpSourceFinderCore.csproj", "{1127EE31-7E3F-42DA-AF49-802BF960A980}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpSourceFinderCore", "SharpSourceFinderCore\SharpSourceFinderCore.csproj", "{1127EE31-7E3F-42DA-AF49-802BF960A980}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground", "Playground\Playground.csproj", "{9944B840-6B99-4CB8-9C2F-55CDA0864138}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground", "Playground\Playground.csproj", "{9944B840-6B99-4CB8-9C2F-55CDA0864138}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSourceFinderCoreTests", "SharpSourceFinderCoreTests\SharpSourceFinderCoreTests.csproj", "{7F57B1CB-4197-46A0-8A19-104DC1D684F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpSourceFinderCoreTests", "SharpSourceFinderCoreTests\SharpSourceFinderCoreTests.csproj", "{7F57B1CB-4197-46A0-8A19-104DC1D684F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

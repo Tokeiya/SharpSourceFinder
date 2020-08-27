@@ -1,6 +1,6 @@
-﻿using System;
+﻿using ChainingAssertion;
+using System;
 using System.Text;
-using ChainingAssertion;
 using Xunit;
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests
@@ -10,7 +10,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		private const string SamplePath = @"G:\Some\Bar.cs";
 
 		static SourceFile CreateDefaultSample(string path = SamplePath) => new SourceFile(path);
-			[Fact]
+		[Fact]
 		public void CtorTest()
 		{
 			var actual = CreateDefaultSample();
