@@ -2,9 +2,9 @@
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class NameExpressionElement : TerminalElement
+	public sealed class IdentityName : TerminalElement
 	{
-		internal NameExpressionElement(NamesElements parent, string identity) : base(parent, identity)
+		internal IdentityName(QualifiedName parent, string identity) : base(parent, identity)
 		{
 		}
 

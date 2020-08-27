@@ -5,13 +5,13 @@ using Xunit;
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests
 {
-	public class NamesElementsTests
+	public class IdentityNameTests
 	{
 		[Fact]
 		public void AddTest()
 		{
 			var root = new MultiDescendantsElementTests.TestSample("root");
-			var names = new NamesElements(root, "identity");
+			var names = new QualifiedName(root, "identity");
 
 			names.Add("System");
 			names.Add("Collections");
@@ -30,7 +30,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		public void DescribeTest()
 		{
 			var root = new MultiDescendantsElementTests.TestSample("root");
-			var names = new NamesElements(root, "identity");
+			var names = new QualifiedName(root, "identity");
 
 			names.Add("System");
 			names.Add("Collections");

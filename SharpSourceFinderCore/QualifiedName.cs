@@ -3,15 +3,15 @@ using Tokeiya3.StringManipulator;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class NamesElements : MultiDescendantsElement<NameExpressionElement>
+	public sealed class QualifiedName : MultiDescendantsElement<IdentityName>
 	{
-		internal NamesElements(IDiscriminatedElement parent, string identity) : base(parent, identity)
+		internal QualifiedName(IDiscriminatedElement parent, string identity) : base(parent, identity)
 		{
 		}
 
-		public NameExpressionElement Add(string name)
+		public IdentityName Add(string name)
 		{
-			var ret = new NameExpressionElement(this, name);
+			var ret = new IdentityName(this, name);
 			Add(ret);
 			return ret;
 		}

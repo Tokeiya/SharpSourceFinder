@@ -4,15 +4,15 @@ using Xunit;
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests
 {
-	public class NameExpressionElementTests
+	public class QualifiedNameTests
 	{
 		[Fact]
 		public void DescribeTest()
 		{
 			var root = new MultiDescendantsElementTests.TestSample("root");
-			var names = new NamesElements(root, "names");
+			var names = new QualifiedName(root, "names");
 
-			var actual = new NameExpressionElement(names, "System");
+			var actual = new IdentityName(names, "System");
 			var bld = new StringBuilder();
 
 			actual.Describe(bld);
