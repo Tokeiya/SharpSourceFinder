@@ -1,11 +1,12 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Tokeiya3.StringManipulator;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class QualifiedName : MultiDescendantsElement<IdentityName>
 	{
-		internal QualifiedName(IDiscriminatedElement parent, string identity) : base(parent, identity)
+		internal QualifiedName(IDiscriminatedElement parent) : base(parent, String.Empty)
 		{
 		}
 
