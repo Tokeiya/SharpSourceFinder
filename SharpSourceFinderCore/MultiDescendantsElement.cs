@@ -8,11 +8,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 	{
 		private readonly List<T> _children = new List<T>();
 
-		protected MultiDescendantsElement(string identity) : base(identity)
+		protected MultiDescendantsElement() : base()
 		{
 		}
 
-		protected MultiDescendantsElement(IDiscriminatedElement parent, string identity) : base(parent, identity)
+		protected MultiDescendantsElement(IDiscriminatedElement parent) : base(parent)
 		{
 		}
 

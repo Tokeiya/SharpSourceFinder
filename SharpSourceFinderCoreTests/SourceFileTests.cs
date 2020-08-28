@@ -28,11 +28,6 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			actual.Path.Is(SamplePath);
 		}
 
-		[Fact]
-		public void RepresentationTest()
-		{
-			CreateDefaultSample().Representation.Is(string.Empty);
-		}
 
 		[Fact]
 		public void DescribeTest()

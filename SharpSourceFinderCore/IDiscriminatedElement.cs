@@ -5,8 +5,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public interface IDiscriminatedElement
 	{
-		string Representation { get; }
-
 		IDiscriminatedElement Parent { get; }
 
 		public static bool IsImaginaryRoot(IDiscriminatedElement element) => element is ImaginaryRoot;

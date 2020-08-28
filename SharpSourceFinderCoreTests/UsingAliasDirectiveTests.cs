@@ -35,7 +35,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			var actual = sample.Children().ToArray();
 
 			(actual[0] is IdentityName).IsTrue();
-			actual[0].Representation.Is("io");
+			((IdentityName)actual[0]).Identity.Is("io");
 
 			(actual[1] is QualifiedName).IsTrue();
 
@@ -48,15 +48,15 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			actual.Length.Is(4);
 
 			(actual[0] is IdentityName).IsTrue();
-			actual[0].Representation.Is("io");
+			((IdentityName)actual[0]).Identity.Is("io");
 
 			(actual[1] is QualifiedName).IsTrue();
 
 			(actual[2] is IdentityName).IsTrue();
-			actual[2].Representation.Is("System");
+			((IdentityName)actual[2]).Identity.Is("System");
 
 			(actual[3] is IdentityName).IsTrue();
-			actual[3].Representation.Is("IO");
+			((IdentityName)actual[3]).Identity.Is("IO");
 		}
 
 		[Fact()]

@@ -7,12 +7,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public abstract class DiscriminatedElement : IDiscriminatedElement
 	{
-		protected DiscriminatedElement(string identity) => (Parent, Representation) = (Root, identity);
+		protected DiscriminatedElement() => Parent = Root;
 
-		protected DiscriminatedElement(IDiscriminatedElement parent, string identity)
+		protected DiscriminatedElement(IDiscriminatedElement parent)
 		{
 			if (parent is ImaginaryRoot) throw new ArgumentException("parent can't accept DiscriminatedElement.Root .");
-			(Parent, Representation) = (parent, identity);
+			Parent = parent;
 		}
 
 		public static IDiscriminatedElement Root { get; } = new ImaginaryRoot();
@@ -20,7 +20,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 		protected static ObjectPool<StringBuilder> StringBuilderPool { get; } =
 			new DefaultObjectPool<StringBuilder>(new StringBuilderPooledObjectPolicy());
 
-		public string Representation { get; }
 		public IDiscriminatedElement Parent { get; }
 		public abstract void Describe(StringBuilder stringBuilder);
 

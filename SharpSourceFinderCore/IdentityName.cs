@@ -5,11 +5,15 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class IdentityName : TerminalElement
 	{
-		internal IdentityName(IDiscriminatedElement parent, string name) : base(parent, name)
+		internal IdentityName(IDiscriminatedElement parent, string identity) : base(parent)
 		{
-			if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException($"{nameof(name)} isn't accept empty or whitespace.");
+			if (string.IsNullOrWhiteSpace(identity)) throw new ArgumentException($"{nameof(identity)} isn't accept empty or whitespace.");
+			Identity = identity;
+
 		}
 
-		public override void Describe(StringBuilder stringBuilder) => stringBuilder.Append(Representation);
+		public string Identity { get; }
+
+		public override void Describe(StringBuilder stringBuilder) => stringBuilder.Append(Identity);
 	}
 }

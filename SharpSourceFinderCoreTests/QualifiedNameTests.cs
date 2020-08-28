@@ -18,12 +18,12 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			names.Add("Generics");
 
 
-			var actual = names.Descendants().ToArray();
+			var actual = names.Descendants().Cast<IdentityName>().ToArray();
 			actual.Length.Is(3);
 
-			actual[0].Representation.Is("System");
-			actual[1].Representation.Is("Collections");
-			actual[2].Representation.Is("Generics");
+			actual[0].Identity.Is("System");
+			actual[1].Identity.Is("Collections");
+			actual[2].Identity.Is("Generics");
 		}
 
 		[Fact]

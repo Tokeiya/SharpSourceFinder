@@ -30,11 +30,11 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 
 		private class TestSample : TerminalElement
 		{
-			public TestSample(IDiscriminatedElement parent, string identity) : base(parent, identity)
-			{
-			}
+			public TestSample(IDiscriminatedElement parent, string identity) : base(parent) => Identity = identity;
 
-			public override void Describe(StringBuilder stringBuilder) => stringBuilder.Append(Representation);
+			private string Identity { get; }
+
+			public override void Describe(StringBuilder stringBuilder) => stringBuilder.Append(Identity);
 		}
 	}
 }

@@ -58,10 +58,10 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			(array[0] is QualifiedName).IsTrue();
 
 			(array[1] is IdentityName).IsTrue();
-			array[1].Representation.Is("System");
+			((IdentityName)array[1]).Identity.Is("System");
 
 			(array[2] is IdentityName).IsTrue();
-			array[2].Representation.Is("Linq");
+			((IdentityName)array[2]).Identity.Is("Linq");
 
 		}
 	}

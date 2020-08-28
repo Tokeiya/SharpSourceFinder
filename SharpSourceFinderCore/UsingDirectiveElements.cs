@@ -7,7 +7,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 	{
 		protected readonly QualifiedName _qualifiedNames;
 
-		public UsingDirective(IDiscriminatedElement parent, params string[] names) : base(parent, string.Empty)
+		public UsingDirective(IDiscriminatedElement parent, params string[] names) : base(parent)
 		{
 			_qualifiedNames = new QualifiedName(this);
 

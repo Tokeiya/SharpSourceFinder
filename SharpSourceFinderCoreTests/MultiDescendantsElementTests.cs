@@ -76,15 +76,12 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 
 		internal class TestSample : MultiDescendantsElement<TestSample>
 		{
-			public TestSample(string identity) : base(identity)
-			{
-			}
-
-			public TestSample(IDiscriminatedElement parent, string identity) : base(parent, identity)
-			{
-			}
+			public TestSample(string identity) => Identity = identity;
+			public TestSample(IDiscriminatedElement parent, string identity) : base(parent) => Identity = identity;
 
 			public IReadOnlyList<IDiscriminatedElement> Elements => ChildElements;
+
+			public string Identity { get; }
 
 			public TestSample Add(string identity)
 			{
@@ -97,7 +94,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			{
 			}
 
-			public override string ToString() => Representation;
+			public override string ToString() => Identity;
 		}
 	}
 }

@@ -18,7 +18,6 @@ namespace SharpSourceFinderCoreTests
 		public void RootTest()
 		{
 			Assert.Throws<NotSupportedException>(() => Root.Parent);
-			Assert.Throws<NotSupportedException>(() => Root.Representation);
 
 			Assert.Throws<NotSupportedException>(() => Root.Describe());
 			Assert.Throws<NotSupportedException>(() => Root.Describe(new StringBuilder()));

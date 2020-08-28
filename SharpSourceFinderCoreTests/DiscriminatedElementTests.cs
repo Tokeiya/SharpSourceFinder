@@ -72,27 +72,18 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			expected[0].Is(element);
 		}
 
-		[Fact]
-		public void RepresentationTest()
-		{
-			var element = CreateExpectedSample();
-			element.Representation.Is(ExpectedRepresentation);
-		}
-
-
 		class TestTarget : DiscriminatedElement
 		{
-			public TestTarget(string identity) : base(identity)
-			{
-			}
+			public TestTarget(string identity) => Identity = identity;
 
-			public TestTarget(IDiscriminatedElement parent, string identity) : base(parent, identity)
-			{
-			}
+			public TestTarget(IDiscriminatedElement parent, string identity) : base(parent) => Identity = identity;
+
+
+			public string Identity { get; }
 
 			public bool DescendantsFlag { get; private set; }
 
-			public override void Describe(StringBuilder stringBuilder) => stringBuilder.Append(Representation);
+			public override void Describe(StringBuilder stringBuilder) => stringBuilder.Append(Identity);
 
 
 			public override IEnumerable<IDiscriminatedElement> Children() => throw new NotSupportedException();

@@ -5,7 +5,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public abstract class TerminalElement : DiscriminatedElement
 	{
-		protected TerminalElement(IDiscriminatedElement parent, string identity) : base(parent, identity)
+		protected TerminalElement(IDiscriminatedElement parent) : base(parent)
 		{
 		}
 
