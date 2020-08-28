@@ -13,7 +13,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 			stringBuilder.Append("using static ");
 			_qualifiedNames.Describe(stringBuilder);
 			stringBuilder.Append(';');
-
 		}
 	}
 
