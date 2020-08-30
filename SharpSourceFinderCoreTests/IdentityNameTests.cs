@@ -1,8 +1,11 @@
 ﻿using Tokeiya3.SharpSourceFinderCore;
 using ChainingAssertion;
 using System;
+using System.Linq;
 using System.Text;
 using Xunit;
+using static SharpSourceFinderCoreTests.EquivalentTestHelper<Tokeiya3.SharpSourceFinderCore.IdentityName>;
+
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests
 {
@@ -20,38 +23,31 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		[Fact]
 		public void DescribeTest()
 		{
-			var root = new MultiDescendantsElementTests.TestSample("root");
-			var names = new QualifiedName(root);
+			var root = CreateStandardSample();
+			var name = new IdentityName(root, SampleNameSpace);
 
-			var actual = new IdentityName(names, "System");
-			var bld = new StringBuilder();
+			name.Describe().Is(SampleNameSpace);
 
-			actual.Describe(bld);
-			bld.ToString().Is("System");
 		}
 
 		[Fact]
 		public void InvalidNameTest()
 		{
-			var root = new SourceFile("G:\\Hoge\\Piyo.cs");
-			var names = new QualifiedName(root);
+			var root = CreateStandardSample();
 
-			Assert.Throws<ArgumentException>(() => names.Add(""));
-			Assert.Throws<ArgumentException>(() => names.Add("  "));
-			Assert.Throws<ArgumentException>(() => names.Add("\n"));
-
-
+			Assert.Throws<ArgumentException>(() => new IdentityName(root,""));
+			Assert.Throws<ArgumentException>(() => new IdentityName(root," "));
+			Assert.Throws<ArgumentException>(() => new IdentityName(root, "\t"));
 		}
 
 		[Fact()]
 		public void EqualsTest()
 		{
-			var expectedName = CreateStandardSample();
-			
-			var pivot = new IdentityName(expectedName, "Tokeiya3");
+			var ns = CreateStandardSample();
+			var piv = new IdentityName(ns, "Tokeiya3");
 
-
-			Assert.True(false, "This test needs an implementation");
+#warning EqualsTest_Is_NotImpl
+			throw new NotImplementedException("EqualsTest is not implemented");
 		}
 
 		[Fact()]
