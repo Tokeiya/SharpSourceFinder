@@ -8,6 +8,15 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 {
 	public class IdentityNameTests
 	{
+		const string SamplePath = @"G:\Hoge\Moge.cs";
+		const string SampleNameSpace = "Tokeiya3";
+
+
+		static NameSpace CreateStandardSample(string path = SamplePath)
+		{
+			var file = new SourceFile(path);
+			return new NameSpace(file);
+		}
 		[Fact]
 		public void DescribeTest()
 		{
@@ -37,6 +46,11 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		[Fact()]
 		public void EqualsTest()
 		{
+			var expectedName = CreateStandardSample();
+			
+			var pivot = new IdentityName(expectedName, "Tokeiya3");
+
+
 			Assert.True(false, "This test needs an implementation");
 		}
 
