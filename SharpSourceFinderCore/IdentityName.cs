@@ -15,5 +15,30 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public string Identity { get; }
 
 		public override void Describe(StringBuilder stringBuilder) => stringBuilder.Append(Identity);
+
+		public override bool Equals(object obj)
+		{
+#warning Equals_Is_NotImpl
+			throw new NotImplementedException("Equals is not implemented");
+		}
+
+		public override int GetHashCode()
+		{
+#warning GetHashCode_Is_NotImpl
+			throw new NotImplementedException("GetHashCode is not implemented");
+		}
+
+		public static bool operator ==(IdentityName x,IdentityName y)
+		{
+#warning ==_Is_NotImpl
+			throw new NotImplementedException("== is not implemented");
+		}
+
+		public static bool operator !=(IdentityName x, IdentityName y)
+		{
+#warning !=_Is_NotImpl
+			throw new NotImplementedException("!= is not implemented");
+		}
+
 	}
 }

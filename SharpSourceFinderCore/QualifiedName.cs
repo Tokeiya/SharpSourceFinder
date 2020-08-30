@@ -27,5 +27,29 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 			stringBuilder.Extract(..(stringBuilder.Length - 1));
 		}
+
+		public override bool Equals(object obj)
+		{
+#warning Equals_Is_NotImpl
+			throw new NotImplementedException("Equals is not implemented");
+		}
+
+		public override int GetHashCode()
+		{
+#warning GetHashCode_Is_NotImpl
+			throw new NotImplementedException("GetHashCode is not implemented");
+		}
+
+		public static bool operator ==(QualifiedName x, QualifiedName y)
+		{
+#warning ==_Is_NotImpl
+			throw new NotImplementedException("== is not implemented");
+		}
+
+		public static bool operator !=(QualifiedName x, QualifiedName y)
+		{
+#warning !=_Is_NotImpl
+			throw new NotImplementedException("!= is not implemented");
+		}
 	}
 }

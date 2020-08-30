@@ -1,4 +1,6 @@
-﻿using ChainingAssertion;
+﻿using System;
+using Tokeiya3.SharpSourceFinderCore;
+using ChainingAssertion;
 using System.Linq;
 using System.Text;
 using Xunit;
@@ -41,5 +43,33 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			bld.ToString().Is("System.Collections.Generics");
 			names.Describe().Is("System.Collections.Generics");
 		}
+
+		[Fact()]
+		public void GetHashCodeTest()
+		{
+			Assert.True(false, "This test needs an implementation");
+		}
+
+		[Fact()]
+		public void EqualsTest()
+		{
+			Assert.True(false, "This test needs an implementation");
+		}
+
+		[Fact]
+		public void OpEqTest()
+		{
+#warning OpEqTest_Is_NotImpl
+			throw new NotImplementedException("OpEqTest is not implemented");
+		}
+
+		[Fact]
+		public void OpNotEqTest()
+		{
+#warning OpNotEqTest_Is_NotImpl
+			throw new NotImplementedException("OpNotEqTest is not implemented");
+		}
+
+
 	}
 }
