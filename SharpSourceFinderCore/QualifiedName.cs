@@ -10,7 +10,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 		}
 
-		public IdentityName Add(string name)
+		internal IdentityName Add(string name)
 		{
 			var ret = new IdentityName(this, name);
 			Add(ret);
