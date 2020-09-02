@@ -12,13 +12,17 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 	public class IdentityNameTests
 	{
 		const string SamplePath = @"G:\Hoge\Moge.cs";
+		const string AnotherPath = @"G:\Foo\Bar.cs";
+
 		const string SampleNameSpace = "Tokeiya3";
+		const string AnotherNameSpace = "時計屋";
 
 
-		static NameSpace CreateStandardSample(string path = SamplePath)
+		static SourceFile CreateStandardSample(string path = SamplePath)
 		{
 			var file = new SourceFile(path);
-			return new NameSpace(file);
+			//return new NameSpace(file);
+			return file;
 		}
 		[Fact]
 		public void DescribeTest()
@@ -44,23 +48,53 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		public void EqualsTest()
 		{
 			var ns = CreateStandardSample();
-			var piv = new IdentityName(ns, "Tokeiya3");
 
-#warning EqualsTest_Is_NotImpl
-			throw new NotImplementedException("EqualsTest is not implemented");
+			var x = new IdentityName(ns, SampleNameSpace);
+			var y = new IdentityName(ns, SampleNameSpace);
+
+			IsObjectEqual(x, y);
+			IsObjectEqual(x, x);
+
+			IsObjectEqual(x, new IdentityName(new SourceFile(AnotherPath), SampleNameSpace));
+
+			IsObjectNotEqual(x, SampleNameSpace);
+			IsObjectNotEqual(x,new IdentityName(ns,AnotherNameSpace));
 		}
+
 
 		[Fact()]
 		public void GetHashCodeTest()
 		{
-			Assert.True(false, "This test needs an implementation");
+			var ns = CreateStandardSample();
+			var x = new IdentityName(ns, SampleNameSpace);
+			var y = new IdentityName(ns, SampleNameSpace);
+
+			HashEqual(x, y);
+			HashEqual(x, new IdentityName(new SourceFile(AnotherPath), SampleNameSpace));
+			HashNotEqual(x, new IdentityName(ns, AnotherNameSpace));
 		}
 
 		[Fact]
 		public void OpEqTest()
 		{
-#warning OpEqTest_Is_NotImpl
-			throw new NotImplementedException("OpEqTest is not implemented");
+			var ns = CreateStandardSample();
+			var x = new IdentityName(ns, SampleNameSpace);
+			var y = new IdentityName(ns, SampleNameSpace);
+
+			IsEqual(x, y);
+			IsEqual(x, x);
+
+			IsEqual(x, new IdentityName(new SourceFile(AnotherPath), SampleNameSpace));
+		}
+
+		[Fact]
+		public void OpInEqTest()
+		{
+			var ns = CreateStandardSample();
+			var piv = new IdentityName(ns, SampleNameSpace);
+
+			IsNotEqual(piv, new IdentityName(ns, AnotherNameSpace));
+
 		}
 
 
