@@ -63,11 +63,6 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			throw new NotImplementedException("OpEqTest is not implemented");
 		}
 
-		[Fact]
-		public void OpNotEqTest()
-		{
-			
-		}
 
 	}
 }
