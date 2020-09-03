@@ -22,9 +22,15 @@ namespace SharpSourceFinderCoreTests
 			var parameters = new[] {typeof(T), typeof(T)};
 
 			var method = typeof(T).GetMethod("op_Equality", parameters);
+
+			if (method?.IsSpecialName ?? false) throw new XunitException("op_Equality not found.");
 			OpEqualityInvoker = (Func<T, T, bool>)(method?.CreateDelegate(typeof(Func<T, T, bool>)) ?? throw new XunitException("op_Equality not found."));
 
+
+
 			method = typeof(T).GetMethod("op_Inequality", parameters);
+
+			if(method?.IsSpecialName??false) throw new XunitException("op_Inequality not found.");
 			OpInequalityInvoker = (Func<T, T, bool>)(method?.CreateDelegate(typeof(Func<T, T, bool>)) ?? throw new XunitException("op_Inequality not found."));
 		}
 
