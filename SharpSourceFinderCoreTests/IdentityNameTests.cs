@@ -1,14 +1,75 @@
 ﻿using Tokeiya3.SharpSourceFinderCore;
 using ChainingAssertion;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using SharpSourceFinderCoreTests;
 using Xunit;
 using static SharpSourceFinderCoreTests.EquivalentTestHelper<Tokeiya3.SharpSourceFinderCore.IdentityName>;
 
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests
 {
+	public class IdentityEquatabilityTest : EquatabilityTester<IdentityName>
+	{
+		static readonly IDiscriminatedElement RootA = new SourceFile("C:\\Hoge\\Piyo.cs");
+		static readonly IDiscriminatedElement RootB = new SourceFile("G:\\Foo\\Bar.cs");
+
+		private const string NameA = "Tokeiya3";
+		private const string NameB = "時計屋";
+
+
+		protected override IEnumerable<(IdentityName x, IdentityName y, IdentityName z)> CreateTransitivelyTestSamples()
+		{
+			yield return (new IdentityName(RootA, NameA), new IdentityName(RootA, NameA), new IdentityName(RootA, NameA));
+			yield return (new IdentityName(RootB, NameB), new IdentityName(RootB, NameB), new IdentityName(RootB, NameB));
+
+			yield return (new IdentityName(RootB, NameA), new IdentityName(RootA, NameA), new IdentityName(RootB, NameA));
+		}
+
+
+		protected override IEnumerable<(IdentityName x, IdentityName y)> CreateReflexivelyTestSamples()
+		{
+			yield return (new IdentityName(RootB, NameA), new IdentityName(RootB, NameA));
+			yield return (new IdentityName(RootA, NameA), new IdentityName(RootB, NameA));
+
+		}
+
+		protected override IEnumerable<IdentityName> CreateSymmetricallyTestSamples()
+		{
+			yield return new IdentityName(RootA, NameA);
+			yield return new IdentityName(RootB, NameB);
+
+		}
+
+		protected override IEnumerable<(IdentityName x, IdentityName y)> CreateInEqualTestSamples()
+		{
+			yield return (new IdentityName(RootA, NameA), new IdentityName(RootA, NameB));
+
+		}
+
+		protected override IEnumerable<(object x, object y)> CreateObjectEqualSamples()
+		{
+			foreach (var (x,y) in CreateReflexivelyTestSamples())
+			{
+				yield return (x, y);
+			}
+		}
+
+		protected override IEnumerable<(object x, object y)> CreateObjectInEqualSamples()
+		{
+			foreach (var (x,y)  in CreateInEqualTestSamples())
+			{
+				yield return (x, y);
+			}
+
+			yield return (new IdentityName(RootA, NameA), RootA);
+
+		}
+	}
 	public class IdentityNameTests
 	{
 		const string SamplePath = @"G:\Hoge\Moge.cs";
