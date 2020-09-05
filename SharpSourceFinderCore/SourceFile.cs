@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class SourceFile : MultiDescendantsElement<IDiscriminatedElement>
+	public sealed class SourceFile : MultiDescendantsElement<IDiscriminatedElement>,IEquatable<SourceFile>
 	{
 		public SourceFile(string path)
 		{
@@ -15,30 +15,27 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override void Describe(StringBuilder stringBuilder)
 		{
-		}
 
+		}
 		public override bool Equals(object obj)
 		{
-#warning Equals_Is_NotImpl
-			throw new NotImplementedException("Equals is not implemented");
+			return ReferenceEquals(this, obj) || obj is SourceFile other && Equals(other);
 		}
 
 		public override int GetHashCode()
 		{
-#warning GetHashCode_Is_NotImpl
-			throw new NotImplementedException("GetHashCode is not implemented");
+			return Path.GetHashCode();
 		}
 
-		public static bool operator ==(SourceFile x, SourceFile y)
-		{
-#warning ==_Is_NotImpl
-			throw new NotImplementedException("== is not implemented");
-		}
+		public static bool operator ==(SourceFile x, SourceFile y) => x.Path == y.Path;
 
-		public static bool operator !=(SourceFile x, SourceFile y)
+		public static bool operator !=(SourceFile x, SourceFile y) => x.Path != y.Path;
+
+		public bool Equals(SourceFile? other)
 		{
-#warning !=_Is_NotImpl
-			throw new NotImplementedException("!= is not implemented");
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Path == other.Path;
 		}
 	}
 }

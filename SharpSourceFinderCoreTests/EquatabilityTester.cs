@@ -23,14 +23,14 @@ namespace SharpSourceFinderCoreTests
 
 			var method = typeof(T).GetMethod("op_Equality", parameters);
 
-			if (method?.IsSpecialName ?? false) throw new XunitException("op_Equality not found.");
+			if (!method?.IsSpecialName ?? true) throw new XunitException("op_Equality not found.");
 			OpEqualityInvoker = (Func<T, T, bool>)(method?.CreateDelegate(typeof(Func<T, T, bool>)) ?? throw new XunitException("op_Equality not found."));
 
 
 
 			method = typeof(T).GetMethod("op_Inequality", parameters);
 
-			if(method?.IsSpecialName??false) throw new XunitException("op_Inequality not found.");
+			if(!method?.IsSpecialName??false) throw new XunitException("op_Inequality not found.");
 			OpInequalityInvoker = (Func<T, T, bool>)(method?.CreateDelegate(typeof(Func<T, T, bool>)) ?? throw new XunitException("op_Inequality not found."));
 		}
 
@@ -54,7 +54,6 @@ namespace SharpSourceFinderCoreTests
 				OpInequalityInvoker(x, y).IsFalse();
 				OpInequalityInvoker(y, z).IsFalse();
 				OpInequalityInvoker(z, x).IsFalse();
-
 
 				x.Equals(y).IsTrue();
 				y.Equals(z).IsTrue();
@@ -111,9 +110,8 @@ namespace SharpSourceFinderCoreTests
 			{
 				OpInequalityInvoker(x, y).IsTrue();
 				OpEqualityInvoker(y, x).IsFalse();
-
 				OpEqualityInvoker(x, y).IsFalse();
-				OpEqualityInvoker(y, x).IsFalse();
+
 
 				x.Equals(y).IsFalse();
 				y.Equals(x).IsFalse();

@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using ChainingAssertion;
+using SharpSourceFinderCoreTests;
 using Xunit;
-using static SharpSourceFinderCoreTests.EquivalentTestHelper<Tokeiya3.SharpSourceFinderCore.SourceFile>;
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests
 {
-	public class SourceFileTests
+	public class SourceFileTests : EquatabilityTester<SourceFile>
 	{
 		private const string SamplePath = @"G:\Some\Bar.cs";
+		private const string OtherPath = @"C:\Foo\Hoge.cs";
+
 
 		static SourceFile CreateDefaultSample(string path = SamplePath) => new SourceFile(path);
 
@@ -39,39 +43,41 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			bld.ToString().Is(string.Empty);
 		}
 
-		[Fact]
-		public void EqualsTest()
+
+		protected override IEnumerable<(SourceFile x, SourceFile y, SourceFile z)> CreateTransitivelyTestSamples()
 		{
+			yield return (new SourceFile(SamplePath), new SourceFile(SamplePath), new SourceFile(SamplePath));
+			yield return (new SourceFile(OtherPath), new SourceFile(OtherPath), new SourceFile(OtherPath));
 
-			var pivot = new SourceFile(SamplePath);
-			IsObjectEqual(pivot, pivot);
-			IsObjectEqual(pivot, new SourceFile(SamplePath));
-
-			IsObjectNotEqual(pivot, new SourceFile("C:\\Hoge\\Piyo.cs"));
-			IsObjectNotEqual(pivot, SamplePath);
 		}
 
-		[Fact]
-		public void GetHashCodeTest()
+		protected override IEnumerable<(SourceFile x, SourceFile y)> CreateReflexivelyTestSamples()
 		{
-
-			var pivot = new SourceFile(SamplePath);
-			HashEqual(pivot, new SourceFile(SamplePath));
-
-			//Who will test the tester?
-			HashNotEqual(SamplePath, "C:\\Hoge\\Piyo.cs");
-			HashNotEqual(pivot, new SourceFile("C:\\Hoge\\Piyo.cs"));
+			yield return (new SourceFile(SamplePath), new SourceFile(SamplePath));
+			yield return (new SourceFile(OtherPath), new SourceFile(OtherPath));
 		}
 
-		[Fact]
-		public void OpEqTest()
+		protected override IEnumerable<SourceFile> CreateSymmetricallyTestSamples()
 		{
-			var piv = new SourceFile(SamplePath);
-			IsEqual(piv, piv);
-			IsEqual(piv, new SourceFile(SamplePath));
-			
-			IsNotEqual(piv, new SourceFile("C:\\Hoge\\Piyo.cs"));
+			yield return new SourceFile(SamplePath);
+			yield return new SourceFile(OtherPath);
+
 		}
+
+		protected override IEnumerable<(SourceFile x, SourceFile y)> CreateInEqualTestSamples()
+		{
+			yield return (new SourceFile(SamplePath), new SourceFile(OtherPath));
+
+		}
+
+		protected override IEnumerable<(object x, object y)> CreateObjectEqualSamples() =>
+			CreateReflexivelyTestSamples().Select(t => ((object)t.x, (object)t.y));
+
+
+		protected override IEnumerable<(object x, object y)> CreateObjectInEqualSamples() =>
+			CreateInEqualTestSamples().Select(t => ((object)t.x, (object)t.y));
+
+
 
 	}
 }
