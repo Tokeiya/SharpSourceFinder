@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using Tokeiya3.SharpSourceFinderCore;
 using ChainingAssertion;
 using System.Linq;
 using System.Text;
+using SharpSourceFinderCoreTests;
 using Xunit;
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests
 {
-	public class QualifiedNameTests
+	public class QualifiedNameTests:EquatabilityTester<QualifiedName>
 	{
 		[Fact]
 		public void AddTest()
@@ -44,32 +46,35 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			names.Describe().Is("System.Collections.Generics");
 		}
 
-		[Fact()]
-		public void GetHashCodeTest()
+
+		protected override IEnumerable<(QualifiedName x, QualifiedName y, QualifiedName z)> CreateTransitivelyTestSamples()
 		{
-			Assert.True(false, "This test needs an implementation");
+			throw new NotImplementedException();
 		}
 
-		[Fact()]
-		public void EqualsTest()
+		protected override IEnumerable<(QualifiedName x, QualifiedName y)> CreateReflexivelyTestSamples()
 		{
-			Assert.True(false, "This test needs an implementation");
+			throw new NotImplementedException();
 		}
 
-		[Fact]
-		public void OpEqTest()
+		protected override IEnumerable<QualifiedName> CreateSymmetricallyTestSamples()
 		{
-#warning OpEqTest_Is_NotImpl
-			throw new NotImplementedException("OpEqTest is not implemented");
+			throw new NotImplementedException();
 		}
 
-		[Fact]
-		public void OpNotEqTest()
+		protected override IEnumerable<(QualifiedName x, QualifiedName y)> CreateInEqualTestSamples()
 		{
-#warning OpNotEqTest_Is_NotImpl
-			throw new NotImplementedException("OpNotEqTest is not implemented");
+			throw new NotImplementedException();
 		}
 
+		protected override IEnumerable<(object x, object y)> CreateObjectEqualSamples()
+		{
+			throw new NotImplementedException();
+		}
 
+		protected override IEnumerable<(object x, object y)> CreateObjectInEqualSamples()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

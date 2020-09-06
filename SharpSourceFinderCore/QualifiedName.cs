@@ -4,7 +4,7 @@ using Tokeiya3.StringManipulator;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class QualifiedName : MultiDescendantsElement<IdentityName>
+	public sealed class QualifiedName : MultiDescendantsElement<IdentityName>,IEquatable<QualifiedName>
 	{
 		internal QualifiedName(IDiscriminatedElement parent) : base(parent)
 		{
@@ -50,6 +50,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 #warning !=_Is_NotImpl
 			throw new NotImplementedException("!= is not implemented");
+		}
+
+		public bool Equals(QualifiedName other)
+		{
+#warning Equal_Is_NotImpl
+			throw new NotImplementedException("Equal is not implemented");
 		}
 	}
 }

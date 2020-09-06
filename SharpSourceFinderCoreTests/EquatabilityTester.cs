@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Xunit.Sdk;
 using ChainingAssertion;
@@ -45,7 +46,9 @@ namespace SharpSourceFinderCoreTests
 		[Fact]
 		public void TransitivelyTest()
 		{
-			foreach ((T x,T y,T z) in CreateTransitivelyTestSamples())
+			CreateTransitivelyTestSamples().Any().IsTrue("Sample sequence is empty.");
+
+		foreach ((T x,T y,T z) in CreateTransitivelyTestSamples())
 			{
 				OpEqualityInvoker(x, y).IsTrue();
 				OpEqualityInvoker(y, z).IsTrue();
@@ -68,7 +71,8 @@ namespace SharpSourceFinderCoreTests
 		[Fact]
 		public void SymmetricallyTest()
 		{
-			foreach (var elem in CreateSymmetricallyTestSamples())
+			CreateSymmetricallyTestSamples().Any().IsTrue("Sample sequence is empty.");
+		foreach (var elem in CreateSymmetricallyTestSamples())
 			{
 				OpEqualityInvoker(elem, elem).IsTrue();
 				OpInequalityInvoker(elem, elem).IsFalse();
@@ -81,6 +85,7 @@ namespace SharpSourceFinderCoreTests
 		[Fact]
 		public void ReflexivelyTest()
 		{
+			CreateReflexivelyTestSamples().Any().IsTrue("Sample sequence is empty.");
 			foreach (var (x,y) in CreateReflexivelyTestSamples())
 			{
 				OpEqualityInvoker(x, y).IsTrue();
@@ -106,6 +111,7 @@ namespace SharpSourceFinderCoreTests
 		[Fact]
 		public void InequalityTest()
 		{
+			CreateInEqualTestSamples().Any().IsTrue("Sequence is empty.");
 			foreach (var (x,y) in CreateInEqualTestSamples())
 			{
 				OpInequalityInvoker(x, y).IsTrue();
@@ -125,6 +131,7 @@ namespace SharpSourceFinderCoreTests
 		[Fact]
 		public void ObjectEqualTest()
 		{
+			CreateObjectInEqualSamples().Any().IsTrue("Sequence is empty.");
 			foreach (var (x,y) in CreateObjectEqualSamples())
 			{
 				x.Equals(y).IsTrue();
@@ -142,6 +149,7 @@ namespace SharpSourceFinderCoreTests
 		[Fact]
 		public void ObjectInequalityTest()
 		{
+			CreateObjectInEqualSamples().Any().IsTrue("Sequence is empty.");
 			foreach (var (x,y) in CreateObjectInEqualSamples())
 			{
 				x.Equals(y).IsFalse();
