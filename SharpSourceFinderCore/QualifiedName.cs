@@ -28,34 +28,41 @@ namespace Tokeiya3.SharpSourceFinderCore
 			stringBuilder.Extract(..(stringBuilder.Length - 1));
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object obj) => obj switch
 		{
-#warning Equals_Is_NotImpl
-			throw new NotImplementedException("Equals is not implemented");
-		}
+			null => false,
+			{ } when ReferenceEquals(this, obj) => true,
+			QualifiedName other => other == this,
+			_ => false
+		};
 
 		public override int GetHashCode()
 		{
-#warning GetHashCode_Is_NotImpl
-			throw new NotImplementedException("GetHashCode is not implemented");
+			var ret = 0;
+
+			foreach (var elem in ChildElements)
+			{
+				ret ^= elem.GetHashCode();
+			}
+
+			return ret;
 		}
 
 		public static bool operator ==(QualifiedName x, QualifiedName y)
 		{
-#warning ==_Is_NotImpl
-			throw new NotImplementedException("== is not implemented");
+			if (x.ChildElements.Count != y.ChildElements.Count) return false;
+
+			for (int i = 0; i < x.ChildElements.Count; i++)
+			{
+				if (x.ChildElements[i] != y.ChildElements[i]) return false;
+			}
+
+			return true;
+
 		}
 
-		public static bool operator !=(QualifiedName x, QualifiedName y)
-		{
-#warning !=_Is_NotImpl
-			throw new NotImplementedException("!= is not implemented");
-		}
+		public static bool operator !=(QualifiedName x, QualifiedName y) => !(x == y);
 
-		public bool Equals(QualifiedName other)
-		{
-#warning Equal_Is_NotImpl
-			throw new NotImplementedException("Equal is not implemented");
-		}
+		public bool Equals(QualifiedName other) => other == this;
 	}
 }

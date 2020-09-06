@@ -11,11 +11,14 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 {
 	public class QualifiedNameTests:EquatabilityTester<QualifiedName>
 	{
-		[Fact]
+		private readonly SourceFile _rootA = new SourceFile(@"C:\Hoge\Piyo.cs");
+		private readonly SourceFile _rootB = new SourceFile(@"G:\Foo\Bar.cs");
+
+
+			[Fact]
 		public void AddTest()
 		{
-			var root = new MultiDescendantsElementTests.TestSample("root");
-			var names = new QualifiedName(root);
+			var names = new QualifiedName(_rootA);
 
 			names.Add("System");
 			names.Add("Collections");
@@ -33,8 +36,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		[Fact]
 		public void DescribeTest()
 		{
-			var root = new MultiDescendantsElementTests.TestSample("root");
-			var names = new QualifiedName(root);
+			var names = new QualifiedName(_rootA);
 
 			names.Add("System");
 			names.Add("Collections");
@@ -47,34 +49,68 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		}
 
 
-		protected override IEnumerable<(QualifiedName x, QualifiedName y, QualifiedName z)> CreateTransitivelyTestSamples()
+		protected override IEnumerable<(QualifiedName x, QualifiedName y, QualifiedName z)>
+			CreateTransitivelyTestSamples()
 		{
-			throw new NotImplementedException();
+
+			var x = new QualifiedName(_rootA);
+			var y = new QualifiedName(_rootB);
+			var z = new QualifiedName(_rootA);
+
+			x.Add("System");
+			y.Add("System");
+			z.Add("System");
+
+			x.Add("Linq");
+			y.Add("Linq");
+			z.Add("Linq");
+
+			yield return (x, y, z);
+
+
 		}
 
 		protected override IEnumerable<(QualifiedName x, QualifiedName y)> CreateReflexivelyTestSamples()
 		{
-			throw new NotImplementedException();
+			var x = new QualifiedName(_rootA);
+			var y = new QualifiedName(_rootB);
+
+			x.Add("System");
+			y.Add("System");
+
+			x.Add("IO");
+			y.Add("IO");
+
+			yield return (x, y);
 		}
 
 		protected override IEnumerable<QualifiedName> CreateSymmetricallyTestSamples()
 		{
-			throw new NotImplementedException();
+			var x = new QualifiedName(_rootA);
+			x.Add("System");
+			x.Add("Runtime");
+
+			yield return x;
 		}
 
 		protected override IEnumerable<(QualifiedName x, QualifiedName y)> CreateInEqualTestSamples()
 		{
-			throw new NotImplementedException();
+			var x = new QualifiedName(_rootA);
+			var y = new QualifiedName(_rootA);
+
+			x.Add("System");
+			y.Add("System");
+			
+			x.Add("Data");
+			y.Add("Dynamic");
+
+			yield return (x, y);
 		}
 
-		protected override IEnumerable<(object x, object y)> CreateObjectEqualSamples()
-		{
-			throw new NotImplementedException();
-		}
+		protected override IEnumerable<(object x, object y)> CreateObjectEqualSamples() => CreateReflexivelyTestSamples().Select(tup => ((object)tup.x, (object)tup.y));
 
-		protected override IEnumerable<(object x, object y)> CreateObjectInEqualSamples()
-		{
-			throw new NotImplementedException();
-		}
+		protected override IEnumerable<(object x, object y)> CreateObjectInEqualSamples() =>
+			CreateInEqualTestSamples().Select(tup => ((object) tup.x, (object) tup.y));
+
 	}
 }
