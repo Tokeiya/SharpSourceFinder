@@ -1,8 +1,6 @@
-using System;
+using ChainingAssertion;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using ChainingAssertion;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -38,14 +36,14 @@ namespace SharpSourceFinderCoreTests
 
 		void ResetAll()
 		{
-			foreach (var (x,y,z) in _transitivelySamples)
+			foreach (var (x, y, z) in _transitivelySamples)
 			{
 				x.Reset();
 				y.Reset();
 				z.Reset();
 			}
 
-			foreach (var (x,y) in _reflexivelySamples)
+			foreach (var (x, y) in _reflexivelySamples)
 			{
 				x.Reset();
 				y.Reset();
@@ -57,7 +55,7 @@ namespace SharpSourceFinderCoreTests
 				elem.Reset();
 			}
 
-			foreach (var (x,y) in _inEqualSamples)
+			foreach (var (x, y) in _inEqualSamples)
 			{
 				x.Reset();
 				y.Reset();
@@ -72,7 +70,7 @@ namespace SharpSourceFinderCoreTests
 
 			TransitivelyTest();
 
-			foreach (var (x,y,z) in _transitivelySamples)
+			foreach (var (x, y, z) in _transitivelySamples)
 			{
 				x.OpInequalityCount.Is(2);
 				y.OpInequalityCount.Is(2);
@@ -107,7 +105,7 @@ namespace SharpSourceFinderCoreTests
 				elem.ObjEqualsCount.Is(1);
 				elem.OpInequalityCount.Is(2);
 			}
-			
+
 		}
 
 		[Fact]
@@ -117,7 +115,7 @@ namespace SharpSourceFinderCoreTests
 
 			GetHashCodeTest();
 
-			foreach (var (x,y) in _reflexivelySamples)
+			foreach (var (x, y) in _reflexivelySamples)
 			{
 				x.GetHashCodeCount.Is(1);
 				y.GetHashCodeCount.Is(1);
@@ -131,7 +129,7 @@ namespace SharpSourceFinderCoreTests
 
 			InequalityTest();
 
-			foreach (var (x,y) in _inEqualSamples)
+			foreach (var (x, y) in _inEqualSamples)
 			{
 				x.OpEqualityCount.Is(2);
 				y.OpEqualityCount.Is(2);
@@ -154,7 +152,7 @@ namespace SharpSourceFinderCoreTests
 
 			ObjectEqualTest();
 
-			foreach (var (x,y) in _reflexivelySamples)
+			foreach (var (x, y) in _reflexivelySamples)
 			{
 				x.ObjEqualsCount.Is(2);
 				y.ObjEqualsCount.Is(2);
@@ -168,7 +166,7 @@ namespace SharpSourceFinderCoreTests
 
 			ObjectInequalityTest();
 
-			foreach (var (x,y) in _inEqualSamples)
+			foreach (var (x, y) in _inEqualSamples)
 			{
 				x.ObjEqualsCount.Is(1);
 				y.ObjEqualsCount.Is(1);

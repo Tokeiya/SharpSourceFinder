@@ -1,12 +1,7 @@
-﻿using Tokeiya3.SharpSourceFinderCore;
-using ChainingAssertion;
+﻿using ChainingAssertion;
+using SharpSourceFinderCoreTests;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using SharpSourceFinderCoreTests;
 using Xunit;
 
 
@@ -52,7 +47,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 
 		protected override IEnumerable<(object x, object y)> CreateObjectEqualSamples()
 		{
-			foreach (var (x,y) in CreateReflexivelyTestSamples())
+			foreach (var (x, y) in CreateReflexivelyTestSamples())
 			{
 				yield return (x, y);
 			}
@@ -60,7 +55,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 
 		protected override IEnumerable<(object x, object y)> CreateObjectInEqualSamples()
 		{
-			foreach (var (x,y)  in CreateInEqualTestSamples())
+			foreach (var (x, y) in CreateInEqualTestSamples())
 			{
 				yield return (x, y);
 			}
@@ -99,9 +94,11 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		{
 			var root = CreateStandardSample();
 
-			Assert.Throws<ArgumentException>(() => new IdentityName(root,""));
-			Assert.Throws<ArgumentException>(() => new IdentityName(root," "));
+			Assert.Throws<ArgumentException>(() => new IdentityName(root, ""));
+			Assert.Throws<ArgumentException>(() => new IdentityName(root, " "));
 			Assert.Throws<ArgumentException>(() => new IdentityName(root, "\t"));
 		}
+
+
 	}
 }

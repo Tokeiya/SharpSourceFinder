@@ -2,7 +2,7 @@
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class UsingStaticDirective:UsingDirective
+	public sealed class UsingStaticDirective : UsingDirective
 	{
 		public UsingStaticDirective(IDiscriminatedElement parent, params string[] names) : base(parent, names)
 		{

@@ -11,7 +11,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		static UsingAliasDirective CreateSample()
 		{
 			var sf = new SourceFile("G:\\Hoge\\Piyo.cs");
-			return new UsingAliasDirective(sf, "io", "System","IO");
+			return new UsingAliasDirective(sf, "io", "System", "IO");
 
 		}
 		[Fact()]
@@ -66,7 +66,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			var bld = new StringBuilder();
 
 			actual.Describe().Is("using io=System.IO;");
-			
+
 			actual.Describe(bld);
 			bld.ToString().Is("using io=System.IO;");
 		}

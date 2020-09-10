@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Tokeiya3.SharpSourceFinderCore;
 
 namespace Playground
 {
-	public class WalkerSurvey:CSharpSyntaxWalker
+	public class WalkerSurvey : CSharpSyntaxWalker
 	{
 		private class Dummy : DiscriminatedElement
 		{
@@ -35,7 +35,7 @@ namespace Playground
 			base.VisitAliasQualifiedName(node);
 		}
 
-		
+
 		public override void VisitClassDeclaration(ClassDeclarationSyntax node)
 		{
 			base.VisitClassDeclaration(node);
@@ -48,7 +48,7 @@ namespace Playground
 
 		public override void VisitUsingDirective(UsingDirectiveSyntax node)
 		{
-			
+
 			base.VisitUsingDirective(node);
 		}
 	}

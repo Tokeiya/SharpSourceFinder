@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class SourceFile : MultiDescendantsElement<IDiscriminatedElement>,IEquatable<SourceFile>
+	public sealed class SourceFile : MultiDescendantsElement<IDiscriminatedElement>, IEquatable<SourceFile>
 	{
 		public SourceFile(string path)
 		{

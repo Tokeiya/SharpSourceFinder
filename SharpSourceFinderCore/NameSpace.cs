@@ -1,44 +1,87 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class NameSpace:MultiDescendantsElement<IDiscriminatedElement>
+	public sealed class NameSpace : MultiDescendantsElement<IDiscriminatedElement>, IEquatable<NameSpace>
 	{
-		private QualifiedName? _name;
-
-		public QualifiedName Name
-		{
-			get
-			{
-#warning Name_Is_NotImpl
-				throw new NotImplementedException("Name is not implemented");
-			}
-		}
-
-		internal void SetName(QualifiedName name)
-		{
-#warning SetName_Is_NotImpl
-			throw new NotImplementedException("SetName is not implemented");
-		}
 
 
-		public NameSpace(IDiscriminatedElement parent) : base(parent)
-		{
-#warning NameSpace_Is_NotImpl
-			throw new NotImplementedException("NameSpace is not implemented");
-		}
+		public QualifiedName Name { get; }
+
+
+
+		public NameSpace(IDiscriminatedElement parent) : base(parent) => Name = new QualifiedName(this);
+
 
 		public QualifiedName GetFullQualifiedName()
 		{
-#warning GetFUllQualifiedName_Is_NotImpl
-			throw new NotImplementedException("GetFUllQualifiedName is not implemented");
+			var root = Ancestors().OfType<SourceFile>().FirstOrDefault() ?? DiscriminatedElement.Root;
+			var ret = new QualifiedName(root);
+
+			foreach (var elem in Ancestors().OfType<NameSpace>())
+			{
+				foreach (var identityName in elem.Name.Children().Cast<IdentityName>())
+				{
+					ret.Add(identityName.Identity);
+				}
+			}
+
+			return ret;
 		}
 
 		public override void Describe(StringBuilder stringBuilder)
 		{
-			throw new NotImplementedException();
+			stringBuilder.Append("namespace ");
+			Name.Describe(stringBuilder);
+			stringBuilder.Append("\n{\n");
+
+			foreach (var elem in ChildElements)
+			{
+				elem.Describe(stringBuilder);
+			}
+
+			stringBuilder.Append("}\n");
 		}
+
+		public bool Equals(NameSpace? other) => other switch
+		{
+			null => false,
+			{ } when ReferenceEquals(this, other) => true,
+			_ => this == other
+		};
+
+
+		public override bool Equals(object? obj) => obj switch
+		{
+			null => false,
+			{ } when ReferenceEquals(this, obj) => true,
+			NameSpace other => this == other,
+			_ => false
+		};
+
+		public override int GetHashCode()
+		{
+			var ret = Name.GetHashCode();
+
+			foreach (var elem in Ancestors().OfType<NameSpace>())
+			{
+				ret ^= elem.GetHashCode();
+			}
+
+			return ret;
+		}
+
+		public static bool operator ==(NameSpace x, NameSpace y)
+		{
+			var xx = x.GetFullQualifiedName();
+			var yy = y.GetFullQualifiedName();
+
+			return xx == yy;
+		}
+
+		public static bool operator !=(NameSpace x, NameSpace y) => !(x == y);
+
 	}
 }

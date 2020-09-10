@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class IdentityName : TerminalElement,IEquatable<IdentityName>
+	public sealed class IdentityName : TerminalElement, IEquatable<IdentityName>
 	{
 		internal IdentityName(IDiscriminatedElement parent, string identity) : base(parent)
 		{
@@ -21,10 +21,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			return ReferenceEquals(this, obj) || obj is IdentityName other && Equals(other);
 		}
 
-		public override int GetHashCode()
-		{
-			return Identity.GetHashCode();
-		}
+		public override int GetHashCode() => Identity.GetHashCode();
 
 
 		public static bool operator ==(IdentityName x, IdentityName y) => x.Identity == y.Identity;
@@ -34,7 +31,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 			var ret = other switch
 			{
-				{ } another=>another==this,
+				{ } another => another == this,
 				_ => false
 			};
 

@@ -62,7 +62,7 @@ namespace SharpSourceFinderCoreTests
 		public bool Equals(Mock? other)
 		{
 			EquatableCount++;
-			
+
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 

@@ -1,21 +1,19 @@
-﻿using System;
+﻿using ChainingAssertion;
+using SharpSourceFinderCoreTests;
 using System.Collections.Generic;
-using Tokeiya3.SharpSourceFinderCore;
-using ChainingAssertion;
 using System.Linq;
 using System.Text;
-using SharpSourceFinderCoreTests;
 using Xunit;
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests
 {
-	public class QualifiedNameTests:EquatabilityTester<QualifiedName>
+	public class QualifiedNameTests : EquatabilityTester<QualifiedName>
 	{
 		private readonly SourceFile _rootA = new SourceFile(@"C:\Hoge\Piyo.cs");
 		private readonly SourceFile _rootB = new SourceFile(@"G:\Foo\Bar.cs");
 
 
-			[Fact]
+		[Fact]
 		public void AddTest()
 		{
 			var names = new QualifiedName(_rootA);
@@ -100,7 +98,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 
 			x.Add("System");
 			y.Add("System");
-			
+
 			x.Add("Data");
 			y.Add("Dynamic");
 
@@ -110,7 +108,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		protected override IEnumerable<(object x, object y)> CreateObjectEqualSamples() => CreateReflexivelyTestSamples().Select(tup => ((object)tup.x, (object)tup.y));
 
 		protected override IEnumerable<(object x, object y)> CreateObjectInEqualSamples() =>
-			CreateInEqualTestSamples().Select(tup => ((object) tup.x, (object) tup.y));
+			CreateInEqualTestSamples().Select(tup => ((object)tup.x, (object)tup.y));
 
 	}
 }

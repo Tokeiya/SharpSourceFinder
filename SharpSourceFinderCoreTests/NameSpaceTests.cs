@@ -1,37 +1,33 @@
-﻿using System;
-using ChainingAssertion;
+﻿using ChainingAssertion;
+using SharpSourceFinderCoreTests;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests
 {
-	public class NameSpaceTests
+	public class NameSpaceTests : EquatabilityTester<NameSpace>
 	{
 		private const string SamplePath = "G:\\Hoge\\Piyo.cs";
-
 		static SourceFile CreateStandardScr() => new SourceFile(SamplePath);
 
-		static QualifiedName CreateName(IDiscriminatedElement parent, params string[] identities)
-		{
-			var ret = new QualifiedName(parent);
 
-			foreach (var elem in identities) ret.Add(elem);
-
-			return ret;
-		}
 
 		[Fact]
 		public void NameTest()
 		{
 			var scr = CreateStandardScr();
 			var tokeiya = new NameSpace(scr);
+			tokeiya.Name.Add("Tokeiya3");
 
-			var expected = CreateName(tokeiya, "Tokeiya3");
-			var unexpected = CreateName(tokeiya, "Unexpected");
-
-			Assert.Throws<InvalidOperationException>(() => tokeiya.Name);
+			var expected = new QualifiedName(tokeiya);
+			expected.Add("Tokeiya3");
 
 
-			tokeiya.SetName(expected);
+			var unexpected = new QualifiedName(tokeiya);
+			unexpected.Add("UnExpected");
+
+
 			tokeiya.Name.Is(expected);
 			tokeiya.Name.IsNot(unexpected);
 		}
@@ -39,23 +35,18 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		[Fact]
 		public void DescribeTest()
 		{
-			const string expectedOuterDescription = @"namespace Outer.Outer
-{
-	namespace Inner
-	{
-	}
-}";
+			const string expectedInnerDescription = "namespace Outer.Outer\n{\nnamespace Inner\n{\n}\n}\n";
 
-			const string expectedInnerDescription = @"namespace Inner
-{
-}";
+			const string expectedOuterDescription = "namespace Outer.Outer\n{\n}\n";
 
 			var scr = CreateStandardScr();
 			var outer = new NameSpace(scr);
-			outer.SetName(CreateName(outer, "Outer", "Outer"));
+			outer.Name.Add("Outer");
+			outer.Name.Add("Outer");
+
 
 			var inner = new NameSpace(outer);
-			inner.SetName(CreateName(inner, "Inner"));
+			inner.Name.Add("Inner");
 
 
 			outer.Describe().Is(expectedOuterDescription);
@@ -67,33 +58,132 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		{
 			var scr = CreateStandardScr();
 			var outer = new NameSpace(scr);
-			var outerName = CreateName(outer, "Outer", "Outer");
-			outer.SetName(outerName);
+			outer.Name.Add("Outer");
+			outer.Name.Add("Outer");
 
-			outer.GetFullQualifiedName().Is(outerName);
+			var expected = new QualifiedName(outer);
+			expected.Add("Outer");
+			expected.Add("Outer");
 
+
+			outer.GetFullQualifiedName().Is(expected);
 
 			var inner = new NameSpace(outer);
-			var innerName = CreateName(inner, "Inner");
-			inner.SetName(innerName);
+			inner.Name.Add("Inner");
 
-			inner.GetFullQualifiedName().Is(CreateName(inner, "Outer", "Outer", "Inner"));
+
+			expected.Add("Inner");
+
+			inner.GetFullQualifiedName().Is(expected);
 		}
 
 
-		[Fact]
-		public void SetNameTest()
+
+		protected override IEnumerable<(NameSpace x, NameSpace y, NameSpace z)> CreateTransitivelyTestSamples()
 		{
-			var scr = CreateStandardScr();
-			var outer = new NameSpace(scr);
+			var rootA = new SourceFile("C:\\Foo\\Bar.cs");
+			var rootB = new SourceFile(@"G:\Hoge\Piyo.cs");
 
-			var expected = CreateName(outer, "Tokeiya3");
-			outer.SetName(expected);
+			var x = new NameSpace(rootA);
+			var name = new QualifiedName(x);
+			name.Add("System");
+			name.Add("Collections");
 
-			outer.Name.Is(expected);
+			var y = new NameSpace(rootB);
+			name = new QualifiedName(y);
+			name.Add("System");
+			name.Add("Collections");
 
-			Assert.Throws<InvalidOperationException>(() => outer.SetName(CreateName(outer, "identity")));
-			outer.Name.Is(expected);
+			var z = new NameSpace(rootA);
+			name = new QualifiedName(z);
+			name.Add("System");
+			name.Add("Collections");
+
+			yield return (x, y, z);
+			name.Add("Generic");
+
+			x = new NameSpace(rootA);
+			name = new QualifiedName(x);
+			name.Add("System");
+
+			var child = new NameSpace(x);
+			name = new QualifiedName(child);
+			name.Add("Collections");
+			name.Add("Generic");
+
+			y = new NameSpace(rootB);
+			name = new QualifiedName(y);
+			name.Add("System");
+			name.Add("Collections");
+
+			child = new NameSpace(y);
+			name = new QualifiedName(child);
+			name.Add("Generic");
+
+
+			yield return (x, y, z);
+
 		}
+
+		protected override IEnumerable<(NameSpace x, NameSpace y)> CreateReflexivelyTestSamples()
+		{
+			foreach (var (x, y, z) in CreateTransitivelyTestSamples())
+			{
+				yield return (x, y);
+				yield return (y, z);
+				yield return (z, x);
+			}
+		}
+
+		protected override IEnumerable<NameSpace> CreateSymmetricallyTestSamples()
+		{
+			foreach (var (x, y, z) in CreateTransitivelyTestSamples())
+			{
+				yield return x;
+				yield return y;
+				yield return z;
+			}
+		}
+
+		protected override IEnumerable<(NameSpace x, NameSpace y)> CreateInEqualTestSamples()
+		{
+			var root = new SourceFile(SamplePath);
+			var x = new NameSpace(root);
+			var name = new QualifiedName(x);
+
+			name.Add("System");
+			name.Add("Collections");
+			name.Add("Generics");
+
+			var y = new NameSpace(root);
+			name = new QualifiedName(y);
+
+			name.Add("system");
+			name.Add("collections");
+			name.Add("generics");
+
+			yield return (x, y);
+
+
+			x = new NameSpace(root);
+			name = new QualifiedName(x);
+			name.Add("System");
+			name.Add("Collections");
+
+			var child = new NameSpace(x);
+			name = new QualifiedName(child);
+			name.Add("generics");
+
+			yield return (x, y);
+
+
+		}
+
+		protected override IEnumerable<(object x, object y)> CreateObjectEqualSamples() =>
+		CreateReflexivelyTestSamples().Select(tup => ((object)tup.x, (object)tup.y));
+
+		protected override IEnumerable<(object x, object y)> CreateObjectInEqualSamples()
+		=> CreateInEqualTestSamples().Select(tup => ((object)tup.x, (object)tup.y));
+
 	}
 }

@@ -6,7 +6,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class UsingAliasDirective : UsingDirective
 	{
-		public UsingAliasDirective(IDiscriminatedElement parent, string alias, params string[] names) : base(parent,names)
+		public UsingAliasDirective(IDiscriminatedElement parent, string alias, params string[] names) : base(parent, names)
 		{
 			if (string.IsNullOrWhiteSpace(alias)) throw new ArgumentException($"{nameof(alias)} is unexpected.");
 

@@ -4,11 +4,13 @@ using Tokeiya3.StringManipulator;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class QualifiedName : MultiDescendantsElement<IdentityName>,IEquatable<QualifiedName>
+	public sealed class QualifiedName : MultiDescendantsElement<IdentityName>, IEquatable<QualifiedName>
 	{
 		internal QualifiedName(IDiscriminatedElement parent) : base(parent)
 		{
 		}
+
+		public bool Equals(QualifiedName other) => other == this;
 
 		internal IdentityName Add(string name)
 		{
@@ -40,10 +42,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 			var ret = 0;
 
-			foreach (var elem in ChildElements)
-			{
-				ret ^= elem.GetHashCode();
-			}
+			foreach (var elem in ChildElements) ret ^= elem.GetHashCode();
 
 			return ret;
 		}
@@ -53,16 +52,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 			if (x.ChildElements.Count != y.ChildElements.Count) return false;
 
 			for (int i = 0; i < x.ChildElements.Count; i++)
-			{
-				if (x.ChildElements[i] != y.ChildElements[i]) return false;
-			}
+				if (x.ChildElements[i] != y.ChildElements[i])
+					return false;
 
 			return true;
-
 		}
 
 		public static bool operator !=(QualifiedName x, QualifiedName y) => !(x == y);
-
-		public bool Equals(QualifiedName other) => other == this;
 	}
 }
