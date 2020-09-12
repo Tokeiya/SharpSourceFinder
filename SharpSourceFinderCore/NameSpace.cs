@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.ObjectPool;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class NameSpace : MultiDescendantsElement<IDiscriminatedElement>, IEquatable<NameSpace>
 	{
+		private static readonly ObjectPool<Stack<NameSpace>> StackPool = new DefaultObjectPool<Stack<NameSpace>>(new DefaultPooledObjectPolicy<Stack<NameSpace>>());
 
 
 		public QualifiedName Name { get; }
@@ -14,35 +17,22 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public NameSpace(IDiscriminatedElement parent) : base(parent) => Name = new QualifiedName(this);
 
+		private void CollectNameAncestorsNameSpace(Stack<NameSpace> buffer)
+		{
+#warning CollectNameAncestorsNameSpace_Is_NotImpl
+			throw new NotImplementedException("CollectNameAncestorsNameSpace is not implemented");
+		}
 
 		public QualifiedName GetFullQualifiedName()
 		{
-			var root = Ancestors().OfType<SourceFile>().FirstOrDefault() ?? DiscriminatedElement.Root;
-			var ret = new QualifiedName(root);
-
-			foreach (var elem in Ancestors().OfType<NameSpace>())
-			{
-				foreach (var identityName in elem.Name.Children().Cast<IdentityName>())
-				{
-					ret.Add(identityName.Identity);
-				}
-			}
-
-			return ret;
+#warning GetFullQualifiedName_Is_NotImpl
+			throw new NotImplementedException("GetFullQualifiedName is not implemented");
 		}
 
 		public override void Describe(StringBuilder stringBuilder)
 		{
-			stringBuilder.Append("namespace ");
-			Name.Describe(stringBuilder);
-			stringBuilder.Append("\n{\n");
-
-			foreach (var elem in ChildElements)
-			{
-				elem.Describe(stringBuilder);
-			}
-
-			stringBuilder.Append("}\n");
+#warning Describe_Is_NotImpl
+			throw new NotImplementedException("Describe is not implemented");
 		}
 
 		public bool Equals(NameSpace? other) => other switch

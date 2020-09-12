@@ -61,10 +61,9 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			outer.Name.Add("Outer");
 			outer.Name.Add("Outer");
 
-			var expected = new QualifiedName(outer);
+			var expected = new QualifiedName(scr);
 			expected.Add("Outer");
 			expected.Add("Outer");
-
 
 			outer.GetFullQualifiedName().Is(expected);
 
