@@ -11,6 +11,11 @@ namespace Playground
 	{
 		private class Dummy : DiscriminatedElement
 		{
+			public override void RegisterChild(IDiscriminatedElement child)
+			{
+				throw new NotImplementedException();
+			}
+
 			public override void Describe(StringBuilder stringBuilder)
 			{
 				throw new NotImplementedException();

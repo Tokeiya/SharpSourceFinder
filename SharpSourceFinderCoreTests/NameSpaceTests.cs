@@ -46,7 +46,6 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 
 
 			var inner = new NameSpace(outer);
-			outer.AddChild(inner);
 
 			inner.Name.Add("Inner");
 

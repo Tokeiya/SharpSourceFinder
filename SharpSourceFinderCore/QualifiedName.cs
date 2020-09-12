@@ -15,7 +15,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 		internal IdentityName Add(string name)
 		{
 			var ret = new IdentityName(this, name);
-			Add(ret);
 			return ret;
 		}
 

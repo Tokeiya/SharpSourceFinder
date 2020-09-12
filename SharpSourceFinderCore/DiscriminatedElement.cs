@@ -13,6 +13,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 			if (parent is ImaginaryRoot) throw new ArgumentException("parent can't accept DiscriminatedElement.Root .");
 			Parent = parent;
+
+			parent.RegisterChild(this);
 		}
 
 		public static IDiscriminatedElement Root { get; } = new ImaginaryRoot();
@@ -21,6 +23,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 			new DefaultObjectPool<StringBuilder>(new StringBuilderPooledObjectPolicy());
 
 		public IDiscriminatedElement Parent { get; }
+		public abstract void RegisterChild(IDiscriminatedElement child);
+		
 		public abstract void Describe(StringBuilder stringBuilder);
 
 		public virtual string Describe()

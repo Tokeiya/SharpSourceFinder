@@ -9,6 +9,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public static bool IsImaginaryRoot(IDiscriminatedElement element) => element is ImaginaryRoot;
 
+		void RegisterChild(IDiscriminatedElement child);
+
 		void Describe(StringBuilder stringBuilder);
 		string Describe();
 

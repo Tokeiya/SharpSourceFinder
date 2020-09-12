@@ -12,8 +12,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		}
 
+
 		public string Identity { get; }
 
+		public override void RegisterChild(IDiscriminatedElement child)
+		=>throw new NotSupportedException("IdentityName can't have child.");
 		public override void Describe(StringBuilder stringBuilder) => stringBuilder.Append(Identity);
 
 		public override bool Equals(object obj)

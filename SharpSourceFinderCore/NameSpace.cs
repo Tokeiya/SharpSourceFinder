@@ -22,11 +22,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 			}
 		}
 
-		public void AddChild(NameSpace child) => Add(child);
-
-
-
-
 		public QualifiedName GetFullQualifiedName()
 		{
 			var buff = StackPool.Get();
@@ -68,7 +63,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			Name.Describe(stringBuilder);
 			stringBuilder.Append("\n{\n");
 
-			foreach (var elem in Children())
+			foreach (var elem in Children().Where(x=>!ReferenceEquals(x,Name)))
 			{
 				elem.Describe(stringBuilder);
 			}

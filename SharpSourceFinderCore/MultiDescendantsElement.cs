@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Tokeiya3.SharpSourceFinderCore
@@ -14,7 +15,19 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		protected MultiDescendantsElement(IDiscriminatedElement parent) : base(parent)
 		{
+
 		}
+
+		public override void RegisterChild(IDiscriminatedElement child)
+		{
+			if (child is T t) _children.Add(t);
+			else throw new ArgumentException($"{nameof(child)} can't accept.");
+		}
+
+
+
+
+
 
 		protected IReadOnlyList<T> ChildElements => _children;
 
@@ -25,7 +38,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 			foreach (var elem in _children)
 			{
 				yield return elem;
-
 				foreach (var e in elem.Descendants()) yield return e;
 			}
 		}
