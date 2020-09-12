@@ -35,9 +35,9 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		[Fact]
 		public void DescribeTest()
 		{
-			const string expectedInnerDescription = "namespace Outer.Outer\n{\nnamespace Inner\n{\n}\n}\n";
+			const string expectedInnerDescription = "namespace Inner\n{\n}\n";
 
-			const string expectedOuterDescription = "namespace Outer.Outer\n{\n}\n";
+			const string expectedOuterDescription = "namespace Outer.Outer\n{\nnamespace Inner\n{\n}\n}\n";
 
 			var scr = CreateStandardScr();
 			var outer = new NameSpace(scr);
@@ -46,6 +46,8 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 
 
 			var inner = new NameSpace(outer);
+			outer.AddChild(inner);
+
 			inner.Name.Add("Inner");
 
 
@@ -148,30 +150,27 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		{
 			var root = new SourceFile(SamplePath);
 			var x = new NameSpace(root);
-			var name = new QualifiedName(x);
+				
+			x.Name.Add("System");
+			x.Name.Add("Collections");
+			x.Name.Add("Generics");
 
-			name.Add("System");
-			name.Add("Collections");
-			name.Add("Generics");
 
 			var y = new NameSpace(root);
-			name = new QualifiedName(y);
 
-			name.Add("system");
-			name.Add("collections");
-			name.Add("generics");
+				y.Name.Add("system");
+			y.Name.Add("collections");
+			y.Name.Add("generics");
 
 			yield return (x, y);
 
 
 			x = new NameSpace(root);
-			name = new QualifiedName(x);
-			name.Add("System");
-			name.Add("Collections");
+			x.Name.Add("System");
+			x.Name.Add("Collections");
 
 			var child = new NameSpace(x);
-			name = new QualifiedName(child);
-			name.Add("generics");
+			child.Name.Add("generics");
 
 			yield return (x, y);
 
