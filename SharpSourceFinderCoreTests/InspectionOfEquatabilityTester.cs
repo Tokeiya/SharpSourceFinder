@@ -84,9 +84,9 @@ namespace SharpSourceFinderCoreTests
 				y.ObjEqualsCount.Is(1);
 				z.ObjEqualsCount.Is(1);
 
-				x.EquatableCount.Is(2);
-				y.EquatableCount.Is(2);
-				z.EquatableCount.Is(2);
+				x.EquatableCount.Is(1);
+				y.EquatableCount.Is(1);
+				z.EquatableCount.Is(1);
 			}
 		}
 
