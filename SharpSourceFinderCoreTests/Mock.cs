@@ -14,6 +14,16 @@ namespace SharpSourceFinderCoreTests
 		public int OpInequalityCount { get; private set; }
 		public int GetHashCodeCount { get; private set; }
 
+		public bool Equals(Mock? other)
+		{
+			EquatableCount++;
+
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+
+			return Value == other.Value;
+		}
+
 		public void Reset()
 		{
 			ObjEqualsCount = 0;
@@ -32,7 +42,7 @@ namespace SharpSourceFinderCoreTests
 			return obj switch
 			{
 				Mock m => m.Value == Value,
-				_ => false,
+				_ => false
 			};
 		}
 
@@ -57,16 +67,6 @@ namespace SharpSourceFinderCoreTests
 			y.OpInequalityCount++;
 
 			return x.Value != y.Value;
-		}
-
-		public bool Equals(Mock? other)
-		{
-			EquatableCount++;
-
-			if (ReferenceEquals(null, other)) return false;
-			if (ReferenceEquals(this, other)) return true;
-
-			return Value == other.Value;
 		}
 	}
 }

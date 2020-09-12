@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.ObjectPool;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.ObjectPool;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
@@ -24,7 +24,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public IDiscriminatedElement Parent { get; }
 		public abstract void RegisterChild(IDiscriminatedElement child);
-		
+
 		public abstract void Describe(StringBuilder stringBuilder);
 
 		public virtual string Describe()

@@ -1,9 +1,9 @@
-﻿using ChainingAssertion;
-using SharpSourceFinderCoreTests;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ChainingAssertion;
+using SharpSourceFinderCoreTests;
 using Xunit;
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests
@@ -48,7 +48,6 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		{
 			yield return (new SourceFile(SamplePath), new SourceFile(SamplePath), new SourceFile(SamplePath));
 			yield return (new SourceFile(OtherPath), new SourceFile(OtherPath), new SourceFile(OtherPath));
-
 		}
 
 		protected override IEnumerable<(SourceFile x, SourceFile y)> CreateReflexivelyTestSamples()
@@ -61,23 +60,18 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		{
 			yield return new SourceFile(SamplePath);
 			yield return new SourceFile(OtherPath);
-
 		}
 
 		protected override IEnumerable<(SourceFile x, SourceFile y)> CreateInEqualTestSamples()
 		{
 			yield return (new SourceFile(SamplePath), new SourceFile(OtherPath));
-
 		}
 
 		protected override IEnumerable<(object x, object y)> CreateObjectEqualSamples() =>
-			CreateReflexivelyTestSamples().Select(t => ((object)t.x, (object)t.y));
+			CreateReflexivelyTestSamples().Select(t => ((object) t.x, (object) t.y));
 
 
 		protected override IEnumerable<(object x, object y)> CreateObjectInEqualSamples() =>
-			CreateInEqualTestSamples().Select(t => ((object)t.x, (object)t.y));
-
-
-
+			CreateInEqualTestSamples().Select(t => ((object) t.x, (object) t.y));
 	}
 }

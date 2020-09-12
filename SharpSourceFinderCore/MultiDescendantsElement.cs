@@ -9,27 +9,22 @@ namespace Tokeiya3.SharpSourceFinderCore
 	{
 		private readonly List<T> _children = new List<T>();
 
-		protected MultiDescendantsElement() : base()
+		protected MultiDescendantsElement()
 		{
 		}
 
 		protected MultiDescendantsElement(IDiscriminatedElement parent) : base(parent)
 		{
-
 		}
+
+
+		protected IReadOnlyList<T> ChildElements => _children;
 
 		public override void RegisterChild(IDiscriminatedElement child)
 		{
 			if (child is T t) _children.Add(t);
 			else throw new ArgumentException($"{nameof(child)} can't accept.");
 		}
-
-
-
-
-
-
-		protected IReadOnlyList<T> ChildElements => _children;
 
 		protected void Add(T value) => _children.Add(value);
 

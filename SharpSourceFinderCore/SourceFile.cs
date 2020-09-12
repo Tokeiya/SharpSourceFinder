@@ -13,10 +13,17 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public string Path { get; }
 
+		public bool Equals(SourceFile? other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Path == other.Path;
+		}
+
 		public override void Describe(StringBuilder stringBuilder)
 		{
-
 		}
+
 		public override bool Equals(object obj)
 		{
 			return ReferenceEquals(this, obj) || obj is SourceFile other && Equals(other);
@@ -30,12 +37,5 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public static bool operator ==(SourceFile x, SourceFile y) => x.Path == y.Path;
 
 		public static bool operator !=(SourceFile x, SourceFile y) => x.Path != y.Path;
-
-		public bool Equals(SourceFile? other)
-		{
-			if (ReferenceEquals(null, other)) return false;
-			if (ReferenceEquals(this, other)) return true;
-			return Path == other.Path;
-		}
 	}
 }

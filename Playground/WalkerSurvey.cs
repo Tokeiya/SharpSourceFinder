@@ -1,36 +1,14 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Tokeiya3.SharpSourceFinderCore;
 
 namespace Playground
 {
 	public class WalkerSurvey : CSharpSyntaxWalker
 	{
-		private class Dummy : DiscriminatedElement
-		{
-			public override void RegisterChild(IDiscriminatedElement child)
-			{
-				throw new NotImplementedException();
-			}
-
-			public override void Describe(StringBuilder stringBuilder)
-			{
-				throw new NotImplementedException();
-			}
-
-			public override IEnumerable<IDiscriminatedElement> Children()
-			{
-				throw new NotImplementedException();
-			}
-
-			public override IEnumerable<IDiscriminatedElement> Descendants()
-			{
-				throw new NotImplementedException();
-			}
-		}
 		private readonly Stack<IDiscriminatedElement> _stack = new Stack<IDiscriminatedElement>();
 
 		public override void VisitAliasQualifiedName(AliasQualifiedNameSyntax node)
@@ -53,8 +31,30 @@ namespace Playground
 
 		public override void VisitUsingDirective(UsingDirectiveSyntax node)
 		{
-
 			base.VisitUsingDirective(node);
+		}
+
+		private class Dummy : DiscriminatedElement
+		{
+			public override void RegisterChild(IDiscriminatedElement child)
+			{
+				throw new NotImplementedException();
+			}
+
+			public override void Describe(StringBuilder stringBuilder)
+			{
+				throw new NotImplementedException();
+			}
+
+			public override IEnumerable<IDiscriminatedElement> Children()
+			{
+				throw new NotImplementedException();
+			}
+
+			public override IEnumerable<IDiscriminatedElement> Descendants()
+			{
+				throw new NotImplementedException();
+			}
 		}
 	}
 }

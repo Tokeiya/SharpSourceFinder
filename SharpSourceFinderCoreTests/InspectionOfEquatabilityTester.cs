@@ -1,25 +1,27 @@
-using ChainingAssertion;
 using System.Collections.Generic;
 using System.Linq;
+using ChainingAssertion;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
-
-
-
 	public class InspectionOfEquatabilityTester : EquatabilityTester<Mock>
 	{
-		private readonly (Mock x, Mock y, Mock z)[] _transitivelySamples = Enumerable.Range(0, 10).Select(i => (new Mock(i), new Mock(i), new Mock(i))).ToArray();
-		private readonly (Mock x, Mock y)[] _reflexivelySamples = Enumerable.Range(0, 10).Select(i => (new Mock(i), new Mock(i))).ToArray();
-		private readonly Mock[] _symmetricallySamples = Enumerable.Range(0, 10).Select(i => new Mock(i)).ToArray();
-		private readonly (Mock x, Mock y)[] _inEqualSamples = Enumerable.Range(0, 10).Select(i => (new Mock(i), new Mock(i + 1))).ToArray();
-
-
+		private readonly (Mock x, Mock y)[] _inEqualSamples =
+			Enumerable.Range(0, 10).Select(i => (new Mock(i), new Mock(i + 1))).ToArray();
 
 
 		private readonly ITestOutputHelper _output;
+
+		private readonly (Mock x, Mock y)[] _reflexivelySamples =
+			Enumerable.Range(0, 10).Select(i => (new Mock(i), new Mock(i))).ToArray();
+
+		private readonly Mock[] _symmetricallySamples = Enumerable.Range(0, 10).Select(i => new Mock(i)).ToArray();
+
+		private readonly (Mock x, Mock y, Mock z)[] _transitivelySamples =
+			Enumerable.Range(0, 10).Select(i => (new Mock(i), new Mock(i), new Mock(i))).ToArray();
+
 		public InspectionOfEquatabilityTester(ITestOutputHelper output) => _output = output;
 
 		protected override IEnumerable<(Mock x, Mock y, Mock z)> CreateTransitivelyTestSamples()
@@ -30,9 +32,11 @@ namespace SharpSourceFinderCoreTests
 
 		protected override IEnumerable<(Mock x, Mock y)> CreateInEqualTestSamples() => _inEqualSamples;
 
-		protected override IEnumerable<(object x, object y)> CreateObjectEqualSamples() => _reflexivelySamples.Select(t => ((object)t.x, (object)t.y));
+		protected override IEnumerable<(object x, object y)> CreateObjectEqualSamples() =>
+			_reflexivelySamples.Select(t => ((object) t.x, (object) t.y));
 
-		protected override IEnumerable<(object x, object y)> CreateObjectInEqualSamples() => _inEqualSamples.Select(t => ((object)t.x, (object)t.y));
+		protected override IEnumerable<(object x, object y)> CreateObjectInEqualSamples() =>
+			_inEqualSamples.Select(t => ((object) t.x, (object) t.y));
 
 		void ResetAll()
 		{
@@ -47,19 +51,14 @@ namespace SharpSourceFinderCoreTests
 			{
 				x.Reset();
 				y.Reset();
-
 			}
 
-			foreach (var elem in _symmetricallySamples)
-			{
-				elem.Reset();
-			}
+			foreach (var elem in _symmetricallySamples) elem.Reset();
 
 			foreach (var (x, y) in _inEqualSamples)
 			{
 				x.Reset();
 				y.Reset();
-
 			}
 		}
 
@@ -105,7 +104,6 @@ namespace SharpSourceFinderCoreTests
 				elem.ObjEqualsCount.Is(1);
 				elem.OpInequalityCount.Is(2);
 			}
-
 		}
 
 		[Fact]
@@ -170,7 +168,6 @@ namespace SharpSourceFinderCoreTests
 			{
 				x.ObjEqualsCount.Is(1);
 				y.ObjEqualsCount.Is(1);
-
 			}
 		}
 	}

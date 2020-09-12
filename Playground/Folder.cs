@@ -32,8 +32,8 @@ namespace Playground
 			yield return this;
 
 			foreach (var elem in _children)
-				foreach (var elemChild in elem.Descendants())
-					yield return elemChild;
+			foreach (var elemChild in elem.Descendants())
+				yield return elemChild;
 		}
 
 		public IEnumerable<Folder> UseStack()

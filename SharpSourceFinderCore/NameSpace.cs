@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.ObjectPool;
@@ -9,17 +8,22 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class NameSpace : MultiDescendantsElement<IDiscriminatedElement>, IEquatable<NameSpace>
 	{
-		private static readonly ObjectPool<Stack<NameSpace>> StackPool = new DefaultObjectPool<Stack<NameSpace>>(new DefaultPooledObjectPolicy<Stack<NameSpace>>());
-		public QualifiedName Name { get; }
+		private static readonly ObjectPool<Stack<NameSpace>> StackPool =
+			new DefaultObjectPool<Stack<NameSpace>>(new DefaultPooledObjectPolicy<Stack<NameSpace>>());
 
 		public NameSpace(IDiscriminatedElement parent) : base(parent) => Name = new QualifiedName(this);
+		public QualifiedName Name { get; }
+
+		public bool Equals(NameSpace? other) => other switch
+		{
+			null => false,
+			{ } when ReferenceEquals(this, other) => true,
+			_ => this == other
+		};
 
 		private void CollectNameAncestorsNameSpace(Stack<NameSpace> buffer)
 		{
-			foreach (var elem in AncestorsAndSelf().OfType<NameSpace>())
-			{
-				buffer.Push(elem);
-			}
+			foreach (var elem in AncestorsAndSelf().OfType<NameSpace>()) buffer.Push(elem);
 		}
 
 		public QualifiedName GetFullQualifiedName()
@@ -33,15 +37,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 				CollectNameAncestorsNameSpace(buff);
 
-		
+
 				while (buff.Count != 0)
 				{
 					var piv = buff.Pop();
 
-					foreach (var elem in piv.Name.Children().Cast<IdentityName>())
-					{
-						ret.Add(elem.Identity);
-					}
+					foreach (var elem in piv.Name.Children().Cast<IdentityName>()) ret.Add(elem.Identity);
 				}
 
 				return ret;
@@ -51,10 +52,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 				buff.Clear();
 				StackPool.Return(buff);
 			}
-
-
 		}
-
 
 
 		public override void Describe(StringBuilder stringBuilder)
@@ -63,20 +61,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 			Name.Describe(stringBuilder);
 			stringBuilder.Append("\n{\n");
 
-			foreach (var elem in Children().Where(x=>!ReferenceEquals(x,Name)))
-			{
-				elem.Describe(stringBuilder);
-			}
+			foreach (var elem in Children().Where(x => !ReferenceEquals(x, Name))) elem.Describe(stringBuilder);
 
 			stringBuilder.Append("}\n");
 		}
-
-		public bool Equals(NameSpace? other) => other switch
-		{
-			null => false,
-			{ } when ReferenceEquals(this, other) => true,
-			_ => this == other
-		};
 
 
 		public override bool Equals(object? obj) => obj switch
@@ -91,10 +79,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 			var ret = Name.GetHashCode();
 
-			foreach (var elem in Ancestors().OfType<NameSpace>())
-			{
-				ret ^= elem.GetHashCode();
-			}
+			foreach (var elem in Ancestors().OfType<NameSpace>()) ret ^= elem.GetHashCode();
 
 			return ret;
 		}
@@ -108,6 +93,5 @@ namespace Tokeiya3.SharpSourceFinderCore
 		}
 
 		public static bool operator !=(NameSpace x, NameSpace y) => !(x == y);
-
 	}
 }

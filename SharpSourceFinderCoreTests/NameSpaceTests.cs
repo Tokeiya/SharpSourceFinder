@@ -1,7 +1,7 @@
-﻿using ChainingAssertion;
-using SharpSourceFinderCoreTests;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using ChainingAssertion;
+using SharpSourceFinderCoreTests;
 using Xunit;
 
 namespace Tokeiya3.SharpSourceFinderCore.Tests
@@ -10,7 +10,6 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 	{
 		private const string SamplePath = "G:\\Hoge\\Piyo.cs";
 		static SourceFile CreateStandardScr() => new SourceFile(SamplePath);
-
 
 
 		[Fact]
@@ -78,7 +77,6 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		}
 
 
-
 		protected override IEnumerable<(NameSpace x, NameSpace y, NameSpace z)> CreateTransitivelyTestSamples()
 		{
 			var rootA = new SourceFile("C:\\Foo\\Bar.cs");
@@ -122,7 +120,6 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 
 
 			yield return (x, y, z);
-
 		}
 
 		protected override IEnumerable<(NameSpace x, NameSpace y)> CreateReflexivelyTestSamples()
@@ -149,7 +146,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 		{
 			var root = new SourceFile(SamplePath);
 			var x = new NameSpace(root);
-				
+
 			x.Name.Add("System");
 			x.Name.Add("Collections");
 			x.Name.Add("Generics");
@@ -157,7 +154,7 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 
 			var y = new NameSpace(root);
 
-				y.Name.Add("system");
+			y.Name.Add("system");
 			y.Name.Add("collections");
 			y.Name.Add("generics");
 
@@ -172,15 +169,12 @@ namespace Tokeiya3.SharpSourceFinderCore.Tests
 			child.Name.Add("generics");
 
 			yield return (x, y);
-
-
 		}
 
 		protected override IEnumerable<(object x, object y)> CreateObjectEqualSamples() =>
-		CreateReflexivelyTestSamples().Select(tup => ((object)tup.x, (object)tup.y));
+			CreateReflexivelyTestSamples().Select(tup => ((object) tup.x, (object) tup.y));
 
 		protected override IEnumerable<(object x, object y)> CreateObjectInEqualSamples()
-		=> CreateInEqualTestSamples().Select(tup => ((object)tup.x, (object)tup.y));
-
+			=> CreateInEqualTestSamples().Select(tup => ((object) tup.x, (object) tup.y));
 	}
 }

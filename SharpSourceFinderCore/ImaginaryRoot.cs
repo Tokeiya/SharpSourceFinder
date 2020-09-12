@@ -8,6 +8,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 	{
 		public void RegisterChild(IDiscriminatedElement child) =>
 			throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support any methods and properties.");
+
 		public void Describe(StringBuilder stringBuilder) =>
 			throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support any methods and properties.");
 
