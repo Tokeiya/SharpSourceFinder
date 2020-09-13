@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ChainingAssertion;
-using SharpSourceFinderCoreTests;
+using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 
-namespace Tokeiya3.SharpSourceFinderCore.Tests
+namespace SharpSourceFinderCoreTests
 {
 	public class SourceFileTests : EquatabilityTester<SourceFile>
 	{

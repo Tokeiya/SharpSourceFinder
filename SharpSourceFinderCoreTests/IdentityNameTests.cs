@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using ChainingAssertion;
-using SharpSourceFinderCoreTests;
+using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 
-namespace Tokeiya3.SharpSourceFinderCore.Tests
+namespace SharpSourceFinderCoreTests
 {
 	public class IdentityEquatabilityTest : EquatabilityTester<IdentityName>
 	{
