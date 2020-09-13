@@ -52,7 +52,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public IEnumerable<IDiscriminatedElement> AncestorsAndSelf()
 		{
 			yield return this;
-
 			foreach (var elem in Ancestors()) yield return elem;
 		}
 
@@ -63,7 +62,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public IEnumerable<IDiscriminatedElement> DescendantsAndSelf()
 		{
 			yield return this;
-
 			foreach (var elem in Descendants()) yield return elem;
 		}
 	}

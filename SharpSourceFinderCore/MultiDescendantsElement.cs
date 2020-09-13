@@ -5,7 +5,7 @@ using System.Linq;
 namespace Tokeiya3.SharpSourceFinderCore
 {
 	public abstract class MultiDescendantsElement<T> : DiscriminatedElement
-		where T : IDiscriminatedElement
+		where T : class,IDiscriminatedElement
 	{
 		private readonly List<T> _children = new List<T>();
 
@@ -22,11 +22,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override void RegisterChild(IDiscriminatedElement child)
 		{
+			var hoge = (T)child;
 			if (child is T t) _children.Add(t);
 			else throw new ArgumentException($"{nameof(child)} can't accept.");
 		}
 
-		protected void Add(T value) => _children.Add(value);
 
 		public override IEnumerable<IDiscriminatedElement> Descendants()
 		{
