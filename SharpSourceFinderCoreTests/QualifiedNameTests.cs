@@ -14,6 +14,54 @@ namespace SharpSourceFinderCoreTests
 
 
 		[Fact]
+		public void AddQualifiedNameTest()
+		{
+			var scr=new QualifiedName(_rootA);
+			scr.Add("A");
+			scr.Add("B");
+
+			var actual = new QualifiedName(_rootB);
+			actual.Add("AA");
+			actual.Add("BB");
+			actual.Add(scr);
+
+			var expected = new QualifiedName(_rootB);
+			expected.Add("AA");
+			expected.Add("BB");
+			expected.Add("A");
+			expected.Add("B");
+
+
+			actual.Is(expected);
+		}
+
+		[Fact]
+		public void GetIdentitiesTest()
+		{
+			var name = new QualifiedName(_rootB);
+			name.Add("System");
+			name.Add("Collections");
+			name.Add("Generic");
+
+			var expected = new[]
+			{
+				new IdentityName(_rootB, "System"), new IdentityName(_rootB, "Collections"),
+				new IdentityName(_rootB, "Generic")
+			};
+
+			var actual = name.GetIdentityies().ToArray();
+
+			actual.Length.Is(expected.Length);
+
+			for (int i = 0; i < expected.Length; i++)
+			{
+				actual[i].Is(expected[i]);
+			}
+		}
+
+
+
+		[Fact]
 		public void AddTest()
 		{
 			var names = new QualifiedName(_rootA);

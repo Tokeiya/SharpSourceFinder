@@ -36,13 +36,48 @@ namespace SharpSourceFinderCoreTests
 		}
 
 		protected abstract IEnumerable<(T x, T y, T z)> CreateTransitivelyTestSamples();
-		protected abstract IEnumerable<(T x, T y)> CreateReflexivelyTestSamples();
-		protected abstract IEnumerable<T> CreateSymmetricallyTestSamples();
+
+		protected virtual IEnumerable<(T x, T y)> CreateReflexivelyTestSamples()
+		{
+			foreach (var elem in CreateTransitivelyTestSamples())
+			{
+				yield return (elem.x, elem.y);
+				yield return (elem.y, elem.z);
+			}
+		}
+
+		protected virtual IEnumerable<T> CreateSymmetricallyTestSamples()
+		{
+			foreach (var elem in CreateTransitivelyTestSamples())
+			{
+				yield return elem.x;
+				yield return elem.y;
+				yield return elem.z;
+
+			}
+		}
+
 		protected abstract IEnumerable<(T x, T y)> CreateInEqualTestSamples();
 
-		protected abstract IEnumerable<(object x, object y)> CreateObjectEqualSamples();
-		protected abstract IEnumerable<(object x, object y)> CreateObjectInEqualSamples();
+		protected virtual IEnumerable<(object x, object y)> CreateObjectEqualSamples()
+		{
+			foreach (var (xx,yy,zz) in CreateTransitivelyTestSamples())
+			{
+				yield return (xx, yy);
+				yield return (yy, zz);
 
+			}
+		}
+
+		protected virtual IEnumerable<(object x, object y)> CreateObjectInEqualSamples()
+		{
+			foreach (var elem in CreateInEqualTestSamples())
+			{
+				yield return (elem.x, elem.y);
+			}
+		}
+
+		[Trait("Equatability", "Equivalent")]
 		[Fact]
 		public void TransitivelyTest()
 		{
@@ -68,6 +103,7 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
+		[Trait("Equatability", "Equivalent")]
 		[Fact]
 		public void SymmetricallyTest()
 		{
@@ -82,6 +118,7 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
+		[Trait("Equatability", "Equivalent")]
 		[Fact]
 		public void ReflexivelyTest()
 		{
@@ -99,12 +136,14 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
+		[Trait("Equatability", "GetHashCode")]
 		[Fact]
 		public void GetHashCodeTest()
 		{
 			foreach (var (x, y) in CreateReflexivelyTestSamples()) x.GetHashCode().Is(y.GetHashCode());
 		}
 
+		[Trait("Equatability", "Inequivalent")]
 		[Fact]
 		public void InequalityTest()
 		{
@@ -124,7 +163,9 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
-		[Fact]
+		[Trait("Equatability","Equivalent")]
+
+	[Fact]
 		public void ObjectEqualTest()
 		{
 			CreateObjectInEqualSamples().Any().IsTrue("Sequence is empty.");
@@ -142,6 +183,7 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
+		[Trait("Equatability","Inequivalent")]
 		[Fact]
 		public void ObjectInequalityTest()
 		{

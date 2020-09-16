@@ -17,6 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="FastEnum" Version="1.5.3" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.7.0" />
 		<PackageReference Include="StringManipulator" Version="0.1.1" />
 	</ItemGroup>

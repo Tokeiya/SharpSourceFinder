@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tokeiya3.StringManipulator;
 
@@ -16,6 +18,14 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 			var ret = new IdentityName(this, name);
 			return ret;
+		}
+
+		internal void Add(QualifiedName source)
+		{
+			foreach (var elem in source.GetIdentityies())
+			{
+				Add(elem.Identity);
+			}
 		}
 
 		public override void Describe(StringBuilder stringBuilder)
@@ -36,6 +46,9 @@ namespace Tokeiya3.SharpSourceFinderCore
 			QualifiedName other => other == this,
 			_ => false
 		};
+
+		public IEnumerable<IdentityName> GetIdentityies() => ChildElements;
+
 
 		public override int GetHashCode()
 		{
