@@ -22,10 +22,18 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		internal void Add(QualifiedName source)
 		{
+			if (ReferenceEquals(this,source)) throw new ArgumentException($"{nameof(source)} is same.");
+
 			foreach (var elem in source.GetIdentityies())
 			{
 				Add(elem.Identity);
 			}
+		}
+
+		internal void Add(IdentityName name)
+		{
+			if (ReferenceEquals(this,name.Parent)) throw new ArgumentException($"{nameof(name)} specified this child identity.");
+			Add(name.Identity);
 		}
 
 		public override void Describe(StringBuilder stringBuilder)

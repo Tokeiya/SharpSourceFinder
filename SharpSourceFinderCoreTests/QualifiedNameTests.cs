@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ChainingAssertion;
@@ -78,6 +79,61 @@ namespace SharpSourceFinderCoreTests
 			actual[1].Identity.Is("Collections");
 			actual[2].Identity.Is("Generics");
 		}
+
+		[Fact]
+		public void AddAnotherQualifiedNameTest()
+		{
+			var expected = new QualifiedName(_rootA);
+			expected.Add("A");
+			expected.Add("B");
+			expected.Add("C");
+
+			var actual = new QualifiedName(_rootB);
+			actual.Add("A");
+
+
+			var tmp = new QualifiedName(_rootA);
+			tmp.Add("B");
+			tmp.Add("C");
+
+
+			actual.Add(tmp);
+
+			actual.Is(expected);
+
+
+			Assert.Throws<ArgumentException>(() => actual.Add(actual));
+
+		}
+
+		[Fact]
+		public void AddAnotherIdentityNameTest()
+		{
+			var expected = new QualifiedName(_rootA);
+			expected.Add("A");
+			expected.Add("B");
+			expected.Add("C");
+
+
+			var actual = new QualifiedName(_rootB);
+			actual.Add("A");
+			actual.Add("B");
+
+			var tmp = new IdentityName(_rootA, "C");
+			actual.Add(tmp);
+
+
+			actual.Is(expected);
+
+			tmp = actual.Children().OfType<IdentityName>().First();
+
+			Assert.Throws<ArgumentException>(() => actual.Add(tmp));
+
+
+
+		}
+
+
 
 		[Fact]
 		public void DescribeTest()

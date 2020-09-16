@@ -7,6 +7,15 @@ using Microsoft.Extensions.ObjectPool;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
+	[Flags]
+	public enum TypeAttributes
+	{
+		None=0x00,
+		Partial=0x01,
+		Unsafe=0x02,
+		UnsafePartial=Partial|Unsafe
+	}
+
 	public abstract class TypeElement:MultiDescendantsElement<IDiscriminatedElement>,IEquatable<TypeElement>
 	{
 		private static readonly ObjectPool<Stack<IDiscriminatedElement>> StackPool = new DefaultObjectPool<Stack<IDiscriminatedElement>>(new DefaultPooledObjectPolicy<Stack<IDiscriminatedElement>>());
@@ -33,10 +42,57 @@ namespace Tokeiya3.SharpSourceFinderCore
 		}
 
 
+
 		public QualifiedName GetFullQualifiedName()
 		{
-#warning GetFullQualifiedName_Is_NotImpl
-			throw new NotImplementedException("GetFullQualifiedName is not implemented");
+			IDiscriminatedElement findOrigin()
+			{
+				IDiscriminatedElement recent=this;
+
+				foreach (var elem in Ancestors())
+				{
+					if (IDiscriminatedElement.IsImaginaryRoot(elem)) break;
+					recent = elem;
+				}
+
+				return recent;
+			}
+
+			var storage = StackPool.Get();
+
+			try
+			{
+				foreach (var elem in AncestorsAndSelf().Where(x => x is NameSpace || x is TypeElement))
+				{
+					storage.Push(elem);
+				}
+
+				var ret = new QualifiedName(findOrigin());
+
+				while (storage.Count != 0)
+				{
+					switch (storage.Pop())
+					{
+						case NameSpace ns:
+							ret.Add(ns.Name);
+							break;
+
+						case TypeElement te:
+							ret.Add(te.Name);
+							break;
+
+						default:
+							throw new InvalidOperationException();
+					}
+				}
+
+				return ret;
+			}
+			finally
+			{
+				Trace.Assert(storage.Count == 0);
+				StackPool.Return(storage);
+			}
 		}
 
 		public IdentityName Name { get; }
@@ -54,7 +110,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public bool Equals(TypeElement? other) => other switch
 		{
-			{} when other is null=>false,
+			null=>false,
 			{} =>other==this
 		};
 
