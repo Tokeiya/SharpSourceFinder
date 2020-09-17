@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class IdentityName : TerminalElement, IEquatable<IdentityName>
+	public sealed class IdentityName : TerminalElement
 	{
 		internal IdentityName(IDiscriminatedElement parent, string identity) : base(parent)
 		{
@@ -15,31 +15,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public string Identity { get; }
 
-		public bool Equals(IdentityName? other)
-		{
-			var ret = other switch
-			{
-				{ } another => another == this,
-				_ => false
-			};
 
-			return ret;
-		}
-
-		public override void RegisterChild(IDiscriminatedElement child)
-			=> throw new NotSupportedException("IdentityName can't have child.");
-
-		public override void Describe(StringBuilder stringBuilder) => stringBuilder.Append(Identity);
-
-		public override bool Equals(object obj)
-		{
-			return ReferenceEquals(this, obj) || obj is IdentityName other && Equals(other);
-		}
-
-		public override int GetHashCode() => Identity.GetHashCode();
-
-
-		public static bool operator ==(IdentityName x, IdentityName y) => x.Identity == y.Identity;
-		public static bool operator !=(IdentityName x, IdentityName y) => x.Identity != y.Identity;
+		public override void Describe(StringBuilder stringBuilder, string indent, int depth) =>
+			AppendIndent(stringBuilder, indent, depth).Append(Identity);
 	}
 }

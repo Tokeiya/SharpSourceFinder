@@ -9,8 +9,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 		}
 
-		public override IEnumerable<IDiscriminatedElement> Children() => Array.Empty<IDiscriminatedElement>();
+		public sealed override void RegisterChild(IDiscriminatedElement child) =>
+			throw new NotSupportedException($"{nameof(RegisterChild)} is not supported.");
 
-		public override IEnumerable<IDiscriminatedElement> Descendants() => Array.Empty<IDiscriminatedElement>();
+		public sealed override IEnumerable<IDiscriminatedElement> Children() => Array.Empty<IDiscriminatedElement>();
+
+		public sealed override IEnumerable<IDiscriminatedElement> Descendants() => Array.Empty<IDiscriminatedElement>();
 	}
 }

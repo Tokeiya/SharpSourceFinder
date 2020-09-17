@@ -2,7 +2,7 @@
 {
 	public enum Accessibilities
 	{
-		Public=1,
+		Public = 1,
 		Internal,
 		Protected,
 		ProtectedInternal,

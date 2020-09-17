@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class SourceFile : MultiDescendantsElement<IDiscriminatedElement>, IEquatable<SourceFile>
+	public sealed class SourceFile : MultiDescendantsElement<IDiscriminatedElement>
 	{
 		public SourceFile(string path)
 		{
@@ -13,29 +13,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public string Path { get; }
 
-		public bool Equals(SourceFile? other)
+
+		public override void Describe(StringBuilder stringBuilder, string indent, int depth)
 		{
-			if (ReferenceEquals(null, other)) return false;
-			if (ReferenceEquals(this, other)) return true;
-			return Path == other.Path;
+			foreach (var elem in ChildElements) elem.Describe(stringBuilder, indent, 0);
 		}
-
-		public override void Describe(StringBuilder stringBuilder)
-		{
-		}
-
-		public override bool Equals(object obj)
-		{
-			return ReferenceEquals(this, obj) || obj is SourceFile other && Equals(other);
-		}
-
-		public override int GetHashCode()
-		{
-			return Path.GetHashCode();
-		}
-
-		public static bool operator ==(SourceFile x, SourceFile y) => x.Path == y.Path;
-
-		public static bool operator !=(SourceFile x, SourceFile y) => x.Path != y.Path;
 	}
 }

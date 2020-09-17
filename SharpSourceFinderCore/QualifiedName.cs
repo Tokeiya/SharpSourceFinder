@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Tokeiya3.StringManipulator;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class QualifiedName : MultiDescendantsElement<IdentityName>, IEquatable<QualifiedName>
+	public sealed class QualifiedName : MultiDescendantsElement<IdentityName>
 	{
 		internal QualifiedName(IDiscriminatedElement parent) : base(parent)
 		{
 		}
 
-		public bool Equals(QualifiedName other) => other == this;
 
 		internal IdentityName Add(string name)
 		{
@@ -22,62 +20,32 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		internal void Add(QualifiedName source)
 		{
-			if (ReferenceEquals(this,source)) throw new ArgumentException($"{nameof(source)} is same.");
+			if (ReferenceEquals(this, source)) throw new ArgumentException($"{nameof(source)} is same.");
 
-			foreach (var elem in source.GetIdentityies())
-			{
-				Add(elem.Identity);
-			}
+			foreach (var elem in source.GetIdentityies()) Add(elem.Identity);
 		}
 
 		internal void Add(IdentityName name)
 		{
-			if (ReferenceEquals(this,name.Parent)) throw new ArgumentException($"{nameof(name)} specified this child identity.");
+			if (ReferenceEquals(this, name.Parent))
+				throw new ArgumentException($"{nameof(name)} specified this child identity.");
 			Add(name.Identity);
 		}
 
-		public override void Describe(StringBuilder stringBuilder)
+		public override void Describe(StringBuilder stringBuilder, string indent, int depth)
 		{
+			AppendIndent(stringBuilder, indent, depth);
+
 			foreach (var elem in ChildElements)
 			{
-				elem.Describe(stringBuilder);
+				elem.Describe(stringBuilder, string.Empty, 0);
 				stringBuilder.Append('.');
 			}
 
 			stringBuilder.Extract(..(stringBuilder.Length - 1));
 		}
 
-		public override bool Equals(object obj) => obj switch
-		{
-			null => false,
-			{ } when ReferenceEquals(this, obj) => true,
-			QualifiedName other => other == this,
-			_ => false
-		};
 
 		public IEnumerable<IdentityName> GetIdentityies() => ChildElements;
-
-
-		public override int GetHashCode()
-		{
-			var ret = 0;
-
-			foreach (var elem in ChildElements) ret ^= elem.GetHashCode();
-
-			return ret;
-		}
-
-		public static bool operator ==(QualifiedName x, QualifiedName y)
-		{
-			if (x.ChildElements.Count != y.ChildElements.Count) return false;
-
-			for (int i = 0; i < x.ChildElements.Count; i++)
-				if (x.ChildElements[i] != y.ChildElements[i])
-					return false;
-
-			return true;
-		}
-
-		public static bool operator !=(QualifiedName x, QualifiedName y) => !(x == y);
 	}
 }

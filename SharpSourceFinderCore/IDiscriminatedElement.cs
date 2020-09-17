@@ -6,10 +6,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 	public interface IDiscriminatedElement
 	{
 		IDiscriminatedElement Parent { get; }
-		public static bool IsImaginaryRoot(IDiscriminatedElement element) => element is ImaginaryRoot;
 		void RegisterChild(IDiscriminatedElement child);
-		void Describe(StringBuilder stringBuilder);
-		string Describe();
+		void Describe(StringBuilder stringBuilder, string indent, int depth);
+		string Describe(string indent = "\t");
+
 		IEnumerable<IDiscriminatedElement> Ancestors();
 		IEnumerable<IDiscriminatedElement> AncestorsAndSelf();
 		IEnumerable<IDiscriminatedElement> Children();

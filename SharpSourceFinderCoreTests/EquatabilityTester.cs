@@ -53,7 +53,6 @@ namespace SharpSourceFinderCoreTests
 				yield return elem.x;
 				yield return elem.y;
 				yield return elem.z;
-
 			}
 		}
 
@@ -61,23 +60,19 @@ namespace SharpSourceFinderCoreTests
 
 		protected virtual IEnumerable<(object x, object y)> CreateObjectEqualSamples()
 		{
-			foreach (var (xx,yy,zz) in CreateTransitivelyTestSamples())
+			foreach (var (xx, yy, zz) in CreateTransitivelyTestSamples())
 			{
 				yield return (xx, yy);
 				yield return (yy, zz);
-
 			}
 		}
 
 		protected virtual IEnumerable<(object x, object y)> CreateObjectInEqualSamples()
 		{
-			foreach (var elem in CreateInEqualTestSamples())
-			{
-				yield return (elem.x, elem.y);
-			}
+			foreach (var elem in CreateInEqualTestSamples()) yield return (elem.x, elem.y);
 		}
 
-		[Trait("Equatability", "Equivalent")]
+		[Trait("Type","Equatability")]
 		[Fact]
 		public void TransitivelyTest()
 		{
@@ -103,7 +98,8 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
-		[Trait("Equatability", "Equivalent")]
+
+		[Trait("Type", "Equatability")]
 		[Fact]
 		public void SymmetricallyTest()
 		{
@@ -118,7 +114,7 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
-		[Trait("Equatability", "Equivalent")]
+		[Trait("Type", "Equatability")]
 		[Fact]
 		public void ReflexivelyTest()
 		{
@@ -136,14 +132,15 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
-		[Trait("Equatability", "GetHashCode")]
+
+		[Trait("Type", "Equatability")]
 		[Fact]
 		public void GetHashCodeTest()
 		{
 			foreach (var (x, y) in CreateReflexivelyTestSamples()) x.GetHashCode().Is(y.GetHashCode());
 		}
 
-		[Trait("Equatability", "Inequivalent")]
+		[Trait("Type", "Equatability")]
 		[Fact]
 		public void InequalityTest()
 		{
@@ -163,9 +160,8 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
-		[Trait("Equatability","Equivalent")]
-
-	[Fact]
+		[Trait("Type", "Equatability")]
+		[Fact]
 		public void ObjectEqualTest()
 		{
 			CreateObjectInEqualSamples().Any().IsTrue("Sequence is empty.");
@@ -183,7 +179,7 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
-		[Trait("Equatability","Inequivalent")]
+		[Trait("Type", "Equatability")]
 		[Fact]
 		public void ObjectInequalityTest()
 		{

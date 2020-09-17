@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
 	public abstract class MultiDescendantsElement<T> : DiscriminatedElement
-		where T : class,IDiscriminatedElement
+		where T : class, IDiscriminatedElement
 	{
 		private readonly List<T> _children = new List<T>();
 
@@ -22,7 +21,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override void RegisterChild(IDiscriminatedElement child)
 		{
-			var hoge = (T)child;
+			var hoge = (T) child;
 			if (child is T t) _children.Add(t);
 			else throw new ArgumentException($"{nameof(child)} can't accept.");
 		}
@@ -37,6 +36,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 			}
 		}
 
-		public override IEnumerable<IDiscriminatedElement> Children() => _children.Cast<IDiscriminatedElement>();
+		public override IEnumerable<IDiscriminatedElement> Children() => _children;
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
 using static Tokeiya3.SharpSourceFinderCore.DiscriminatedElement;
@@ -20,7 +21,7 @@ namespace SharpSourceFinderCoreTests
 			Assert.Throws<NotSupportedException>(() => Root.Parent);
 
 			Assert.Throws<NotSupportedException>(() => Root.Describe());
-			Assert.Throws<NotSupportedException>(() => Root.Describe(new StringBuilder()));
+			Assert.Throws<NotSupportedException>(() => Root.Describe(new StringBuilder(), "\t", 0));
 
 			Assert.Throws<NotSupportedException>(() => Root.Ancestors());
 			Assert.Throws<NotSupportedException>(() => Root.AncestorsAndSelf());
@@ -29,6 +30,7 @@ namespace SharpSourceFinderCoreTests
 			Assert.Throws<NotSupportedException>(() => Root.DescendantsAndSelf());
 
 			Assert.Throws<NotSupportedException>(() => Root.Children());
+			Assert.Throws<NotSupportedException>(() => Root.RegisterChild(new SourceFile("path")));
 		}
 	}
 }

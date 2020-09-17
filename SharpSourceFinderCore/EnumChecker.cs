@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
@@ -11,15 +9,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		static EnumChecker()
 		{
-			var ret = (T[])Enum.GetValues(typeof(T));
-			foreach (var elem in ret)
-			{
-				Contents.Add(elem);
-			}
+			var ret = (T[]) Enum.GetValues(typeof(T));
+			foreach (var elem in ret) Contents.Add(elem);
 		}
 
 		public static bool Verify(T value) => Contents.Contains(value);
-
 	}
-
 }

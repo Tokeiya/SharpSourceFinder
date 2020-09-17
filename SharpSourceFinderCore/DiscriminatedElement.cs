@@ -12,6 +12,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		protected DiscriminatedElement(IDiscriminatedElement parent)
 		{
 			if (parent is ImaginaryRoot) throw new ArgumentException("parent can't accept DiscriminatedElement.Root .");
+
 			Parent = parent;
 
 			parent.RegisterChild(this);
@@ -24,16 +25,15 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public IDiscriminatedElement Parent { get; }
 		public abstract void RegisterChild(IDiscriminatedElement child);
+		public abstract void Describe(StringBuilder stringBuilder, string indent, int depth);
 
-		public abstract void Describe(StringBuilder stringBuilder);
-
-		public virtual string Describe()
+		public virtual string Describe(string indent = "\t")
 		{
 			var bld = StringBuilderPool.Get();
 
 			try
 			{
-				Describe(bld);
+				Describe(bld, indent, 0);
 				return bld.ToString();
 			}
 			finally
@@ -41,6 +41,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 				StringBuilderPool.Return(bld);
 			}
 		}
+
 
 		public IEnumerable<IDiscriminatedElement> Ancestors()
 		{
@@ -63,6 +64,15 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 			yield return this;
 			foreach (var elem in Descendants()) yield return elem;
+		}
+
+		protected static StringBuilder AppendIndent(StringBuilder stringBuilder, string indent, int depth)
+		{
+			if (depth < 0) throw new ArgumentOutOfRangeException($"{nameof(depth)}");
+
+			for (int i = 0; i < depth; i++) stringBuilder.Append(indent);
+
+			return stringBuilder;
 		}
 	}
 }
