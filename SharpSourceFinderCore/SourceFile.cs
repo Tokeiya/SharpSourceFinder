@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
+
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
@@ -14,9 +16,15 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public string Path { get; }
 
 
+
+
 		public override void Describe(StringBuilder stringBuilder, string indent, int depth)
 		{
 			foreach (var elem in ChildElements) elem.Describe(stringBuilder, indent, 0);
+		}
+
+		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
+		{
 		}
 	}
 }

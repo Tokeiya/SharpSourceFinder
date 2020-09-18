@@ -32,6 +32,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public IEnumerable<IDiscriminatedElement> DescendantsAndSelf() =>
 			throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support any methods and properties.");
 
+		public IQualified GetQualifiedName()=>
+			throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support any methods and properties.");
+
+		public void AggregateIdentities(Stack<(IdentityCategories category,string identity)> accumulator)=>
+			throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support any methods and properties.");
+
 		public IDiscriminatedElement Parent =>
 			throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support any methods and properties.");
 	}

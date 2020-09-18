@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
@@ -18,6 +19,9 @@ namespace SharpSourceFinderCoreTests
 
 		protected abstract IEnumerable<(T actual, IReadOnlyList<IDiscriminatedElement> expectedAncestors)>
 			GetTestSamples();
+
+		protected abstract IEnumerable<(T actual, IReadOnlyList<IIdentity> expected)> GenerateQualifiedNameTest();
+
 
 		[Trait("Type", "DiscriminatedElement")]
 		[Fact]
@@ -80,5 +84,28 @@ namespace SharpSourceFinderCoreTests
 				for (int i = 0; i < expected.Length; i++) AreEqual(actual[i + 1], expected[i]);
 			}
 		}
+
+		[Fact]
+		[Trait("Type","DiscriminatedElement")]
+		public virtual void GetQualifiedNameTest()
+		{
+			static void areEqual(IIdentity actual, IIdentity expected)
+			{
+				actual.Identity.Is(expected.Identity);
+				actual.IdentityCategory.Is(expected.IdentityCategory);
+			}
+
+			foreach (var (sample,expected) in GenerateQualifiedNameTest())
+			{
+				var actual = sample.GetQualifiedName();
+				actual.Identities.Count.Is(expected.Count);
+
+				for (int i = 0; i < expected.Count; i++)
+				{
+					areEqual(actual.Identities[i],expected[i]);
+				}
+			}
+		}
+
 	}
 }

@@ -21,7 +21,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override void RegisterChild(IDiscriminatedElement child)
 		{
-			var hoge = (T) child;
 			if (child is T t) _children.Add(t);
 			else throw new ArgumentException($"{nameof(child)} can't accept.");
 		}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using Microsoft.Extensions.ObjectPool;
 
@@ -22,6 +23,9 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		protected static ObjectPool<StringBuilder> StringBuilderPool { get; } =
 			new DefaultObjectPool<StringBuilder>(new StringBuilderPooledObjectPolicy());
+
+		protected static ObjectPool<Stack<(IdentityCategories category,string identity)>> StackPool { get; }=
+			new DefaultObjectPool<Stack<(IdentityCategories,string)>>(new DefaultPooledObjectPolicy<Stack<(IdentityCategories,string)>>());
 
 		public IDiscriminatedElement Parent { get; }
 		public abstract void RegisterChild(IDiscriminatedElement child);
@@ -66,6 +70,38 @@ namespace Tokeiya3.SharpSourceFinderCore
 			foreach (var elem in Descendants()) yield return elem;
 		}
 
+		public virtual IQualified GetQualifiedName()
+		{
+			var accum = StackPool.Get();
+
+			try
+			{
+				var ret = new QualifiedName();
+				foreach (var elem in AncestorsAndSelf())
+				{
+					elem.AggregateIdentities(accum);
+				}
+
+				while (accum.Count!=0)
+				{
+					var (cat,id) = accum.Pop();
+					_ = new IdentityName(ret, cat, id);
+				}
+
+				return ret;
+			}
+			finally
+			{
+				Debug.Assert(accum.Count == 0);
+				accum.Clear();
+				StackPool.Return(accum);
+
+			}
+		}
+
+		public abstract void AggregateIdentities(Stack<(IdentityCategories category,string identity)> accumulator);
+
+
 		protected static StringBuilder AppendIndent(StringBuilder stringBuilder, string indent, int depth)
 		{
 			if (depth < 0) throw new ArgumentOutOfRangeException($"{nameof(depth)}");
@@ -74,5 +110,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 			return stringBuilder;
 		}
+
+
 	}
 }
