@@ -26,5 +26,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
 		{
 		}
+
+		public override bool IsIndividualEquivalentTo(IDiscriminatedElement element)
+		{
+#warning IsIndividualEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsIndividualEquivalentTo is not implemented");
+		}
 	}
 }

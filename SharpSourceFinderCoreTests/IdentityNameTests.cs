@@ -42,6 +42,86 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
+		protected override IEnumerable<(IdentityName x, IdentityName y, IdentityName z)> GenerateIndividualEquivalentSamples()
+		{
+			var a = new SourceFile("foo");
+			var b = new SourceFile("bar");
+
+			foreach (var cat in FastEnum.GetValues<IdentityCategories>())
+			{
+				var x = new IdentityName(a, cat, "hoge");
+				var y = new IdentityName(a, cat, "hoge");
+				var z = new IdentityName(a, cat, "hoge");
+				yield return (x, y, z);
+
+				x = new IdentityName(a, cat, "piyo");
+				y = new IdentityName(b, cat, "piyo");
+				z = new IdentityName(a, cat, "piyo");
+				yield return (x, y, z);
+
+			}
+
+		}
+
+		protected override IEnumerable<(IdentityName x, IdentityName y)> GenerateIndividualInEquivalentSamples()
+		{
+			var a = new SourceFile("a");
+
+			var x = new IdentityName(a, IdentityCategories.Class, "hoge");
+			var y = new IdentityName(a, IdentityCategories.Delegate, "hoge");
+
+			yield return (x, y);
+
+			x = new IdentityName(a, IdentityCategories.Class, "hoge");
+			y = new IdentityName(a, IdentityCategories.Class, "piyo");
+			yield return (x, y);
+
+		}
+
+		protected override IEnumerable<(IdentityName x, IdentityName y, IdentityName z)> GenerateEquivalentIncludeAncestorsSamples()
+		{
+			var a = new SourceFile("a");
+
+			foreach (var cat in FastEnum.GetValues<IdentityCategories>())
+			{
+				var x =new  IdentityName(a, cat, "Hoge");
+				var y = new IdentityName(a, cat, "Hoge");
+				var z = new IdentityName(a, cat, "Hoge");
+				yield return (x, y, z);
+			}
+		}
+
+		protected override IEnumerable<(IdentityName x, IdentityName y)> GenerateInEquivalentIncludeAncestorsSamples()
+		{
+			var a = new SourceFile("A");
+			var b = new SourceFile("B");
+
+			var x = new IdentityName(a, IdentityCategories.Class, "Hoge");
+			var y = new IdentityName(b, IdentityCategories.Class, "Hoge");
+			yield return (x, y);
+
+			x = new IdentityName(a, IdentityCategories.Class, "Hoge");
+			y = new IdentityName(a, IdentityCategories.Delegate, "Hoge");
+			yield return (x, y);
+
+			x = new IdentityName(a, IdentityCategories.Class, "Hoge");
+			y = new IdentityName(a, IdentityCategories.Class, "Piyo");
+			yield return (x, y);
+		}
+
+		protected override IEnumerable<(IdentityName x, IdentityName y, IdentityName z)> GenerateFullyEquivalentSamples()
+		{
+
+#warning GenerateFullyEquivalentSamples_Is_NotImpl
+			throw new NotImplementedException("GenerateFullyEquivalentSamples is not implemented");
+		}
+
+		protected override IEnumerable<(IdentityName x, IdentityName y)> GenerateFullyInEquivalentSamples()
+		{
+#warning GenerateFullyInEquivalentSamples_Is_NotImpl
+			throw new NotImplementedException("GenerateFullyInEquivalentSamples is not implemented");
+		}
+
 
 		[Fact]
 		public void DescribeTest()

@@ -100,6 +100,20 @@ namespace Tokeiya3.SharpSourceFinderCore
 		}
 
 		public abstract void AggregateIdentities(Stack<(IdentityCategories category,string identity)> accumulator);
+		public abstract bool IsIndividualEquivalentTo(IDiscriminatedElement element);
+
+		public virtual bool IsEquivalentToIncludeAncestors(IDiscriminatedElement element)
+		{
+
+#warning IsEquivalentToIncludeAncestors_Is_NotImpl
+			throw new NotImplementedException("IsEquivalentToIncludeAncestors is not implemented");
+		}
+
+		public bool IsFullyEquivalentTo(IDiscriminatedElement element)
+		{
+#warning IsFullyEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsFullyEquivalentTo is not implemented");
+		}
 
 
 		protected static StringBuilder AppendIndent(StringBuilder stringBuilder, string indent, int depth)

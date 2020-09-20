@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tokeiya3.StringManipulator;
@@ -37,6 +38,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 			{
 				elem.AggregateIdentities(accumulator);
 			}
+		}
+
+		public override bool IsIndividualEquivalentTo(IDiscriminatedElement element)
+		{
+#warning IsIndividualEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsIndividualEquivalentTo is not implemented");
 		}
 
 		public IReadOnlyList<IIdentity> Identities => ChildElements;

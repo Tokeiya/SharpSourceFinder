@@ -42,6 +42,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 			AppendIndent(stringBuilder, indent, depth).Append(Identity);
 
 		public override void AggregateIdentities(Stack<(IdentityCategories, string)> accumulator) => accumulator.Push((IdentityCategory, Identity));
-
+		public override bool IsIndividualEquivalentTo(IDiscriminatedElement element)
+		{
+#warning IsIndividualEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsIndividualEquivalentTo is not implemented");
+		}
 	}
 }

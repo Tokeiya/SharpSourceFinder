@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
@@ -21,6 +20,190 @@ namespace SharpSourceFinderCoreTests
 			GetTestSamples();
 
 		protected abstract IEnumerable<(T actual, IReadOnlyList<IIdentity> expected)> GenerateQualifiedNameTest();
+
+		protected abstract IEnumerable<(T x, T y, T z)> GenerateIndividualEquivalentSamples();
+		protected abstract IEnumerable<(T x, T y)> GenerateIndividualInEquivalentSamples();
+		protected abstract IEnumerable<(T x, T y, T z)> GenerateEquivalentIncludeAncestorsSamples();
+		protected abstract IEnumerable<(T x, T y)> GenerateInEquivalentIncludeAncestorsSamples();
+
+		protected abstract IEnumerable<(T x, T y, T z)> GenerateFullyEquivalentSamples();
+		protected abstract IEnumerable<(T x, T y)> GenerateFullyInEquivalentSamples();
+
+		[Trait("Type", "DiscriminatedElement")]
+		[Fact]
+		public void IsIndividualEquivalentTest()
+		{
+			var flg = false;
+
+			foreach (var (x,y,z)in GenerateIndividualEquivalentSamples())
+			{
+				flg = true;
+				x.IsIndividualEquivalentTo(x).IsTrue();
+				y.IsIndividualEquivalentTo(y).IsTrue();
+				z.IsIndividualEquivalentTo(z).IsTrue();
+
+				x.IsIndividualEquivalentTo(y).IsTrue();
+				y.IsIndividualEquivalentTo(x).IsTrue();
+
+				y.IsIndividualEquivalentTo(z).IsTrue();
+				z.IsIndividualEquivalentTo(y).IsTrue();
+
+				x.IsIndividualEquivalentTo(z).IsTrue();
+				z.IsIndividualEquivalentTo(x).IsTrue();
+			}
+
+			flg.IsTrue();
+		}
+
+		[Trait("Type", "DiscriminatedElement")]
+		[Fact]
+		public void IsIndividualInEquivalentTest()
+		{
+			var flg = false;
+
+			foreach (var (x,y) in GenerateIndividualInEquivalentSamples())
+			{
+				flg = true;
+				x.IsIndividualEquivalentTo(y).IsFalse();
+				y.IsIndividualEquivalentTo(x).IsFalse();
+			}
+
+			flg.IsTrue();
+		}
+
+		[Trait("Type", "DiscriminatedElement")]
+		[Fact]
+		public void IsEquivalentIncludeAncestorsTest ()
+		{
+			var flg = false;
+
+			foreach (var (x,y,z) in GenerateEquivalentIncludeAncestorsSamples())
+			{
+				flg = true;
+
+				x.IsIndividualEquivalentTo(x).IsTrue();
+				x.IsEquivalentToIncludeAncestors(x).IsTrue();
+
+				y.IsIndividualEquivalentTo(y).IsTrue();
+				y.IsEquivalentToIncludeAncestors(y).IsTrue();
+
+				z.IsIndividualEquivalentTo(z).IsTrue();
+				z.IsEquivalentToIncludeAncestors(z).IsTrue();
+
+
+				x.IsIndividualEquivalentTo(y).IsTrue();
+				x.IsEquivalentToIncludeAncestors(y).IsTrue();
+
+				y.IsIndividualEquivalentTo(x).IsTrue();
+				y.IsEquivalentToIncludeAncestors(x).IsTrue();
+
+				y.IsIndividualEquivalentTo(z).IsTrue();
+				y.IsEquivalentToIncludeAncestors(z).IsTrue();
+
+				z.IsIndividualEquivalentTo(y).IsTrue();
+				z.IsEquivalentToIncludeAncestors(y).IsTrue();
+
+				x.IsIndividualEquivalentTo(z).IsTrue();
+				x.IsEquivalentToIncludeAncestors(z).IsTrue();
+
+				z.IsIndividualEquivalentTo(x).IsTrue();
+				z.IsEquivalentToIncludeAncestors(x).IsTrue();
+
+			}
+
+			flg.IsTrue();
+		}
+
+		[Trait("Type", "DiscriminatedElement")]
+		[Fact]
+		public void IsInEquivalentIncludeAncestorsTest()
+		{
+			var flg = false;
+
+			foreach (var (x,y) in GenerateInEquivalentIncludeAncestorsSamples())
+			{
+				flg = true;
+
+				x.IsEquivalentToIncludeAncestors(y).IsFalse();
+				y.IsEquivalentToIncludeAncestors(x).IsFalse();
+			}
+			flg.IsTrue();
+		}
+
+		[Trait("Type", "DiscriminatedElement")]
+		[Fact]
+		public void IsFullyEquivalentToTest()
+		{
+			var flg = false;
+
+			foreach ((T x, T y, T z)  in GenerateFullyEquivalentSamples())
+			{
+				flg = true;
+
+				x.IsIndividualEquivalentTo(x).IsTrue();
+				x.IsEquivalentToIncludeAncestors(x).IsTrue();
+				x.IsFullyEquivalentTo(x).IsTrue();
+
+				y.IsIndividualEquivalentTo(y).IsTrue();
+				y.IsEquivalentToIncludeAncestors(y).IsTrue();
+				y.IsFullyEquivalentTo(y).IsTrue();
+
+				z.IsIndividualEquivalentTo(z).IsTrue();
+				z.IsEquivalentToIncludeAncestors(z).IsTrue();
+				z.IsFullyEquivalentTo(z).IsTrue();
+
+				x.IsIndividualEquivalentTo(y).IsTrue();
+				x.IsEquivalentToIncludeAncestors(y).IsTrue();
+				x.IsFullyEquivalentTo(y).IsTrue();
+
+				y.IsIndividualEquivalentTo(x).IsTrue();
+				y.IsEquivalentToIncludeAncestors(x).IsTrue();
+				y.IsFullyEquivalentTo(x).IsTrue();
+
+
+				y.IsIndividualEquivalentTo(z).IsTrue();
+				y.IsEquivalentToIncludeAncestors(z).IsTrue();
+				y.IsFullyEquivalentTo(z).IsTrue();
+
+
+				z.IsIndividualEquivalentTo(y).IsTrue();
+				z.IsEquivalentToIncludeAncestors(y).IsTrue();
+				z.IsFullyEquivalentTo(y).IsTrue();
+
+
+				x.IsIndividualEquivalentTo(z).IsTrue();
+				x.IsEquivalentToIncludeAncestors(z).IsTrue();
+				x.IsFullyEquivalentTo(z).IsTrue();
+
+
+				z.IsIndividualEquivalentTo(x).IsTrue();
+				z.IsEquivalentToIncludeAncestors(x).IsTrue();
+				z.IsFullyEquivalentTo(x).IsTrue();
+
+			}
+
+			flg.IsTrue();
+
+		}
+
+
+		[Trait("Type", "DiscriminatedElement")]
+		[Fact]
+		public void IsFullyInEquivalentToTest()
+		{
+			var flg = false;
+
+			foreach (var (x,y)in GenerateFullyInEquivalentSamples())
+			{
+				flg = true;
+				x.IsFullyEquivalentTo(y).IsFalse();
+				y.IsFullyEquivalentTo(x).IsFalse();
+			}
+			flg.IsTrue();
+
+		}
+
+
 
 
 		[Trait("Type", "DiscriminatedElement")]

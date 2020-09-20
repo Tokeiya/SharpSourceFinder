@@ -38,6 +38,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public void AggregateIdentities(Stack<(IdentityCategories category,string identity)> accumulator)=>
 			throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support any methods and properties.");
 
+		public bool IsIndividualEquivalentTo(IDiscriminatedElement element) => element is ImaginaryRoot;
+
+		public bool IsEquivalentToIncludeAncestors(IDiscriminatedElement element) => element is ImaginaryRoot;
+		public bool IsFullyEquivalentTo(IDiscriminatedElement element) => element is ImaginaryRoot;
+
 		public IDiscriminatedElement Parent =>
 			throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support any methods and properties.");
 	}
