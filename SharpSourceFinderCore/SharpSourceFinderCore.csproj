@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="IDiscriminatedElement.cs~RF1beed8c2.TMP" />
+		<None Remove="IDiscriminatedElement.cs~RF1beed8c2.TMP" />
 	</ItemGroup>
 
 	<ItemGroup>
