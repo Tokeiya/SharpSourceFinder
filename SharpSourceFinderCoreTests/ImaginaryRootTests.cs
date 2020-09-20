@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -32,18 +31,6 @@ namespace SharpSourceFinderCoreTests
 
 			Assert.Throws<NotSupportedException>(() => Root.Children());
 			Assert.Throws<NotSupportedException>(() => Root.RegisterChild(new SourceFile("path")));
-
-			var tmp = new SourceFile("hoge");
-
-			Root.IsFullyEquivalentTo(Root).IsTrue();
-			Root.IsFullyEquivalentTo(tmp).IsFalse();
-
-			Root.IsIndividualEquivalentTo(Root).IsTrue();
-			Root.IsFullyEquivalentTo(tmp).IsFalse();
-
-			Root.IsEquivalentToIncludeAncestors(Root).IsTrue();
-			Root.IsEquivalentToIncludeAncestors(tmp).IsFalse();
-
 		}
 	}
 }
