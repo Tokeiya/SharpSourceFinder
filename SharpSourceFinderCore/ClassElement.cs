@@ -12,6 +12,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 #warning ClassElement_Is_NotImpl
 			throw new NotImplementedException("ClassElement is not implemented");
 		}
+
 		public override void Describe(StringBuilder builder, string indent, int depth)
 		{
 #warning Describe_Is_NotImpl
@@ -24,7 +25,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("AggregateIdentities is not implemented");
 		}
 
-		public override bool IsEquivalentLogicallyTo(IDiscriminatedElement other)
+		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
 #warning IsEquivalentLogicallyTo_Is_NotImpl
 			throw new NotImplementedException("IsEquivalentLogicallyTo is not implemented");

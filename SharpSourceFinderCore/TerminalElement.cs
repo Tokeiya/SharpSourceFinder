@@ -10,6 +10,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 #warning TerminalElement_Is_NotImpl
 			throw new NotImplementedException("TerminalElement is not implemented");
 		}
+
 		public override IEnumerable<IDiscriminatedElement> Children()
 		{
 #warning Children_Is_NotImpl

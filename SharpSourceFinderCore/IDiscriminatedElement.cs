@@ -3,8 +3,10 @@ using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public interface IDiscriminatedElement
+	public interface IDiscriminatedElement 
 	{
+		bool IsLogicallyEquivalentTo(IDiscriminatedElement other);
+		bool IsPhysicallyEquivalentTo(IDiscriminatedElement other);
 		IDiscriminatedElement Parent { get; }
 		IPhysicalStorage Storage { get; }
 		void RegisterChild(IDiscriminatedElement child);
@@ -18,7 +20,5 @@ namespace Tokeiya3.SharpSourceFinderCore
 		Qualified GetQualifiedName();
 		void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator);
 
-		bool IsEquivalentLogicallyTo(IDiscriminatedElement other);
-		bool IsEquivalentPhysicallyTo(IDiscriminatedElement other);
 	}
 }

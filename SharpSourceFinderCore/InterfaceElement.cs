@@ -6,9 +6,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class InterfaceElement : TypeElement
 	{
-		public InterfaceElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe, bool isPartial) : base(parent, scope, isUnsafe, isPartial, false)
+		public InterfaceElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe, bool isPartial) :
+			base(parent, scope, isUnsafe, isPartial, false)
 		{
 		}
+
 		public override void Describe(StringBuilder builder, string indent, int depth)
 		{
 #warning Describe_Is_NotImpl
@@ -21,12 +23,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("AggregateIdentities is not implemented");
 		}
 
-		public override bool IsEquivalentLogicallyTo(IDiscriminatedElement other)
+		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
 #warning IsEquivalentLogicallyTo_Is_NotImpl
 			throw new NotImplementedException("IsEquivalentLogicallyTo is not implemented");
 		}
-
-		
 	}
 }

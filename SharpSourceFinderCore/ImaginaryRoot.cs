@@ -6,6 +6,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class ImaginaryRoot : IDiscriminatedElement
 	{
+		private ImaginaryRoot()
+		{
+#warning ImaginaryRoot_Is_NotImpl
+			throw new NotImplementedException("ImaginaryRoot is not implemented");
+		}
+
 		public static ImaginaryRoot Root
 		{
 			get
@@ -15,17 +21,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 			}
 		}
 
-		public static bool IsImaginaryRoot(IDiscriminatedElement element)
-		{
-#warning IsImaginaryRoot_Is_NotImpl
-			throw new NotImplementedException("IsImaginaryRoot is not implemented");
-		}
-
-		private ImaginaryRoot()
-		{
-#warning ImaginaryRoot_Is_NotImpl
-			throw new NotImplementedException("ImaginaryRoot is not implemented");
-		}
 		public IDiscriminatedElement Parent
 		{
 			get
@@ -104,16 +99,22 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("AggregateIdentities is not implemented");
 		}
 
-		public bool IsEquivalentLogicallyTo(IDiscriminatedElement other)
+		public bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
 #warning IsEquivalentLogicallyTo_Is_NotImpl
 			throw new NotImplementedException("IsEquivalentLogicallyTo is not implemented");
 		}
 
-		public bool IsEquivalentPhysicallyTo(IDiscriminatedElement other)
+		public bool IsPhysicallyEquivalentTo(IDiscriminatedElement other)
 		{
 #warning IsEquivalentPhysicallyTo_Is_NotImpl
 			throw new NotImplementedException("IsEquivalentPhysicallyTo is not implemented");
+		}
+
+		public static bool IsImaginaryRoot(IDiscriminatedElement element)
+		{
+#warning IsImaginaryRoot_Is_NotImpl
+			throw new NotImplementedException("IsImaginaryRoot is not implemented");
 		}
 	}
 }

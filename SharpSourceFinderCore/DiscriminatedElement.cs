@@ -11,11 +11,13 @@ namespace Tokeiya3.SharpSourceFinderCore
 #warning DiscriminatedElement_Is_NotImpl
 			throw new NotImplementedException("DiscriminatedElement is not implemented");
 		}
+
 		protected DiscriminatedElement()
 		{
 #warning DiscriminatedElement_Is_NotImpl
 			throw new NotImplementedException("DiscriminatedElement is not implemented");
 		}
+
 		public IDiscriminatedElement Parent { get; }
 
 		public virtual IPhysicalStorage Storage
@@ -26,6 +28,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 				throw new NotImplementedException("Storage is not implemented");
 			}
 		}
+
 		public abstract void RegisterChild(IDiscriminatedElement child);
 		public abstract void Describe(StringBuilder builder, string indent, int depth);
 
@@ -69,9 +72,9 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public abstract void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator);
 
-		public abstract bool IsEquivalentLogicallyTo(IDiscriminatedElement other);
+		public abstract bool IsLogicallyEquivalentTo(IDiscriminatedElement other);
 
-		public bool IsEquivalentPhysicallyTo(IDiscriminatedElement other)
+		public bool IsPhysicallyEquivalentTo(IDiscriminatedElement other)
 		{
 #warning IsEquivalentPhysicallyTo_Is_NotImpl
 			throw new NotImplementedException("IsEquivalentPhysicallyTo is not implemented");

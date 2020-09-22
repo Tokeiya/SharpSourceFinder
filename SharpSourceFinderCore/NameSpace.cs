@@ -11,22 +11,34 @@ namespace Tokeiya3.SharpSourceFinderCore
 #warning NameSpace_Is_NotImpl
 			throw new NotImplementedException("NameSpace is not implemented");
 		}
+
 		public NameSpace(IPhysicalStorage physicalStorage)
 		{
 #warning NameSpace_Is_NotImpl
 			throw new NotImplementedException("NameSpace is not implemented");
 		}
-		public NameSpace(IDiscriminatedElement parent):base(parent)
+
+		public NameSpace(IDiscriminatedElement parent) : base(parent)
 		{
 #warning NameSpace_Is_NotImpl
 			throw new NotImplementedException("NameSpace is not implemented");
 		}
+
 		QualifiedElement Identity
 		{
 			get
 			{
 #warning Identity_Is_NotImpl
 				throw new NotImplementedException("Identity is not implemented");
+			}
+		}
+
+		public override IPhysicalStorage Storage
+		{
+			get
+			{
+#warning Storage_Is_NotImpl
+				throw new NotImplementedException("Storage is not implemented");
 			}
 		}
 
@@ -48,21 +60,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("AggregateIdentities is not implemented");
 		}
 
-		public override bool IsEquivalentLogicallyTo(IDiscriminatedElement other)
+		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
 #warning IsEquivalentLogicallyTo_Is_NotImpl
 			throw new NotImplementedException("IsEquivalentLogicallyTo is not implemented");
 		}
-
-		public override IPhysicalStorage Storage
-		{
-			get
-			{
-#warning Storage_Is_NotImpl
-				throw new NotImplementedException("Storage is not implemented");
-			}
-		}
-
-		
 	}
 }

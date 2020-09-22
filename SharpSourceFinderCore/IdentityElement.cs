@@ -6,15 +6,15 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class IdentityElement : Identity, IDiscriminatedElement
 	{
-		public IdentityElement(IDiscriminatedElement parent, string name):base(name)
+		public IdentityElement(IDiscriminatedElement parent, string name) : base(name)
 		{
 #warning IdentityElement_Is_NotImpl
 			throw new NotImplementedException("IdentityElement is not implemented");
 		}
-		public IDiscriminatedElement Parent { get; }
-		public IPhysicalStorage Storage { get; }
 
 		public override IdentityCategories Category { get; }
+		public IDiscriminatedElement Parent { get; }
+		public IPhysicalStorage Storage { get; }
 
 		public void RegisterChild(IDiscriminatedElement child)
 		{
@@ -76,17 +76,16 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("AggregateIdentities is not implemented");
 		}
 
-		public bool IsEquivalentLogicallyTo(IDiscriminatedElement other)
+		public bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
 #warning IsEquivalentLogicallyTo_Is_NotImpl
 			throw new NotImplementedException("IsEquivalentLogicallyTo is not implemented");
 		}
 
-		public bool IsEquivalentPhysicallyTo(IDiscriminatedElement other)
+		public bool IsPhysicallyEquivalentTo(IDiscriminatedElement other)
 		{
 #warning IsEquivalentPhysicallyTo_Is_NotImpl
 			throw new NotImplementedException("IsEquivalentPhysicallyTo is not implemented");
 		}
-
 	}
 }

@@ -10,6 +10,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 #warning TypeElement_Is_NotImpl
 			throw new NotImplementedException("TypeElement is not implemented");
 		}
+
 		private IdentityElement Identity { get; }
 
 		public bool IsUnsafe { get; }
@@ -20,12 +21,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public ScopeCategories Scope { get; }
 
-		protected bool IsBasementEquivalentTo(TypeElement other)
-		{
-#warning IsBasementEquivalentTo_Is_NotImpl
-			throw new NotImplementedException("IsBasementEquivalentTo is not implemented");
-		}
-
 		public override IPhysicalStorage Storage
 		{
 			get
@@ -33,6 +28,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 #warning Storage_Is_NotImpl
 				throw new NotImplementedException("Storage is not implemented");
 			}
+		}
+
+		protected bool IsBasementEquivalentTo(TypeElement other)
+		{
+#warning IsBasementEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsBasementEquivalentTo is not implemented");
 		}
 	}
 }

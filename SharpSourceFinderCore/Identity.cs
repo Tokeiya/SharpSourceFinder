@@ -10,6 +10,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 #warning Identity_Is_NotImpl
 			throw new NotImplementedException("Identity is not implemented");
 		}
+
 		public string Name
 		{
 			get

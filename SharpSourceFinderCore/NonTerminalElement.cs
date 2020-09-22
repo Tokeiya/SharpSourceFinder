@@ -10,11 +10,13 @@ namespace Tokeiya3.SharpSourceFinderCore
 #warning NonTerminalElement_Is_NotImpl
 			throw new NotImplementedException("NonTerminalElement is not implemented");
 		}
+
 		protected NonTerminalElement(IDiscriminatedElement parent) : base(parent)
 		{
 #warning NonTerminalElement_Is_NotImpl
 			throw new NotImplementedException("NonTerminalElement is not implemented");
 		}
+
 		public override IEnumerable<IDiscriminatedElement> Children()
 		{
 #warning Children_Is_NotImpl

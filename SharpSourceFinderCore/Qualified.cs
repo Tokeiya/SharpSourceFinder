@@ -12,6 +12,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		}
 
 		public abstract IReadOnlyList<Identity> Identities { get; }
+
 		public bool Equals(Qualified? other)
 		{
 #warning Equals_Is_NotImpl
