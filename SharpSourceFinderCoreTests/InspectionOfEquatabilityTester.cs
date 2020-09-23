@@ -1,6 +1,6 @@
+using ChainingAssertion;
 using System.Collections.Generic;
 using System.Linq;
-using ChainingAssertion;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -33,10 +33,10 @@ namespace SharpSourceFinderCoreTests
 		protected override IEnumerable<(Mock x, Mock y)> CreateInEqualTestSamples() => _inEqualSamples;
 
 		protected override IEnumerable<(object x, object y)> CreateObjectEqualSamples() =>
-			_reflexivelySamples.Select(t => ((object) t.x, (object) t.y));
+			_reflexivelySamples.Select(t => ((object)t.x, (object)t.y));
 
 		protected override IEnumerable<(object x, object y)> CreateObjectInEqualSamples() =>
-			_inEqualSamples.Select(t => ((object) t.x, (object) t.y));
+			_inEqualSamples.Select(t => ((object)t.x, (object)t.y));
 
 		void ResetAll()
 		{

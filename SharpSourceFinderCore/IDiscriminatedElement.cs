@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public interface IDiscriminatedElement 
+	public interface IDiscriminatedElement
 	{
 		bool IsLogicallyEquivalentTo(IDiscriminatedElement other);
 		bool IsPhysicallyEquivalentTo(IDiscriminatedElement other);

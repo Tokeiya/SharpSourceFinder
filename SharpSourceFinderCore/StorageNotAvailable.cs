@@ -28,6 +28,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 			}
 		}
 
+		public bool IsEquivalentTo(IPhysicalStorage other)
+		{
+#warning IsEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsEquivalentTo is not implemented");
+		}
+
 		public static bool IsNotAvailable(IPhysicalStorage storage)
 		{
 #warning IsNotAvailable_Is_NotImpl

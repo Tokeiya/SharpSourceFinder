@@ -1,7 +1,7 @@
-﻿using System;
+﻿using ChainingAssertion;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ChainingAssertion;
 using Xunit;
 using Xunit.Sdk;
 
@@ -19,20 +19,20 @@ namespace SharpSourceFinderCoreTests
 
 		static EquatabilityTester()
 		{
-			var parameters = new[] {typeof(T), typeof(T)};
+			var parameters = new[] { typeof(T), typeof(T) };
 
 			var method = typeof(T).GetMethod("op_Equality", parameters);
 
 			if (!method?.IsSpecialName ?? true) throw new XunitException("op_Equality not found.");
-			OpEqualityInvoker = (Func<T, T, bool>) (method?.CreateDelegate(typeof(Func<T, T, bool>)) ??
-			                                        throw new XunitException("op_Equality not found."));
+			OpEqualityInvoker = (Func<T, T, bool>)(method?.CreateDelegate(typeof(Func<T, T, bool>)) ??
+													throw new XunitException("op_Equality not found."));
 
 
 			method = typeof(T).GetMethod("op_Inequality", parameters);
 
 			if (!method?.IsSpecialName ?? false) throw new XunitException("op_Inequality not found.");
-			OpInequalityInvoker = (Func<T, T, bool>) (method?.CreateDelegate(typeof(Func<T, T, bool>)) ??
-			                                          throw new XunitException("op_Inequality not found."));
+			OpInequalityInvoker = (Func<T, T, bool>)(method?.CreateDelegate(typeof(Func<T, T, bool>)) ??
+													  throw new XunitException("op_Inequality not found."));
 		}
 
 		protected abstract IEnumerable<(T x, T y, T z)> CreateTransitivelyTestSamples();
@@ -72,7 +72,7 @@ namespace SharpSourceFinderCoreTests
 			foreach (var elem in CreateInEqualTestSamples()) yield return (elem.x, elem.y);
 		}
 
-		[Trait("Type","Equatability")]
+		[Trait("Type", "Equatability")]
 		[Fact]
 		public void TransitivelyTest()
 		{
@@ -92,9 +92,9 @@ namespace SharpSourceFinderCoreTests
 				y.Equals(z).IsTrue();
 				z.Equals(x).IsTrue();
 
-				x.Equals((object) y).IsTrue();
-				y.Equals((object) z).IsTrue();
-				z.Equals((object) x).IsTrue();
+				x.Equals((object)y).IsTrue();
+				y.Equals((object)z).IsTrue();
+				z.Equals((object)x).IsTrue();
 			}
 		}
 
@@ -110,7 +110,7 @@ namespace SharpSourceFinderCoreTests
 				OpInequalityInvoker(elem, elem).IsFalse();
 
 				elem.Equals(elem).IsTrue();
-				elem.Equals((object) elem).IsTrue();
+				elem.Equals((object)elem).IsTrue();
 			}
 		}
 
@@ -127,8 +127,8 @@ namespace SharpSourceFinderCoreTests
 				x.Equals(y).IsTrue();
 				y.Equals(x).IsTrue();
 
-				x.Equals((object) y).IsTrue();
-				y.Equals((object) x).IsTrue();
+				x.Equals((object)y).IsTrue();
+				y.Equals((object)x).IsTrue();
 			}
 		}
 
@@ -155,8 +155,8 @@ namespace SharpSourceFinderCoreTests
 				x.Equals(y).IsFalse();
 				y.Equals(x).IsFalse();
 
-				x.Equals((object) y).IsFalse();
-				y.Equals((object) x).IsFalse();
+				x.Equals((object)y).IsFalse();
+				y.Equals((object)x).IsFalse();
 			}
 		}
 
