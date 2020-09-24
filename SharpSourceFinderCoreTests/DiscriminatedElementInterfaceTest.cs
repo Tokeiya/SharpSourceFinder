@@ -356,7 +356,7 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
-		protected abstract IEnumerable<(IDiscriminatedElement sample, Qualified expected)>
+		protected abstract IEnumerable<(IDiscriminatedElement sample, QualifiedElement expected)>
 			GenerateQualifiedNameSample();
 
 		[Fact]
@@ -364,7 +364,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			GenerateQualifiedNameSample().Any().IsTrue();
 
-			foreach ((IDiscriminatedElement sample, Qualified expected) in GenerateQualifiedNameSample())
+			foreach ((IDiscriminatedElement sample, QualifiedElement expected) in GenerateQualifiedNameSample())
 			{
 				var actual = sample.GetQualifiedName();
 

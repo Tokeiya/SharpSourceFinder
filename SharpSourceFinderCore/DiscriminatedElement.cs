@@ -64,7 +64,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("DescendantsAndSelf is not implemented");
 		}
 
-		public Qualified GetQualifiedName()
+		public QualifiedElement GetQualifiedName()
 		{
 #warning GetQualifiedName_Is_NotImpl
 			throw new NotImplementedException("GetQualifiedName is not implemented");

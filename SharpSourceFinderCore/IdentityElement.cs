@@ -4,15 +4,15 @@ using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class IdentityElement : Identity, IDiscriminatedElement
+	public sealed class IdentityElement : IDiscriminatedElement
 	{
-		public IdentityElement(IDiscriminatedElement parent, string name) : base(name)
+		public IdentityElement(IDiscriminatedElement parent, string name)
 		{
 #warning IdentityElement_Is_NotImpl
 			throw new NotImplementedException("IdentityElement is not implemented");
 		}
 
-		public override IdentityCategories Category { get; }
+		public IdentityCategories Category { get; }
 		public IDiscriminatedElement Parent { get; }
 		public IPhysicalStorage Storage { get; }
 
@@ -64,7 +64,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("DescendantsAndSelf is not implemented");
 		}
 
-		public Qualified GetQualifiedName()
+		public QualifiedElement GetQualifiedName()
 		{
 #warning GetQualifiedName_Is_NotImpl
 			throw new NotImplementedException("GetQualifiedName is not implemented");

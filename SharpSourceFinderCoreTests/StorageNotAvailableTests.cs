@@ -32,7 +32,6 @@ namespace SharpSourceFinderCoreTests
 			var a = new PhysicalStorage("HogeMoge");
 			x.IsEquivalentTo(a).IsFalse();
 			a.IsEquivalentTo(x).IsFalse();
-
 		}
 
 
@@ -47,8 +46,9 @@ namespace SharpSourceFinderCoreTests
 		public void IsNotAvailableTest()
 		{
 			StorageNotAvailable.IsNotAvailable(StorageNotAvailable.NotAvailable).IsTrue();
-			StorageNotAvailable.IsNotAvailable(new PhysicalStorage("hogemoge")).IsFalse();
+			StorageNotAvailable.IsNotAvailable(new PhysicalStorage("HogeMoge")).IsFalse();
 		}
+
 
 
 	}

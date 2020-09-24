@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class QualifiedElement : Qualified, IDiscriminatedElement
+	public sealed class QualifiedElement : IDiscriminatedElement
 	{
 		public QualifiedElement()
 		{
@@ -18,7 +18,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("QualifiedElement is not implemented");
 		}
 
-		public override IReadOnlyList<Identity> Identities { get; }
+		public IReadOnlyList<IdentityElement> Identities { get; }
 		public IDiscriminatedElement Parent { get; }
 		public IPhysicalStorage Storage { get; }
 
@@ -70,7 +70,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("DescendantsAndSelf is not implemented");
 		}
 
-		public Qualified GetQualifiedName()
+		public QualifiedElement GetQualifiedName()
 		{
 #warning GetQualifiedName_Is_NotImpl
 			throw new NotImplementedException("GetQualifiedName is not implemented");
