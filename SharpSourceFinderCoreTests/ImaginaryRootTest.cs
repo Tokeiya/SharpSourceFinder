@@ -47,8 +47,7 @@ namespace SharpSourceFinderCoreTests
 		[Fact]
 		public void StringReturnsDescribeTest()
 		{
-			ImaginaryRoot.Root.Describe().IsEmpty();
-			ImaginaryRoot.Root.Describe(" ").IsEmpty();
+			Throws<NotSupportedException>(() => ImaginaryRoot.Root.Describe());
 		}
 
 		[Trait("TestLayer", nameof(ImaginaryRoot))]
