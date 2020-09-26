@@ -10,5 +10,6 @@
 		bool IsLogicallyEquivalentTo(IIdentity identity);
 
 		bool IsPhysicallyEquivalentTo(IIdentity identity);
+		IQualified From { get; }
 	}
 }

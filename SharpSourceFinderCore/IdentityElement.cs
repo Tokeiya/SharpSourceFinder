@@ -18,6 +18,16 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public string Name { get; }
 
+		public IQualified From
+		{
+			get
+			{
+#warning NotImplemented
+				throw new NotImplementedException();
+
+			}
+		}
+
 		public void RegisterChild(IDiscriminatedElement child)
 		{
 #warning RegisterChild_Is_NotImpl
