@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using ChainingAssertion;
+using Microsoft.VisualBasic.CompilerServices;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -19,6 +20,7 @@ namespace SharpSourceFinderCoreTests
 		protected abstract void AreEqual(IIdentity actual, IIdentity expected);
 
 		protected abstract void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected);
+		protected abstract void AreEqual(IQualified actual, IQualified expected);
 
 
 		protected abstract IEnumerable<(IIdentity sample, IPhysicalStorage expected)>
@@ -212,10 +214,44 @@ namespace SharpSourceFinderCoreTests
 				AreEqual(sample.Storage, expected);
 		}
 
+		protected abstract IEnumerable<(IIdentity sample, string expectedName, IdentityCategories expectedCategory, IQualified expectedFrom)> GenerateSample();
 
 
+		[Trait("TestLayer",nameof(IIdentity))]
+		[Fact]
+		public void NameGetterTest()
+		{
+			GenerateSample().Any().IsTrue();
 
+			foreach (var (sample,expected,_,_) in GenerateSample())
+			{
+				sample.Name.Is(expected);
+			}
+		}
 
+		[Trait("TestLayer",nameof(IIdentity))]
+		[Fact]
+		public void CategoryGetterTest()
+		{
+			GenerateSample().Any().IsTrue();
+
+			foreach (var (sample, _, expected, _) in GenerateSample())
+			{
+				sample.Category.Is(expected);
+			}
+		}
+
+		[Trait("TestLayer",nameof(IIdentity))]
+		[Fact]
+		public void FromGetterTest()
+		{
+			GenerateSample().IsNotEmpty();
+
+			foreach (var (sample,_,_,expected) in GenerateSample())
+			{
+				AreEqual(sample.From, expected);
+			}
+		}
 
 	}
 }
