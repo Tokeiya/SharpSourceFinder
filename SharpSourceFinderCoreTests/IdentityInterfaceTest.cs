@@ -13,14 +13,8 @@ namespace SharpSourceFinderCoreTests
 
 		protected IdentityInterfaceTest(ITestOutputHelper output) => Output = output;
 
-		protected abstract void AreEqual(IIdentity actual, IIdentity expected);
-
 		protected abstract void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected);
 		protected abstract void AreEqual(IQualified actual, IQualified expected);
-
-
-		protected abstract IEnumerable<(IIdentity sample, IPhysicalStorage expected)>
-			GenerateStorageGetTestSamples();
 
 		protected abstract IEnumerable<(IIdentity x, IIdentity y, IIdentity z)>
 			GenerateLogicallyTransitiveSample();
