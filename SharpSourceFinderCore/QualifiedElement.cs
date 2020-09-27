@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class QualifiedElement : IDiscriminatedElement,IQualified
+	public sealed class QualifiedElement : IDiscriminatedElement, IQualified
 	{
 		public QualifiedElement()
 		{
@@ -21,8 +21,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public IReadOnlyList<IdentityElement> Identities { get; }
 		public IDiscriminatedElement Parent { get; }
 		public IPhysicalStorage Storage { get; }
-
-		public IReadOnlyList<IIdentity> Identites => throw new NotImplementedException();
 
 		public void RegisterChild(IDiscriminatedElement child)
 		{
@@ -96,18 +94,18 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("IsEquivalentPhysicallyTo is not implemented");
 		}
 
+		public IReadOnlyList<IIdentity> Identites => throw new NotImplementedException();
+
 		public bool IsLogicallyEquivalentTo(IQualified other)
 		{
 #warning NotImplemented
 			throw new NotImplementedException();
-
 		}
 
 		public bool IsPhysicallyEquivalentTo(IQualified other)
 		{
 #warning NotImplemented
 			throw new NotImplementedException();
-
 		}
 	}
 }

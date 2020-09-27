@@ -1,10 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 using ChainingAssertion;
-using Microsoft.VisualBasic.CompilerServices;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -214,44 +210,36 @@ namespace SharpSourceFinderCoreTests
 				AreEqual(sample.Storage, expected);
 		}
 
-		protected abstract IEnumerable<(IIdentity sample, string expectedName, IdentityCategories expectedCategory, IQualified expectedFrom)> GenerateSample();
+		protected abstract
+			IEnumerable<(IIdentity sample, string expectedName, IdentityCategories expectedCategory, IQualified
+				expectedFrom)> GenerateSample();
 
 
-		[Trait("TestLayer",nameof(IIdentity))]
+		[Trait("TestLayer", nameof(IIdentity))]
 		[Fact]
 		public void NameGetterTest()
 		{
 			GenerateSample().Any().IsTrue();
 
-			foreach (var (sample,expected,_,_) in GenerateSample())
-			{
-				sample.Name.Is(expected);
-			}
+			foreach (var (sample, expected, _, _) in GenerateSample()) sample.Name.Is(expected);
 		}
 
-		[Trait("TestLayer",nameof(IIdentity))]
+		[Trait("TestLayer", nameof(IIdentity))]
 		[Fact]
 		public void CategoryGetterTest()
 		{
 			GenerateSample().Any().IsTrue();
 
-			foreach (var (sample, _, expected, _) in GenerateSample())
-			{
-				sample.Category.Is(expected);
-			}
+			foreach (var (sample, _, expected, _) in GenerateSample()) sample.Category.Is(expected);
 		}
 
-		[Trait("TestLayer",nameof(IIdentity))]
+		[Trait("TestLayer", nameof(IIdentity))]
 		[Fact]
 		public void FromGetterTest()
 		{
 			GenerateSample().IsNotEmpty();
 
-			foreach (var (sample,_,_,expected) in GenerateSample())
-			{
-				AreEqual(sample.From, expected);
-			}
+			foreach (var (sample, _, _, expected) in GenerateSample()) AreEqual(sample.From, expected);
 		}
-
 	}
 }

@@ -16,7 +16,7 @@ namespace SharpSourceFinderCoreTests
 		private readonly ITestOutputHelper _output;
 		public PhysicalStorageTest(ITestOutputHelper output) => _output = output;
 
-		[Trait("TestLayer",nameof(PhysicalStorage))]
+		[Trait("TestLayer", nameof(PhysicalStorage))]
 		[Fact]
 		public void CtorTest()
 		{
@@ -34,7 +34,6 @@ namespace SharpSourceFinderCoreTests
 
 			sample = new PhysicalStorage(SampleB);
 			sample.Path.Is(SampleB);
-
 		}
 
 		[Trait("TestLayer", nameof(PhysicalStorage))]
@@ -46,7 +45,6 @@ namespace SharpSourceFinderCoreTests
 
 			sample = new PhysicalStorage(SampleB);
 			sample.IsEquivalentTo(sample).IsTrue();
-
 		}
 
 		[Trait("TestLayer", nameof(PhysicalStorage))]
@@ -88,7 +86,7 @@ namespace SharpSourceFinderCoreTests
 		}
 
 
-		[Trait("TestLayer",nameof(PhysicalStorage))]
+		[Trait("TestLayer", nameof(PhysicalStorage))]
 		[Fact]
 		public void InEquivalentTest()
 		{
@@ -98,7 +96,5 @@ namespace SharpSourceFinderCoreTests
 			x.IsEquivalentTo(y).IsFalse();
 			y.IsEquivalentTo(x).IsFalse();
 		}
-
-
 	}
 }

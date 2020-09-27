@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class IdentityElement : IDiscriminatedElement,IIdentity
+	public sealed class IdentityElement : IDiscriminatedElement, IIdentity
 	{
 		public IdentityElement(IDiscriminatedElement parent, string name)
 		{
@@ -12,21 +12,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("IdentityElement is not implemented");
 		}
 
-		public IdentityCategories Category { get; }
 		public IDiscriminatedElement Parent { get; }
 		public IPhysicalStorage Storage { get; }
-
-		public string Name { get; }
-
-		public IQualified From
-		{
-			get
-			{
-#warning NotImplemented
-				throw new NotImplementedException();
-
-			}
-		}
 
 		public void RegisterChild(IDiscriminatedElement child)
 		{
@@ -100,18 +87,29 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("IsEquivalentPhysicallyTo is not implemented");
 		}
 
+		public IdentityCategories Category { get; }
+
+		public string Name { get; }
+
+		public IQualified From
+		{
+			get
+			{
+#warning NotImplemented
+				throw new NotImplementedException();
+			}
+		}
+
 		public bool IsLogicallyEquivalentTo(IIdentity identity)
 		{
 #warning NotImplemented
 			throw new NotImplementedException();
-
 		}
 
 		public bool IsPhysicallyEquivalentTo(IIdentity identity)
 		{
 #warning NotImplemented
 			throw new NotImplementedException();
-
 		}
 	}
 }

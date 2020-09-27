@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ChainingAssertion;
+using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
 using static Xunit.Assert;
-using ChainingAssertion;
-using Tokeiya3.SharpSourceFinderCore;
 
 namespace SharpSourceFinderCoreTests
 {
@@ -22,7 +22,7 @@ namespace SharpSourceFinderCoreTests
 		public void ParentGetterTest() => Throws<NotSupportedException>(() => ImaginaryRoot.Root.Parent);
 
 		[Trait("TestLayer", nameof(ImaginaryRoot))]
-		[Fact] 
+		[Fact]
 		public void StorageGetterTest() => Throws<NotSupportedException>(() => ImaginaryRoot.Root.Storage);
 
 		[Trait("TestLayer", nameof(ImaginaryRoot))]
@@ -56,7 +56,8 @@ namespace SharpSourceFinderCoreTests
 
 		[Trait("TestLayer", nameof(ImaginaryRoot))]
 		[Fact]
-		public void AncestorsAndSelfTest() => Throws<NotSupportedException>(() => ImaginaryRoot.Root.AncestorsAndSelf().Any());
+		public void AncestorsAndSelfTest() =>
+			Throws<NotSupportedException>(() => ImaginaryRoot.Root.AncestorsAndSelf().Any());
 
 		[Trait("TestLayer", nameof(ImaginaryRoot))]
 		[Fact]
@@ -68,13 +69,14 @@ namespace SharpSourceFinderCoreTests
 
 		[Trait("TestLayer", nameof(ImaginaryRoot))]
 		[Fact]
-		public void DescendantsAndSelfTest() => Throws<NotSupportedException>(() => ImaginaryRoot.Root.DescendantsAndSelf().Any());
+		public void DescendantsAndSelfTest() =>
+			Throws<NotSupportedException>(() => ImaginaryRoot.Root.DescendantsAndSelf().Any());
 
 		[Trait("TestLayer", nameof(ImaginaryRoot))]
 		[Fact]
 		public void GetQualifiedNameTest()
 		{
-			object? dmy=null;
+			object? dmy = null;
 			Throws<NotSupportedException>(() => dmy = ImaginaryRoot.Root.GetQualifiedName());
 
 			dmy.IsNull();
@@ -84,11 +86,10 @@ namespace SharpSourceFinderCoreTests
 		[Fact]
 		public void AggregateIdentitiesTest()
 		{
-			var stack=new Stack<(IdentityCategories,string)>();
+			var stack = new Stack<(IdentityCategories, string)>();
 			ImaginaryRoot.Root.AggregateIdentities(stack);
 
 			stack.IsEmpty();
-
 		}
 
 		[Trait("TestLayer", nameof(ImaginaryRoot))]
@@ -113,13 +114,12 @@ namespace SharpSourceFinderCoreTests
 			x.IsLogicallyEquivalentTo(x).IsTrue();
 
 			//Inequivalent
-			var a=new NameSpace();
+			var a = new NameSpace();
 			x.IsLogicallyEquivalentTo(a).IsFalse();
 			x.IsPhysicallyEquivalentTo(a).IsFalse();
 
 			a.IsLogicallyEquivalentTo(x).IsFalse();
 			a.IsPhysicallyEquivalentTo(x).IsFalse();
-
 		}
 
 		[Trait("TestLayer", nameof(ImaginaryRoot))]
@@ -153,7 +153,6 @@ namespace SharpSourceFinderCoreTests
 			var a = new NameSpace();
 			x.IsLogicallyEquivalentTo(a).IsFalse();
 			a.IsLogicallyEquivalentTo(x).IsFalse();
-
 		}
 
 		[Trait("TestLayer", nameof(ImaginaryRoot))]
@@ -165,13 +164,6 @@ namespace SharpSourceFinderCoreTests
 
 			sample = new NameSpace();
 			ImaginaryRoot.IsImaginaryRoot(sample).IsFalse();
-
 		}
-
-
-
-
-
 	}
-
 }

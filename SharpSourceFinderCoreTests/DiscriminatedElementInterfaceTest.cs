@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
@@ -332,10 +330,7 @@ namespace SharpSourceFinderCoreTests
 				var actual = sample.Descendants().ToArray();
 				actual.Length.Is(expected.Count);
 
-				for (int i = 0; i < expected.Count; i++)
-				{
-					AreEqual(actual[i], expected[i]);
-				}
+				for (int i = 0; i < expected.Count; i++) AreEqual(actual[i], expected[i]);
 			}
 		}
 
@@ -349,10 +344,7 @@ namespace SharpSourceFinderCoreTests
 				var actual = sample.DescendantsAndSelf().ToArray();
 				actual.Length.Is(expected.Count);
 
-				for (int i = 0; i < expected.Count; i++)
-				{
-					AreEqual(actual[i], expected[i]);
-				}
+				for (int i = 0; i < expected.Count; i++) AreEqual(actual[i], expected[i]);
 			}
 		}
 
@@ -382,8 +374,9 @@ namespace SharpSourceFinderCoreTests
 		{
 			GenerateAggregateIdentitiesSample().Any().IsTrue();
 
-			var actual=new Stack<(IdentityCategories category,string identiy)>();
-			foreach ((IDiscriminatedElement sample, Stack<(IdentityCategories category, string identity)> expected)  in GenerateAggregateIdentitiesSample())
+			var actual = new Stack<(IdentityCategories category, string identiy)>();
+			foreach ((IDiscriminatedElement sample, Stack<(IdentityCategories category, string identity)> expected) in
+				GenerateAggregateIdentitiesSample())
 			{
 				actual.Count.Is(0);
 
@@ -391,7 +384,7 @@ namespace SharpSourceFinderCoreTests
 
 				actual.Count.Is(expected.Count);
 
-				while (expected.Count!=0)
+				while (expected.Count != 0)
 				{
 					var a = actual.Pop();
 					var e = expected.Pop();
@@ -399,13 +392,7 @@ namespace SharpSourceFinderCoreTests
 					a.category.Is(e.category);
 					a.identiy.Is(e.identity);
 				}
-
 			}
 		}
-
-
-
-
-
 	}
 }

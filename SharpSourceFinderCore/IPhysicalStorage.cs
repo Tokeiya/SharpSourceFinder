@@ -5,6 +5,5 @@
 		string Path { get; }
 
 		bool IsEquivalentTo(IPhysicalStorage other);
-
 	}
 }

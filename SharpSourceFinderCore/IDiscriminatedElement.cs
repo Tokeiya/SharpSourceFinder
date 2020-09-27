@@ -5,10 +5,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public interface IDiscriminatedElement
 	{
-		bool IsLogicallyEquivalentTo(IDiscriminatedElement other);
-		bool IsPhysicallyEquivalentTo(IDiscriminatedElement other);
 		IDiscriminatedElement Parent { get; }
 		IPhysicalStorage Storage { get; }
+		bool IsLogicallyEquivalentTo(IDiscriminatedElement other);
+		bool IsPhysicallyEquivalentTo(IDiscriminatedElement other);
 		void RegisterChild(IDiscriminatedElement child);
 		void Describe(StringBuilder builder, string indent, int depth);
 		string Describe(string indent = "\t");
@@ -19,6 +19,5 @@ namespace Tokeiya3.SharpSourceFinderCore
 		IEnumerable<IDiscriminatedElement> DescendantsAndSelf();
 		QualifiedElement GetQualifiedName();
 		void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator);
-
 	}
 }
