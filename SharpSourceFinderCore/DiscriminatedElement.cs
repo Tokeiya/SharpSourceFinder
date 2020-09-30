@@ -8,69 +8,65 @@ namespace Tokeiya3.SharpSourceFinderCore
 	{
 		protected DiscriminatedElement(IDiscriminatedElement parent)
 		{
-#warning DiscriminatedElement_Is_NotImpl
-			throw new NotImplementedException("DiscriminatedElement is not implemented");
+			if (parent is ImaginaryRoot) throw new ArgumentException($"{nameof(parent)} can't accept ImaginaryRoot.");
+			Parent = parent;
 		}
 
-		protected DiscriminatedElement()
-		{
-#warning DiscriminatedElement_Is_NotImpl
-			throw new NotImplementedException("DiscriminatedElement is not implemented");
-		}
+		protected DiscriminatedElement() => Parent = ImaginaryRoot.Root;
 
 		public IDiscriminatedElement Parent { get; }
 
-		public virtual IPhysicalStorage Storage
-		{
-			get
-			{
-#warning Storage_Is_NotImpl
-				throw new NotImplementedException("Storage is not implemented");
-			}
-		}
+		public virtual IPhysicalStorage Storage => Parent.Storage;
+
 
 		public abstract void RegisterChild(IDiscriminatedElement child);
 
 		public IEnumerable<IDiscriminatedElement> Ancestors()
 		{
-#warning Ancestors_Is_NotImpl
-			throw new NotImplementedException("Ancestors is not implemented");
+			var piv = Parent;
+
+			while (!(piv is ImaginaryRoot))
+			{
+				yield return piv;
+				piv = piv.Parent;
+			}
 		}
 
 		public IEnumerable<IDiscriminatedElement> AncestorsAndSelf()
 		{
-#warning AncestorsAndSelf_Is_NotImpl
-			throw new NotImplementedException("AncestorsAndSelf is not implemented");
+			yield return this;
+
+			foreach (var elem in Ancestors())
+			{
+				yield return elem;
+			}
 		}
 
 		public abstract IEnumerable<IDiscriminatedElement> Children();
 
 		public IEnumerable<IDiscriminatedElement> Descendants()
 		{
-#warning Descendants_Is_NotImpl
-			throw new NotImplementedException("Descendants is not implemented");
+			foreach (var elem in Children())
+				foreach (var ret in elem.Children())
+					yield return ret;
 		}
 
 		public IEnumerable<IDiscriminatedElement> DescendantsAndSelf()
 		{
-#warning DescendantsAndSelf_Is_NotImpl
-			throw new NotImplementedException("DescendantsAndSelf is not implemented");
+			yield return this;
+
+			foreach (var elem in Descendants())
+			{
+				yield return elem;
+			}
 		}
 
-		public QualifiedElement GetQualifiedName()
-		{
-#warning GetQualifiedName_Is_NotImpl
-			throw new NotImplementedException("GetQualifiedName is not implemented");
-		}
+		public abstract QualifiedElement GetQualifiedName();
 
 		public abstract void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator);
 
 		public abstract bool IsLogicallyEquivalentTo(IDiscriminatedElement other);
 
-		public bool IsPhysicallyEquivalentTo(IDiscriminatedElement other)
-		{
-#warning IsEquivalentPhysicallyTo_Is_NotImpl
-			throw new NotImplementedException("IsEquivalentPhysicallyTo is not implemented");
-		}
+		public abstract bool IsPhysicallyEquivalentTo(IDiscriminatedElement other);
 	}
 }

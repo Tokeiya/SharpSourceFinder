@@ -42,12 +42,22 @@ namespace Tokeiya3.SharpSourceFinderCore
 			}
 		}
 
+		public override bool IsPhysicallyEquivalentTo(IDiscriminatedElement other)
+		{
+			throw new NotImplementedException();
+		}
+
 		public override void RegisterChild(IDiscriminatedElement child)
 		{
 #warning RegisterChild_Is_NotImpl
 			throw new NotImplementedException("RegisterChild is not implemented");
 		}
 
+
+		public override QualifiedElement GetQualifiedName()
+		{
+			throw new NotImplementedException();
+		}
 
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
 		{

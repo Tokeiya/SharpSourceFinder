@@ -14,6 +14,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 		}
 
 
+		public override QualifiedElement GetQualifiedName()
+		{
+			throw new NotImplementedException();
+		}
+
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
 		{
 #warning AggregateIdentities_Is_NotImpl
@@ -24,6 +29,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 #warning IsEquivalentLogicallyTo_Is_NotImpl
 			throw new NotImplementedException("IsEquivalentLogicallyTo is not implemented");
+		}
+
+		public override bool IsPhysicallyEquivalentTo(IDiscriminatedElement other)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

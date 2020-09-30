@@ -247,19 +247,53 @@ namespace SharpSourceFinderCoreTests
 
 			yield return (sample, expected);
 
+			sample = new NameSpace(sample);
+			nme = new QualifiedElement(sample);
+
+			_ = new IdentityElement(nme, "Foo");
+			_ = new IdentityElement(nme, "Bar");
+
+			expected.Count.Is(0);
+
+			expected.Push((IdentityCategories.Namespace, "Bar"));
+			expected.Push((IdentityCategories.Namespace, "Foo"));
+			expected.Push((IdentityCategories.Namespace, "Piyo"));
+			expected.Push((IdentityCategories.Namespace, "Hoge"));
+
+			yield return (sample, expected);
 
 		}
 
 		protected override IEnumerable<(NonTerminalElement<IDiscriminatedElement> sample, IReadOnlyList<IDiscriminatedElement> expected, Action<NonTerminalElement<IDiscriminatedElement>> registerAction)> GenerateRegisterChildSample()
 		{
-#warning GenerateRegisterChildSample_Is_NotImpl
-			throw new NotImplementedException("GenerateRegisterChildSample is not implemented");
+			var expected = new List<IDiscriminatedElement>();
+			var sample = new NameSpace(new PhysicalStorage(PathA));
+
+
+			void act(NonTerminalElement<IDiscriminatedElement> scr)
+			{
+				expected.Add(new QualifiedElement(scr));
+				expected.Add(new NameSpace(scr));
+			}
+
+			yield return (sample, expected, act);
+
 		}
 
-		protected override IEnumerable<(NonTerminalElement<IDiscriminatedElement> sample, IDiscriminatedElement errSample)> GenerateErrSample()
+		protected override
+			IEnumerable<(NonTerminalElement<IDiscriminatedElement> sample, IDiscriminatedElement errSample)>
+			GenerateErrSample()
 		{
-#warning GenerateErrSample_Is_NotImpl
-			throw new NotImplementedException("GenerateErrSample is not implemented");
+			var sample = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpace(new PhysicalStorage(PathA));
+
+			var err = new IdentityElement(ns, "Foo");
+			yield return (sample, err);
+
+			err = new IdentityElement(sample, "Bar");
+			yield return (sample, err);
+
+
 		}
 	}
 }
