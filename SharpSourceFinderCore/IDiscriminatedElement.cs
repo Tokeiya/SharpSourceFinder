@@ -10,8 +10,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 		bool IsLogicallyEquivalentTo(IDiscriminatedElement other);
 		bool IsPhysicallyEquivalentTo(IDiscriminatedElement other);
 		void RegisterChild(IDiscriminatedElement child);
-		void Describe(StringBuilder builder, string indent, int depth);
-		string Describe(string indent = "\t");
 		IEnumerable<IDiscriminatedElement> Ancestors();
 		IEnumerable<IDiscriminatedElement> AncestorsAndSelf();
 		IEnumerable<IDiscriminatedElement> Children();

@@ -222,45 +222,7 @@ namespace SharpSourceFinderCoreTests
 				AreEqual(sample.Storage, expected);
 		}
 
-		protected abstract IEnumerable<(IDiscriminatedElement sample, string indent, int depth, string expected)>
-			GenerateDescribeSample();
 
-		[Trait("TestLayer", nameof(IDiscriminatedElement))]
-		[Fact]
-		public void WithStringBuilderDescribeTest()
-		{
-			GenerateDescribeSample().Any().IsTrue();
-			var bld = new StringBuilder();
-
-			foreach ((IDiscriminatedElement sample, string indent, int depth, string expected) in
-				GenerateDescribeSample())
-			{
-				bld.Clear();
-
-				sample.Describe(bld, indent, depth);
-				bld.ToString().Is(expected);
-			}
-		}
-
-		[Trait("TestLayer", nameof(IDiscriminatedElement))]
-		[Fact]
-		public void StringReturnsDescribeTest()
-		{
-			GenerateDescribeSample().Any().IsTrue();
-
-			var bld = new StringBuilder();
-
-			foreach (var (sample, _, _, _) in GenerateDescribeSample())
-			{
-				bld.Clear();
-				sample.Describe(bld, "\t", 0);
-				sample.Describe().Is(bld.ToString());
-
-				bld.Clear();
-				sample.Describe(bld, "  ", 0);
-				sample.Describe("  ").Is(bld.ToString());
-			}
-		}
 
 		protected abstract IEnumerable<(IDiscriminatedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateGetAncestorsSample(bool isContainSelf);
