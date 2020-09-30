@@ -1,7 +1,6 @@
+using ChainingAssertion;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -310,19 +309,21 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
-		protected abstract IEnumerable<(IDiscriminatedElement sample, QualifiedElement expected)>
+		protected abstract IEnumerable<(IDiscriminatedElement sample, IQualified expected)>
 			GenerateQualifiedNameSample();
+
+		protected abstract void AreEqual(IQualified actual, IQualified expected);
 
 		[Fact]
 		public void GetQualifiedNameTest()
 		{
 			GenerateQualifiedNameSample().Any().IsTrue();
 
-			foreach ((IDiscriminatedElement sample, QualifiedElement expected) in GenerateQualifiedNameSample())
+			foreach ((IDiscriminatedElement sample, IQualified expected) in GenerateQualifiedNameSample())
 			{
 				var actual = sample.GetQualifiedName();
 
-				actual.Is(expected);
+				AreEqual(actual,expected);
 			}
 		}
 

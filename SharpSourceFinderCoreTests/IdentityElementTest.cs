@@ -1,19 +1,17 @@
-using System.Collections.Generic;
 using ChainingAssertion;
-using Microsoft.CodeAnalysis.Operations;
+using System.Collections.Generic;
 using Tokeiya3.SharpSourceFinderCore;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
-	public class IdentityElementIdentityInterFaceTest:IdentityInterfaceTest
+	public class IdentityElementIdentityInterFaceTest : IdentityInterfaceTest
 	{
 		private readonly PhysicalStorage _strageA = new PhysicalStorage("C:\\Hoge\\Piyo.cs");
 		private readonly PhysicalStorage _storageB = new PhysicalStorage("D:\\Foo\\Bar.cs");
 
 
-		protected IdentityElementIdentityInterFaceTest(ITestOutputHelper output):base(output){}
+		protected IdentityElementIdentityInterFaceTest(ITestOutputHelper output) : base(output) { }
 		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) => ReferenceEquals(actual, expected).IsTrue();
 
 		protected override void AreEqual(IQualified actual, IQualified expected) =>

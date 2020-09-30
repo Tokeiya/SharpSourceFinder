@@ -30,13 +30,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 		}
 
 		public abstract void RegisterChild(IDiscriminatedElement child);
-		public abstract void Describe(StringBuilder builder, string indent, int depth);
-
-		public string Describe(string indent = "\t")
-		{
-#warning Describe_Is_NotImpl
-			throw new NotImplementedException("Describe is not implemented");
-		}
 
 		public IEnumerable<IDiscriminatedElement> Ancestors()
 		{

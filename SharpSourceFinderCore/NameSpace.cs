@@ -48,11 +48,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("RegisterChild is not implemented");
 		}
 
-		public override void Describe(StringBuilder builder, string indent, int depth)
-		{
-#warning Describe_Is_NotImpl
-			throw new NotImplementedException("Describe is not implemented");
-		}
 
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
 		{
