@@ -17,28 +17,28 @@ namespace SharpSourceFinderCoreTests
 		protected abstract void AreEqual(IQualified actual, IQualified expected);
 
 		protected abstract IEnumerable<(IIdentity x, IIdentity y, IIdentity z)>
-			GenerateLogicallyTransitiveSample();
+			GenerateTransitiveSample();
 
 
 		[Trait("TestLayer", nameof(IIdentity))]
 		[Fact]
-		public void LogicallyTransitiveTest()
+		public void TransitiveTest()
 		{
-			GenerateLogicallyTransitiveSample().Any().IsTrue();
+			GenerateTransitiveSample().Any().IsTrue();
 
-			foreach (var (x, y, z) in GenerateLogicallyTransitiveSample())
+			foreach (var (x, y, z) in GenerateTransitiveSample())
 			{
-				x.IsLogicallyEquivalentTo(y).IsTrue();
-				y.IsLogicallyEquivalentTo(z).IsTrue();
-				x.IsLogicallyEquivalentTo(z).IsTrue();
+				x.IsEquivalentTo(y).IsTrue();
+				y.IsEquivalentTo(z).IsTrue();
+				x.IsEquivalentTo(z).IsTrue();
 			}
 		}
 
 
 		protected virtual IEnumerable<(IIdentity x, IIdentity y)>
-			GenerateLogicallySymmetricSample()
+			GenerateSymmetricSample()
 		{
-			foreach (var (x, y, z) in GenerateLogicallyTransitiveSample())
+			foreach (var (x, y, z) in GenerateTransitiveSample())
 			{
 				yield return (x, y);
 				yield return (y, z);
@@ -48,112 +48,21 @@ namespace SharpSourceFinderCoreTests
 
 		[Trait("TestLayer", nameof(IIdentity))]
 		[Fact]
-		public void LogicallySymmetricTest()
+		public void SymmetricTest()
 		{
-			GenerateLogicallySymmetricSample().Any().IsTrue();
+			GenerateSymmetricSample().Any().IsTrue();
 
-			foreach (var (x, y) in GenerateLogicallySymmetricSample())
+			foreach (var (x, y) in GenerateSymmetricSample())
 			{
-				x.IsLogicallyEquivalentTo(y).IsTrue();
-				y.IsLogicallyEquivalentTo(x).IsTrue();
+				x.IsEquivalentTo(y).IsTrue();
+				y.IsEquivalentTo(x).IsTrue();
 			}
 		}
 
 
-		protected virtual IEnumerable<IIdentity> GenerateLogicallyReflexiveSample()
+		protected virtual IEnumerable<IIdentity> GenerateReflexiveSample()
 		{
-			foreach (var (x, y, z) in GenerateLogicallyTransitiveSample())
-			{
-				yield return x;
-				yield return y;
-				yield return z;
-			}
-		}
-
-		[Trait("TestLayer", nameof(IIdentity))]
-		[Fact]
-		public void LogicallyReflexiveTest()
-		{
-			GenerateLogicallyReflexiveSample().Any().IsTrue();
-
-			foreach (var element in GenerateLogicallyReflexiveSample())
-				element.IsLogicallyEquivalentTo(element).IsTrue();
-		}
-
-
-		protected abstract IEnumerable<(IIdentity x, IIdentity y)>
-			GenerateLogicallyInEquivalentSample();
-
-		[Trait("TestLayer", nameof(IIdentity))]
-		[Fact]
-		public void LogicallyInEquivalentTest()
-		{
-			GenerateLogicallyInEquivalentSample().Any().IsTrue();
-
-			foreach (var (x, y) in GenerateLogicallyInEquivalentSample())
-			{
-				x.IsLogicallyEquivalentTo(y).IsFalse();
-				x.IsPhysicallyEquivalentTo(y).IsFalse();
-
-				y.IsLogicallyEquivalentTo(x).IsFalse();
-				y.IsPhysicallyEquivalentTo(x).IsFalse();
-			}
-		}
-
-
-		protected abstract IEnumerable<(IIdentity x, IIdentity y, IIdentity z)>
-			GeneratePhysicallyTransitiveSample();
-
-		[Trait("TestLayer", nameof(IIdentity))]
-		[Fact]
-		public void PhysicallyTransitiveTest()
-		{
-			GeneratePhysicallyTransitiveSample().Any().IsTrue();
-
-			foreach (var (x, y, z) in GeneratePhysicallyTransitiveSample())
-			{
-				x.IsPhysicallyEquivalentTo(y).IsTrue();
-				x.IsLogicallyEquivalentTo(y).IsTrue();
-
-				y.IsPhysicallyEquivalentTo(z).IsTrue();
-				y.IsLogicallyEquivalentTo(z).IsTrue();
-
-				x.IsPhysicallyEquivalentTo(z).IsTrue();
-				x.IsLogicallyEquivalentTo(z).IsTrue();
-			}
-		}
-
-
-		protected virtual IEnumerable<(IIdentity x, IIdentity y)>
-			GeneratePhysicallySymmetricSample()
-		{
-			foreach (var (x, y, z) in GeneratePhysicallyTransitiveSample())
-			{
-				yield return (x, y);
-				yield return (y, z);
-				yield return (z, x);
-			}
-		}
-
-		[Trait("TestLayer", nameof(IIdentity))]
-		[Fact]
-		public void PhysicallySymmetricTest()
-		{
-			GeneratePhysicallySymmetricSample().Any().IsTrue();
-
-			foreach (var (x, y) in GeneratePhysicallySymmetricSample())
-			{
-				x.IsPhysicallyEquivalentTo(y).IsTrue();
-				x.IsLogicallyEquivalentTo(y).IsTrue();
-
-				y.IsPhysicallyEquivalentTo(x).IsTrue();
-				y.IsLogicallyEquivalentTo(x).IsTrue();
-			}
-		}
-
-		protected virtual IEnumerable<IIdentity> GeneratePhysicallyReflexiveSample()
-		{
-			foreach (var (x, y, z) in GeneratePhysicallyTransitiveSample())
+			foreach (var (x, y, z) in GenerateTransitiveSample())
 			{
 				yield return x;
 				yield return y;
@@ -163,46 +72,34 @@ namespace SharpSourceFinderCoreTests
 
 		[Trait("TestLayer", nameof(IIdentity))]
 		[Fact]
-		public void PhysicallyReflexiveTest()
+		public void ReflexiveTest()
 		{
-			GeneratePhysicallyReflexiveSample().Any().IsTrue();
+			GenerateReflexiveSample().Any().IsTrue();
 
-			foreach (var element in GeneratePhysicallyReflexiveSample())
-			{
-				element.IsPhysicallyEquivalentTo(element).IsTrue();
-				element.IsLogicallyEquivalentTo(element).IsTrue();
-			}
+			foreach (var element in GenerateReflexiveSample())
+				element.IsEquivalentTo(element).IsTrue();
 		}
+
 
 		protected abstract IEnumerable<(IIdentity x, IIdentity y)>
-			GeneratePhysicallyInEqualitySample();
+			GenerateInEquivalentSample();
 
 		[Trait("TestLayer", nameof(IIdentity))]
 		[Fact]
-		public void PhysicallyInEquivalentTest()
+		public void InEquivalentTest()
 		{
-			GeneratePhysicallyInEqualitySample().Any().IsTrue();
+			GenerateInEquivalentSample().Any().IsTrue();
 
-			foreach (var (x, y) in GeneratePhysicallyInEqualitySample())
+			foreach (var (x, y) in GenerateInEquivalentSample())
 			{
-				x.IsPhysicallyEquivalentTo(y).IsFalse();
-				y.IsPhysicallyEquivalentTo(x).IsFalse();
+				x.IsEquivalentTo(y).IsFalse();
+
+				y.IsEquivalentTo(x).IsFalse();
 			}
 		}
 
-		protected abstract IEnumerable<(IIdentity sample, IPhysicalStorage expected)>
-			GeneratePhysicalStorageSample();
 
 
-		[Trait("TestLayer", nameof(IIdentity))]
-		[Fact]
-		public void PhysicalStorageGetterTest()
-		{
-			GeneratePhysicalStorageSample().Any().IsTrue();
-
-			foreach ((IIdentity sample, IPhysicalStorage expected) in GeneratePhysicalStorageSample())
-				AreEqual(sample.Storage, expected);
-		}
 
 		protected abstract
 			IEnumerable<(IIdentity sample, string expectedName, IdentityCategories expectedCategory, IQualified
