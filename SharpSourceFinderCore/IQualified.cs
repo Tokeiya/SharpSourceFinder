@@ -4,9 +4,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public interface IQualified
 	{
-		IPhysicalStorage Storage { get; }
 		IReadOnlyList<IIdentity> Identities { get; }
-		bool IsLogicallyEquivalentTo(IQualified other);
-		bool IsPhysicallyEquivalentTo(IQualified other);
+		bool IsEquivalentTo(IQualified other);
+
 	}
 }

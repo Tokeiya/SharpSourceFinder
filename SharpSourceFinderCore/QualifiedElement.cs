@@ -18,7 +18,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("QualifiedElement is not implemented");
 		}
 
-		public IReadOnlyList<IdentityElement> Identities { get; }
+		public IReadOnlyList<IIdentity> Identities { get; }
 		public IDiscriminatedElement Parent { get; }
 		public IPhysicalStorage Storage { get; }
 
@@ -96,7 +96,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public IReadOnlyList<IIdentity> Identites => throw new NotImplementedException();
 
-		public bool IsLogicallyEquivalentTo(IQualified other)
+		public bool IsEquivalentTo(IQualified other)
 		{
 #warning NotImplemented
 			throw new NotImplementedException();
