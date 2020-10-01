@@ -1,32 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Diagnostics;
+using System.Linq;
 using FastEnumUtility;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	[Serializable]
-	public class CategoryNotFoundException : Exception
-	{
-		//
-		// For guidelines regarding the creation of new exception types, see
-		//    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpgenref/html/cpconerrorraisinghandlingguidelines.asp
-		// and
-		//    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dncscol/html/csharp07192001.asp
-		//
-
-
-		public CategoryNotFoundException(string name) : base($"{nameof(name)} category not found.")
-		{
-		}
-
-		protected CategoryNotFoundException(
-			SerializationInfo info,
-			StreamingContext context) : base(info, context)
-		{
-		}
-	}
-
 	public sealed class IdentityElement : TerminalElement, IIdentity
 	{
 		public IdentityElement(QualifiedElement from, IdentityCategories category, string name) : base(from)
@@ -60,6 +39,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 				break;
 			}
 
+			Name = name;
 			Category = cat ?? throw new CategoryNotFoundException(name);
 		}
 
@@ -67,19 +47,34 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public IdentityCategories Category { get; }
 		public string Name { get; }
-		public IQualified From { get; }
-
-		public bool IsEquivalentTo(IIdentity identity)
-		{
-#warning IsEquivalentTo_Is_NotImpl
-			throw new NotImplementedException("IsEquivalentTo is not implemented");
-		}
-
-
+		public IQualified From => (IQualified) Parent;
+		public bool IsEquivalentTo(IIdentity identity) => (Name == identity.Name && Category == identity.Category && Order == identity.Order);
 		public override QualifiedElement GetQualifiedName()
 		{
-#warning GetQualifiedName_Is_NotImpl
-			throw new NotImplementedException("GetQualifiedName is not implemented");
+			var accum = StackPool.Get();
+
+			try
+			{
+				foreach (var identity in From.Identities.Take(Order).Cast<IdentityElement>().Reverse())
+				{
+					identity.AggregateIdentities(accum);
+				}
+
+				var ret = new QualifiedElement();
+
+				while (accum.Count != 0)
+				{
+					var cursor = accum.Pop();
+					_ = new IdentityElement(ret, cursor.category, cursor.name);
+				}
+
+				return ret;
+			}
+			finally
+			{
+				Debug.Assert(accum.Count == 0);
+				StackPool.Return(accum);
+			}
 		}
 
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator) =>
@@ -87,8 +82,13 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
-#warning IsLogicallyEquivalentTo_Is_NotImpl
-			throw new NotImplementedException("IsLogicallyEquivalentTo is not implemented");
+			if (ReferenceEquals(this, other)) return true;
+
+			return other switch
+			{
+				IdentityElement elem => IsEquivalentTo(elem) && Parent.IsLogicallyEquivalentTo(other.Parent),
+				_ => false
+			};
 		}
 	}
 }

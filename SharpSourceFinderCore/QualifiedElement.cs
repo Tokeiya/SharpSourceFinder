@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
@@ -17,35 +20,70 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public bool IsEquivalentTo(IQualified other)
 		{
-#warning IsEquivalentTo_Is_NotImpl
-			throw new NotImplementedException("IsEquivalentTo is not implemented");
+			if (ReferenceEquals(this, other)) return true;
+			if (Identities.Count != other.Identities.Count) return false;
+
+			for (int i = 0; i < Identities.Count; i++)
+			{
+				if (!Identities[i].IsEquivalentTo(other.Identities[i])) return false;
+			}
+
+			return true;
 		}
 
 		public override QualifiedElement GetQualifiedName()
 		{
-#warning GetQualifiedName_Is_NotImpl
-			throw new NotImplementedException("GetQualifiedName is not implemented");
+			var accum = StackPool.Get();
+
+			try
+			{
+				foreach (var element in AncestorsAndSelf())
+				{
+					element.AggregateIdentities(accum);
+				}
+
+				var ret = new QualifiedElement();
+
+				while (accum.Count != 0)
+				{
+					var (cat, nme) = accum.Pop();
+					_ = new IdentityElement(ret, cat, nme);
+				}
+
+				return ret;
+			}
+			finally
+			{
+				Debug.Assert(accum.Count!=0);
+				StackPool.Return(accum);
+			}
 		}
 
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
 		{
-#warning AggregateIdentities_Is_NotImpl
-			throw new NotImplementedException("AggregateIdentities is not implemented");
+			foreach (var elem in TypedChildren.Reverse())
+			{
+				accumulator.Push((elem.Category, elem.Name));
+			}
+
 		}
 
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
-#warning IsLogicallyEquivalentTo_Is_NotImpl
-			throw new NotImplementedException("IsLogicallyEquivalentTo is not implemented");
-		}
+			if (ReferenceEquals(other, this)) return true;
 
+			return other switch
+			{
+				QualifiedElement elem => IsEquivalentTo(elem) && Parent.IsLogicallyEquivalentTo(other.Parent),
+				_ => false
+			};
+		}
 
 		//Must coordinate the IdentityElement's Order property.
 		public override void RegisterChild(IDiscriminatedElement child)
 		{
-#warning RegisterChild_Is_NotImpl
-			throw new NotImplementedException("RegisterChild is not implemented");
 			base.RegisterChild(child);
+			((IdentityElement) child).Order = TypedChildren.Count;
 		}
 	}
 }
