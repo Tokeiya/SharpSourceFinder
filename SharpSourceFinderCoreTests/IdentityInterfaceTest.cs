@@ -132,5 +132,22 @@ namespace SharpSourceFinderCoreTests
 
 			foreach (var (sample, _, _, expected) in GenerateSample()) AreEqual(sample.From, expected);
 		}
+
+		protected abstract IEnumerable<(IIdentity sample, int expected)> GenerateOrderSample();
+
+		[Trait("TestLayer", nameof(IIdentity))]
+		[Fact]
+		public void OrderGetterTest()
+		{
+			GenerateOrderSample().IsNotEmpty();
+
+			foreach (var (sample,expected) in GenerateOrderSample())
+			{
+				sample.Order.Is(expected);	
+
+			}
+		}
+
+
 	}
 }

@@ -34,5 +34,10 @@ namespace SharpSourceFinderCoreTests
 		{
 			throw new System.NotImplementedException();
 		}
+
+		protected override IEnumerable<(IIdentity sample, int expected)> GenerateOrderSample()
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

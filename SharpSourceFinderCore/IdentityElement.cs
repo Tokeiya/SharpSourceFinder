@@ -78,6 +78,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("IsLogicallyEquivalentTo is not implemented");
 		}
 
+		public int Order { get; internal set; }
 
 		public IdentityCategories Category { get; }
 		public string Name { get; }

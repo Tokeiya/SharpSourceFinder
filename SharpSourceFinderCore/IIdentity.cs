@@ -4,6 +4,7 @@
 	{
 		IdentityCategories Category { get; }
 
+		int Order { get; }
 		string Name { get; }
 		IQualified From { get; }
 

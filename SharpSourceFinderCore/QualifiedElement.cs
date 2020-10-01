@@ -33,6 +33,14 @@ namespace Tokeiya3.SharpSourceFinderCore
 		}
 
 
+		//Must coordinate the IdentityElement's Order property.
+		public override void RegisterChild(IDiscriminatedElement child)
+		{
+#warning RegisterChild_Is_NotImpl
+			throw new NotImplementedException("RegisterChild is not implemented");
+			base.RegisterChild(child);
+		}
+
 		public IReadOnlyList<IIdentity> Identities => TypedChildren;
 		public bool IsEquivalentTo(IQualified other)
 		{
