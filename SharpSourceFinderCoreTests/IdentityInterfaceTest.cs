@@ -93,7 +93,6 @@ namespace SharpSourceFinderCoreTests
 			foreach (var (x, y) in GenerateInEquivalentSample())
 			{
 				x.IsEquivalentTo(y).IsFalse();
-
 				y.IsEquivalentTo(x).IsFalse();
 			}
 		}

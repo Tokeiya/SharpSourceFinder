@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ChainingAssertion;
+using FastEnumUtility;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
 
@@ -8,11 +9,9 @@ namespace SharpSourceFinderCoreTests
 {
 	public class IdentityElementIIdentityTest : IdentityInterfaceTest
 	{
-		private readonly PhysicalStorage _storageB = new PhysicalStorage("D:\\Foo\\Bar.cs");
-		private readonly PhysicalStorage _strageA = new PhysicalStorage("C:\\Hoge\\Piyo.cs");
 
 
-		protected IdentityElementIIdentityTest(ITestOutputHelper output) : base(output)
+		public IdentityElementIIdentityTest(ITestOutputHelper output) : base(output)
 		{
 		}
 
@@ -24,15 +23,34 @@ namespace SharpSourceFinderCoreTests
 
 		protected override IEnumerable<(IIdentity x, IIdentity y, IIdentity z)> GenerateTransitiveSample()
 		{
-#warning GenerateTransitiveSample_Is_NotImpl
-			throw new NotImplementedException("GenerateTransitiveSample is not implemented");
+			foreach (var elem in FastEnum.GetValues<IdentityCategories>())
+			{
+				var x = new IdentityElement(new QualifiedElement(), elem, elem.ToString());
+				var y = new IdentityElement(new QualifiedElement(), elem, elem.ToString());
+				var z = new IdentityElement(new QualifiedElement(), elem, elem.ToString());
+
+				yield return (x, y, z);
+			}
+
 		}
 
 		protected override IEnumerable<(IIdentity x, IIdentity y)> GenerateInEquivalentSample()
 		{
-#warning GenerateInEquivalentSample_Is_NotImpl
-			throw new NotImplementedException("GenerateInEquivalentSample is not implemented");
-		}
+			var q = new QualifiedElement();
+			var x = new IdentityElement(q, IdentityCategories.Namespace, "Hoge");
+			var y = new IdentityElement(q, IdentityCategories.Namespace, "Hoge");
+			yield return (x, y);
+
+			x = new IdentityElement(new QualifiedElement(), IdentityCategories.Namespace, "Hoge");
+			y = new IdentityElement(new QualifiedElement(), IdentityCategories.Class, "Hoge");
+
+			yield return (x, y);
+
+			x = new IdentityElement(new QualifiedElement(), IdentityCategories.Class, "Foo");
+			y = new IdentityElement(new QualifiedElement(), IdentityCategories.Class, "Bar");
+			yield return (x, y);
+
+	}
 
 
 		protected override
@@ -45,8 +63,16 @@ namespace SharpSourceFinderCoreTests
 
 		protected override IEnumerable<(IIdentity sample, int expected)> GenerateOrderSample()
 		{
-#warning GenerateOrderSample_Is_NotImpl
-			throw new NotImplementedException("GenerateOrderSample is not implemented");
+			var q = new QualifiedElement();
+			return new (IIdentity sample, int expected)[]
+			{
+				(new IdentityElement(q, IdentityCategories.Class, "Foo"), 1),
+				(new IdentityElement(q, IdentityCategories.Class, "Bar"), 2),
+				(new IdentityElement(q, IdentityCategories.Struct, "Hoge"), 3),
+				(new IdentityElement(new QualifiedElement(), IdentityCategories.Namespace, "Hoge"), 1)
+			};
+
+
 		}
 	}
 }

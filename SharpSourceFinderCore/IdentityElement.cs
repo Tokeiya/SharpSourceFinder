@@ -13,6 +13,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			if (!category.IsDefined()) throw new ArgumentException($"{nameof(category)} is unexpected value");
 			Category = category;
 			Name = name;
+			from.RegisterChild(this);
 		}
 
 		public IdentityElement(QualifiedElement parent, string name) : base(parent)
@@ -41,6 +42,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 			Name = name;
 			Category = cat ?? throw new CategoryNotFoundException(name);
+			parent.RegisterChild(this);
+
 		}
 
 		public int Order { get; internal set; }
