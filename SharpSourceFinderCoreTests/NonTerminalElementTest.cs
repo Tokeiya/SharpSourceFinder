@@ -8,20 +8,21 @@ using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
-	public abstract class NonTerminalElementTest<T> : DiscriminatedElementInterfaceTest where T : IDiscriminatedElement
+	public abstract class NonTerminalElementTest<T,U> : DiscriminatedElementInterfaceTest<T> where T : NonTerminalElement<U>
+	where U:IDiscriminatedElement
 	{
 		protected NonTerminalElementTest(ITestOutputHelper output) : base(output)
 		{
 		}
 
-		protected abstract IEnumerable<(NonTerminalElement<T> sample, IReadOnlyList<IDiscriminatedElement> expected,
-				Action<NonTerminalElement<T>> registerAction)>
+		protected abstract IEnumerable<(T sample, IReadOnlyList<IDiscriminatedElement> expected,
+				Action<T> registerAction)>
 			GenerateRegisterChildSample();
 
-		protected abstract IEnumerable<(NonTerminalElement<T> sample, T errSample)> GenerateErrSample();
+		protected abstract IEnumerable<(T sample, U errSample)> GenerateErrSample();
 
 
-		[Trait("TestLayer", nameof(NonTerminalElementTest<T>))]
+		[Trait("TestLayer", nameof(NonTerminalElementTest<T,U>))]
 		[Fact]
 		public void RegisterChildTest()
 		{
@@ -44,7 +45,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			GenerateErrSample().IsNotEmpty();
 
-			foreach ((NonTerminalElement<T> sample, T errSample) in GenerateErrSample())
+			foreach ((T sample, U errSample) in GenerateErrSample())
 				Assert.Throws<ArgumentException>(() => sample.RegisterChild(errSample));
 		}
 	}

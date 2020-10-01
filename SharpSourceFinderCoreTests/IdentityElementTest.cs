@@ -6,13 +6,13 @@ using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
-	public class IdentityElementIdentityInterFaceTest : IdentityInterfaceTest
+	public class IdentityElementIIdentityTest : IdentityInterfaceTest
 	{
 		private readonly PhysicalStorage _storageB = new PhysicalStorage("D:\\Foo\\Bar.cs");
 		private readonly PhysicalStorage _strageA = new PhysicalStorage("C:\\Hoge\\Piyo.cs");
 
 
-		protected IdentityElementIdentityInterFaceTest(ITestOutputHelper output) : base(output)
+		protected IdentityElementIIdentityTest(ITestOutputHelper output) : base(output)
 		{
 		}
 

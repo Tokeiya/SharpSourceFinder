@@ -12,7 +12,7 @@ namespace SharpSourceFinderCoreTests
 		private const string PathB = "D:\\Foo\\Bar.cs";
 
 
-		protected QualifiedElementIQualifiedTest(ITestOutputHelper output) : base(output)
+		public QualifiedElementIQualifiedTest(ITestOutputHelper output) : base(output)
 		{
 		}
 

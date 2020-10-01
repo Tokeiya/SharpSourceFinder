@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
-	public abstract class DiscriminatedElementInterfaceTest
+	public abstract class DiscriminatedElementInterfaceTest<T> where T:IDiscriminatedElement
 	{
 		protected readonly ITestOutputHelper Output;
 
@@ -18,11 +18,7 @@ namespace SharpSourceFinderCoreTests
 		protected abstract void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected);
 
 
-		protected abstract IEnumerable<(DiscriminatedElement sample, IPhysicalStorage expected)>
-			GenerateStorageGetTestSamples();
-
-
-		protected abstract IEnumerable<(IDiscriminatedElement x, IDiscriminatedElement y, IDiscriminatedElement z)>
+		protected abstract IEnumerable<(T x, T y, T z)>
 			GenerateLogicallyTransitiveSample();
 
 
@@ -43,7 +39,7 @@ namespace SharpSourceFinderCoreTests
 		}
 
 
-		protected virtual IEnumerable<(IDiscriminatedElement x, IDiscriminatedElement y)>
+		protected virtual IEnumerable<(T x, T y)>
 			GenerateLogicallySymmetricSample()
 		{
 			foreach (var (x, y, z) in GenerateLogicallyTransitiveSample())
@@ -69,7 +65,7 @@ namespace SharpSourceFinderCoreTests
 		}
 
 
-		protected virtual IEnumerable<IDiscriminatedElement> GenerateLogicallyReflexiveSample()
+		protected virtual IEnumerable<T> GenerateLogicallyReflexiveSample()
 		{
 			foreach (var (x, y, z) in GenerateLogicallyTransitiveSample())
 			{
@@ -90,7 +86,7 @@ namespace SharpSourceFinderCoreTests
 		}
 
 
-		protected abstract IEnumerable<(IDiscriminatedElement x, IDiscriminatedElement y)>
+		protected abstract IEnumerable<(T x, T y)>
 			GenerateLogicallyInEquivalentSample();
 
 		[Trait("TestLayer", nameof(IDiscriminatedElement))]
@@ -110,7 +106,7 @@ namespace SharpSourceFinderCoreTests
 		}
 
 
-		protected abstract IEnumerable<(IDiscriminatedElement x, IDiscriminatedElement y, IDiscriminatedElement z)>
+		protected abstract IEnumerable<(T x, T y, T z)>
 			GeneratePhysicallyTransitiveSample();
 
 		[Trait("TestLayer", nameof(IDiscriminatedElement))]
@@ -133,7 +129,7 @@ namespace SharpSourceFinderCoreTests
 		}
 
 
-		protected virtual IEnumerable<(IDiscriminatedElement x, IDiscriminatedElement y)>
+		protected virtual IEnumerable<(T x, T y)>
 			GeneratePhysicallySymmetricSample()
 		{
 			foreach (var (x, y, z) in GeneratePhysicallyTransitiveSample())
@@ -183,7 +179,7 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
-		protected abstract IEnumerable<(IDiscriminatedElement x, IDiscriminatedElement y)>
+		protected abstract IEnumerable<(T x, T y)>
 			GeneratePhysicallyInEqualitySample();
 
 		[Trait("TestLayer", nameof(IDiscriminatedElement))]
@@ -199,7 +195,7 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
-		protected abstract IEnumerable<(IDiscriminatedElement sample, IDiscriminatedElement expected)>
+		protected abstract IEnumerable<(T sample, IDiscriminatedElement expected)>
 			GenerateParentSample();
 
 		[Trait("TestLayer", nameof(IDiscriminatedElement))]
@@ -211,7 +207,7 @@ namespace SharpSourceFinderCoreTests
 			foreach (var (sample, expected) in GenerateParentSample()) AreEqual(sample.Parent, expected);
 		}
 
-		protected abstract IEnumerable<(IDiscriminatedElement sample, IPhysicalStorage expected)>
+		protected abstract IEnumerable<(T sample, IPhysicalStorage expected)>
 			GeneratePhysicalStorageSample();
 
 
@@ -226,7 +222,7 @@ namespace SharpSourceFinderCoreTests
 		}
 
 
-		protected abstract IEnumerable<(IDiscriminatedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+		protected abstract IEnumerable<(T sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateGetAncestorsSample(bool isContainSelf);
 
 		[Trait("TestLayer", nameof(IDiscriminatedElement))]
@@ -261,7 +257,7 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
-		protected abstract IEnumerable<(IDiscriminatedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+		protected abstract IEnumerable<(T sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateChildrenSample();
 
 
@@ -280,7 +276,7 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
-		protected abstract IEnumerable<(IDiscriminatedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+		protected abstract IEnumerable<(T sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateDescendantsSample(bool isContainSelf);
 
 		[Fact]
@@ -312,7 +308,7 @@ namespace SharpSourceFinderCoreTests
 			}
 		}
 
-		protected abstract IEnumerable<(IDiscriminatedElement sample, IQualified expected)>
+		protected abstract IEnumerable<(T sample, IQualified expected)>
 			GenerateQualifiedNameSample();
 
 		protected abstract void AreEqual(IQualified actual, IQualified expected);
@@ -332,7 +328,7 @@ namespace SharpSourceFinderCoreTests
 
 
 		protected abstract
-			IEnumerable<(IDiscriminatedElement sample, Stack<(IdentityCategories category, string identity)>
+			IEnumerable<(T sample, Stack<(IdentityCategories category, string identity)>
 				expected)> GenerateAggregateIdentitiesSample();
 
 		[Fact]

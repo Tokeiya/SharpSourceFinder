@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
-	public abstract class TypedElementTest : NonTerminalElementTest<IDiscriminatedElement>
+	public abstract class TypedElementTest : NonTerminalElementTest<TypeElement,IDiscriminatedElement>
 	{
 		protected TypedElementTest(ITestOutputHelper output) : base(output)
 		{

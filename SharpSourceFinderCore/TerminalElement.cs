@@ -7,20 +7,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 	{
 		protected TerminalElement(IDiscriminatedElement parent) : base(parent)
 		{
-#warning TerminalElement_Is_NotImpl
-			throw new NotImplementedException("TerminalElement is not implemented");
 		}
 
-		public override IEnumerable<IDiscriminatedElement> Children()
-		{
-#warning Children_Is_NotImpl
-			throw new NotImplementedException("Children is not implemented");
-		}
+		public override IEnumerable<IDiscriminatedElement> Children() => Array.Empty<IDiscriminatedElement>();
 
-		public override void RegisterChild(IDiscriminatedElement child)
-		{
-#warning RegisterChild_Is_NotImpl
-			throw new NotImplementedException("RegisterChild is not implemented");
-		}
+		public override void RegisterChild(IDiscriminatedElement child)=>throw new InvalidOperationException($"{nameof(TerminalElement)} can't have any children.");
 	}
 }
