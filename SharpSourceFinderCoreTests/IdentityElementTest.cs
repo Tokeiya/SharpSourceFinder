@@ -1,3 +1,4 @@
+using System;
 using ChainingAssertion;
 using System.Collections.Generic;
 using Tokeiya3.SharpSourceFinderCore;
@@ -19,25 +20,28 @@ namespace SharpSourceFinderCoreTests
 
 		protected override IEnumerable<(IIdentity x, IIdentity y, IIdentity z)> GenerateTransitiveSample()
 		{
-
-			throw new System.NotImplementedException();
+#warning GenerateTransitiveSample_Is_NotImpl
+			throw new NotImplementedException("GenerateTransitiveSample is not implemented");
 		}
 
 		protected override IEnumerable<(IIdentity x, IIdentity y)> GenerateInEquivalentSample()
 		{
-			throw new System.NotImplementedException();
+#warning GenerateInEquivalentSample_Is_NotImpl
+			throw new NotImplementedException("GenerateInEquivalentSample is not implemented");
 		}
 
 
 
 		protected override IEnumerable<(IIdentity sample, string expectedName, IdentityCategories expectedCategory, IQualified expectedFrom)> GenerateSample()
 		{
-			throw new System.NotImplementedException();
+#warning GenerateSample_Is_NotImpl
+			throw new NotImplementedException("GenerateSample is not implemented");
 		}
 
 		protected override IEnumerable<(IIdentity sample, int expected)> GenerateOrderSample()
 		{
-			throw new System.NotImplementedException();
+#warning GenerateOrderSample_Is_NotImpl
+			throw new NotImplementedException("GenerateOrderSample is not implemented");
 		}
 	}
 }

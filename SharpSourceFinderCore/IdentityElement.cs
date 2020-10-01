@@ -88,11 +88,5 @@ namespace Tokeiya3.SharpSourceFinderCore
 #warning IsEquivalentTo_Is_NotImpl
 			throw new NotImplementedException("IsEquivalentTo is not implemented");
 		}
-
-		public bool IsPhysicallyEquivalentTo(IIdentity identity)
-		{
-#warning IsPhysicallyEquivalentTo_Is_NotImpl
-			throw new NotImplementedException("IsPhysicallyEquivalentTo is not implemented");
-		}
 	}
 }

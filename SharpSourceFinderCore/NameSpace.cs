@@ -82,8 +82,15 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
-#warning IsLogicallyEquivalentTo_Is_NotImpl
-			throw new NotImplementedException("IsLogicallyEquivalentTo is not implemented");
+			var ret= other switch
+			{
+				NameSpace ns => Identity.IsEquivalentTo(ns.Identity),
+				_ => false
+			};
+
+			if (!ret) return false;
+
+			return Parent.IsLogicallyEquivalentTo(other.Parent);
 		}
 	}
 }
