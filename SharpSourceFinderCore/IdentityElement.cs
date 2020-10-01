@@ -1,42 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
+using FastEnumUtility;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
+	[Serializable]
+	public class CategoryNotFoundException : Exception
+	{
+		//
+		// For guidelines regarding the creation of new exception types, see
+		//    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpgenref/html/cpconerrorraisinghandlingguidelines.asp
+		// and
+		//    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dncscol/html/csharp07192001.asp
+		//
+
+
+
+		public CategoryNotFoundException(string name) : base($"{nameof(name)} category not found.")
+		{
+		}
+
+		protected CategoryNotFoundException(
+			SerializationInfo info,
+			StreamingContext context) : base(info, context)
+		{
+		}
+	}
 	public sealed class IdentityElement : TerminalElement, IIdentity
 	{
-		public IdentityElement(IDiscriminatedElement from, IdentityCategories category, string name) : base(from)
+		public IdentityElement(QualifiedElement from, IdentityCategories category, string name) : base(from)
 		{
-#warning IdentityElement_Is_NotImpl
-			throw new NotImplementedException("IdentityElement is not implemented");
+			if (!category.IsDefined()) throw new ArgumentException($"{nameof(category)} is unexpected value");
+			Category = category;
+			Name = name;
 		}
-			
-		public IdentityElement(IDiscriminatedElement parent, string name) : base(parent)
+
+		public IdentityElement(QualifiedElement parent, string name) : base(parent)
 		{
-#warning IdentityElement_Is_NotImpl
-			throw new NotImplementedException("IdentityElement is not implemented");
+			var piv = parent.Parent;
+			IdentityCategories? cat=default;
+
+			while (!(piv is ImaginaryRoot))
+			{
+				cat = piv switch
+				{
+					NameSpace _ => IdentityCategories.Namespace,
+					ClassElement _ => IdentityCategories.Class,
+					StructElement _ => IdentityCategories.Struct,
+					InterfaceElement _ => IdentityCategories.Interface,
+					EnumElement _ => IdentityCategories.Enum,
+					DelegateElement _ => IdentityCategories.Delegate,
+					_ => null
+				};
+				
+				piv = piv.Parent;
+
+				if(!(cat is null)) continue;
+				break;
+			}
+
+			Category = cat ?? throw new CategoryNotFoundException(name);
 		}
 
 
 		public override QualifiedElement GetQualifiedName()
 		{
-			throw new NotImplementedException();
+#warning GetQualifiedName_Is_NotImpl
+			throw new NotImplementedException("GetQualifiedName is not implemented");
 		}
 
-		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
-		{
-			throw new NotImplementedException();
-		}
+		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator) => accumulator.Push((Category, Name));
 
-		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
+		public override bool IsEquivalentTo(IDiscriminatedElement other)
 		{
-			throw new NotImplementedException();
-		}
-
-		public override bool IsPhysicallyEquivalentTo(IDiscriminatedElement other)
-		{
-			throw new NotImplementedException();
+#warning IsEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsEquivalentTo is not implemented");
 		}
 
 		public IdentityCategories Category { get; }
@@ -44,12 +84,14 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public IQualified From { get; }
 		public bool IsEquivalentTo(IIdentity identity)
 		{
-			throw new NotImplementedException();
+#warning IsEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsEquivalentTo is not implemented");
 		}
 
 		public bool IsPhysicallyEquivalentTo(IIdentity identity)
 		{
-			throw new NotImplementedException();
+#warning IsPhysicallyEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsPhysicallyEquivalentTo is not implemented");
 		}
 	}
 }

@@ -44,6 +44,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public bool IsLogicallyEquivalentTo(IDiscriminatedElement other) => other is ImaginaryRoot;
 		public bool IsPhysicallyEquivalentTo(IDiscriminatedElement other) => other is ImaginaryRoot;
 
+		public bool IsEquivalentTo(IDiscriminatedElement other) => other is ImaginaryRoot;
+
 		public static bool IsImaginaryRoot(IDiscriminatedElement element) => element is ImaginaryRoot;
 	}
 }

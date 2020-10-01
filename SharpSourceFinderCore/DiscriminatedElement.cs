@@ -69,8 +69,18 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public abstract void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator);
 
-		public abstract bool IsLogicallyEquivalentTo(IDiscriminatedElement other);
+		public abstract bool IsEquivalentTo(IDiscriminatedElement other);
 
-		public abstract bool IsPhysicallyEquivalentTo(IDiscriminatedElement other);
+		public bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
+		{
+#warning IsLogicallyEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsLogicallyEquivalentTo is not implemented");
+		}
+
+		public bool IsPhysicallyEquivalentTo(IDiscriminatedElement other)
+		{
+#warning IsPhysicallyEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsPhysicallyEquivalentTo is not implemented");
+		}
 	}
 }

@@ -31,12 +31,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			}
 		}
 
-		public override bool IsPhysicallyEquivalentTo(IDiscriminatedElement other)
-		{
-			if (ReferenceEquals(this, other)) return true;
 
-			return IsLogicallyEquivalentTo(other) && Storage.IsEquivalentTo(other.Storage);
-		}
 
 		public override void RegisterChild(IDiscriminatedElement child)
 		{
@@ -85,11 +80,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 			}
 		}
 
-		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other) => other switch
+		public override bool IsEquivalentTo(IDiscriminatedElement other)
 		{
-			NameSpace ns => ns.Identity.IsEquivalentTo(Identity),
-			_ => false
-		};
-
+#warning IsEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsEquivalentTo is not implemented");
+		}
 	}
 }

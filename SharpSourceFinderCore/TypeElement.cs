@@ -11,7 +11,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("TypeElement is not implemented");
 		}
 
-		public IdentityElement Identity { get; }
+		public IQualified Identity { get; }
 
 		public bool IsUnsafe { get; }
 

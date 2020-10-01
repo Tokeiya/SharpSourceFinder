@@ -9,6 +9,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground", "Playground\Pl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpSourceFinderCoreTests", "SharpSourceFinderCoreTests\SharpSourceFinderCoreTests.csproj", "{7F57B1CB-4197-46A0-8A19-104DC1D684F4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OnGoing", "OnGoing", "{4AB676AE-7657-4240-BF90-C075105AEFD8}"
+	ProjectSection(SolutionItems) = preProject
+		SharpSourceFinderCore\ClassElement.cs = SharpSourceFinderCore\ClassElement.cs
+		SharpSourceFinderCore\DelegateElement.cs = SharpSourceFinderCore\DelegateElement.cs
+		SharpSourceFinderCore\EnumElement.cs = SharpSourceFinderCore\EnumElement.cs
+		SharpSourceFinderCore\IdentityElement.cs = SharpSourceFinderCore\IdentityElement.cs
+		SharpSourceFinderCore\InterfaceElement.cs = SharpSourceFinderCore\InterfaceElement.cs
+		SharpSourceFinderCore\QualifiedElement.cs = SharpSourceFinderCore\QualifiedElement.cs
+		SharpSourceFinderCore\StructElement.cs = SharpSourceFinderCore\StructElement.cs
+		SharpSourceFinderCore\TerminalElement.cs = SharpSourceFinderCore\TerminalElement.cs
+		SharpSourceFinderCore\TypeElement.cs = SharpSourceFinderCore\TypeElement.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

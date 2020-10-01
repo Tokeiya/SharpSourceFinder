@@ -15,11 +15,11 @@ namespace SharpSourceFinderCoreTests
 		}
 
 		public abstract
-			IEnumerable<(TypeElement sample, IdentityElement expectedIdentity, bool expectedIsUnsafe, bool
+			IEnumerable<(TypeElement sample, IQualified expectedIdentity, bool expectedIsUnsafe, bool
 				expectedIsPartial, bool expectedIsStatic, ScopeCategories expectedScope, IPhysicalStorage
 				expectedStorage)> GenerateSample();
 
-		protected abstract void AreEqual(IdentityElement actual, IdentityElement expected);
+		protected abstract void AreEqual(IdentityElement actual, IQualified expected);
 
 
 		[Trait("TestLayer", nameof(TypeElement))]

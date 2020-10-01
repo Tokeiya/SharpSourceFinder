@@ -284,15 +284,8 @@ namespace SharpSourceFinderCoreTests
 			IEnumerable<(NonTerminalElement<IDiscriminatedElement> sample, IDiscriminatedElement errSample)>
 			GenerateErrSample()
 		{
-			var sample = new NameSpace(new PhysicalStorage(PathA));
-			var ns = new NameSpace(new PhysicalStorage(PathA));
-
-			var err = new IdentityElement(ns, "Foo");
-			yield return (sample, err);
-
-			err = new IdentityElement(sample, "Bar");
-			yield return (sample, err);
-
+#warning GenerateErrSample_Is_NotImpl
+			throw new NotImplementedException("GenerateErrSample is not implemented");
 
 		}
 	}

@@ -16,28 +16,27 @@ namespace Tokeiya3.SharpSourceFinderCore
 		}
 		public override QualifiedElement GetQualifiedName()
 		{
-			throw new NotImplementedException();
+#warning GetQualifiedName_Is_NotImpl
+			throw new NotImplementedException("GetQualifiedName is not implemented");
 		}
 
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
 		{
-			throw new NotImplementedException();
+#warning AggregateIdentities_Is_NotImpl
+			throw new NotImplementedException("AggregateIdentities is not implemented");
 		}
 
-		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
+		public override bool IsEquivalentTo(IDiscriminatedElement other)
 		{
-			throw new NotImplementedException();
-		}
-
-		public override bool IsPhysicallyEquivalentTo(IDiscriminatedElement other)
-		{
-			throw new NotImplementedException();
+#warning IsEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsEquivalentTo is not implemented");
 		}
 
 		public IReadOnlyList<IIdentity> Identities => TypedChildren;
 		public bool IsEquivalentTo(IQualified other)
 		{
-			throw new NotImplementedException();
+#warning IsEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsEquivalentTo is not implemented");
 		}
 	}
 }

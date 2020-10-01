@@ -18,12 +18,8 @@ namespace SharpSourceFinderCoreTests
 		[Fact]
 		public void RegisterChildTest()
 		{
-			GenerateTerminalElementSample().IsNotEmpty();
-
-			foreach (var elem in GenerateTerminalElementSample())
-			{
-				Assert.Throws<ArgumentException>(() => new IdentityElement(elem, "Some"));
-			}
+#warning RegisterChildTest_Is_NotImpl
+			throw new NotImplementedException("RegisterChildTest is not implemented");
 		}
 
 	}
