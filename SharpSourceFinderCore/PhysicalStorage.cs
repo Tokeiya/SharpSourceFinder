@@ -6,16 +6,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 	{
 		public PhysicalStorage(string path)
 		{
-			if (string.IsNullOrEmpty(path)) throw new ArgumentException($"{nameof(path)} is null or empty.");
+			if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException($"{nameof(path)} is null or empty.");
 			Path = path;
 		}
 
 		public string Path { get; }
 
-		public bool IsEquivalentTo(IPhysicalStorage other)
-		{
-#warning IsEquivalentTo_Is_NotImpl
-			throw new NotImplementedException("IsEquivalentTo is not implemented");
-		}
+		public bool IsEquivalentTo(IPhysicalStorage other) => Path == other.Path;
 	}
 }

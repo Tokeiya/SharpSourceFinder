@@ -20,14 +20,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public void RegisterChild(IDiscriminatedElement child) =>
 			throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support this method or property.");
-
-		public void Describe(StringBuilder builder, string indent, int depth)
-		{
-		}
-
-		public string Describe(string indent = "\t") =>
-			throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support this method or property.");
-
 		public IEnumerable<IDiscriminatedElement> Ancestors() => Array.Empty<IDiscriminatedElement>();
 
 		public IEnumerable<IDiscriminatedElement> AncestorsAndSelf() =>

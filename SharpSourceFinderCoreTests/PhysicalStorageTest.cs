@@ -91,7 +91,7 @@ namespace SharpSourceFinderCoreTests
 		public void InEquivalentTest()
 		{
 			var x = new PhysicalStorage(SampleA);
-			var y = new PhysicalStorage(SampleA);
+			var y = new PhysicalStorage(SampleB);
 
 			x.IsEquivalentTo(y).IsFalse();
 			y.IsEquivalentTo(x).IsFalse();

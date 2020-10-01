@@ -1,74 +1,95 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
+using Microsoft.CodeAnalysis;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class NameSpace : NonTerminalElement<IDiscriminatedElement>
 	{
-		public NameSpace()
-		{
-#warning NameSpace_Is_NotImpl
-			throw new NotImplementedException("NameSpace is not implemented");
-		}
+		//ここに参照持たせる
+		private IQualified? _identity;
 
-		public NameSpace(IPhysicalStorage physicalStorage)
-		{
-#warning NameSpace_Is_NotImpl
-			throw new NotImplementedException("NameSpace is not implemented");
-		}
+		private readonly IPhysicalStorage _storage;
 
-		public NameSpace(IDiscriminatedElement parent) : base(parent)
-		{
-#warning NameSpace_Is_NotImpl
-			throw new NotImplementedException("NameSpace is not implemented");
-		}
+		public NameSpace() => _storage = StorageNotAvailable.NotAvailable;
 
-		QualifiedElement Identity
-		{
-			get
-			{
-#warning Identity_Is_NotImpl
-				throw new NotImplementedException("Identity is not implemented");
-			}
-		}
+		public NameSpace(IPhysicalStorage physicalStorage) => _storage = physicalStorage;
+
+		public NameSpace(IDiscriminatedElement parent) : base(parent) => _storage = StorageNotAvailable.NotAvailable;
+
+		IQualified Identity => _identity ?? throw new IdentityNotFoundException();
 
 		public override IPhysicalStorage Storage
 		{
 			get
 			{
-#warning Storage_Is_NotImpl
-				throw new NotImplementedException("Storage is not implemented");
+				if (Parent is ImaginaryRoot) return _storage;
+				else return Parent.Storage;
 			}
 		}
 
 		public override bool IsPhysicallyEquivalentTo(IDiscriminatedElement other)
 		{
-			throw new NotImplementedException();
+			if (ReferenceEquals(this, other)) return true;
+
+			return IsLogicallyEquivalentTo(other) && Storage.IsEquivalentTo(other.Storage);
 		}
 
 		public override void RegisterChild(IDiscriminatedElement child)
 		{
-#warning RegisterChild_Is_NotImpl
-			throw new NotImplementedException("RegisterChild is not implemented");
+			if (child is IQualified qualified)
+			{
+				if(_identity is null) throw new IdentityDuplicatedException();
+				else _identity = qualified;
+			}
+
+			base.RegisterChild(child);
 		}
 
 
 		public override QualifiedElement GetQualifiedName()
 		{
-			throw new NotImplementedException();
+			var stack = StackPool.Get();
+
+			try
+			{
+				AggregateIdentities(stack);
+				Parent.AggregateIdentities(stack);
+
+				var ret=new QualifiedElement();
+
+				while (stack.Count != 0)
+				{
+					var piv = stack.Pop();
+					_ =new IdentityElement(ret, piv.category, piv.name);
+				}
+
+				return ret;
+
+			}
+			finally
+			{
+				Debug.Assert(stack.Count == 0);
+				StackPool.Return(stack);
+			}
 		}
 
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
 		{
-#warning AggregateIdentities_Is_NotImpl
-			throw new NotImplementedException("AggregateIdentities is not implemented");
+			foreach (var elem in Identity.Identities)
+			{
+				accumulator.Push((elem.Category, elem.Name));
+			}
 		}
 
-		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
+		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other) => other switch
 		{
-#warning IsEquivalentLogicallyTo_Is_NotImpl
-			throw new NotImplementedException("IsEquivalentLogicallyTo is not implemented");
-		}
+			NameSpace ns => ns.Identity.IsEquivalentTo(Identity),
+			_ => false
+		};
+
 	}
 }

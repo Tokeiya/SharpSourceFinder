@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Text;
+using Microsoft.Extensions.ObjectPool;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
 	public abstract class DiscriminatedElement : IDiscriminatedElement
 	{
+		protected static ObjectPool<Stack<(IdentityCategories category, string name)>> StackPool { get; } 
+			= new DefaultObjectPool<Stack<(IdentityCategories category, string name)>>(new DefaultPooledObjectPolicy<Stack<(IdentityCategories category, string name)>>());
 		protected DiscriminatedElement(IDiscriminatedElement parent)
 		{
 			if (parent is ImaginaryRoot) throw new ArgumentException($"{nameof(parent)} can't accept ImaginaryRoot.");

@@ -213,18 +213,18 @@ namespace SharpSourceFinderCoreTests
 
 			expected = sample.GetQualifiedName();
 
-			expected.Identites.Count.Is(4);
+			expected.Identities.Count.Is(4);
 
-			foreach (var elem in expected.Identites)
+			foreach (var elem in expected.Identities)
 			{
 				elem.Category.Is(IdentityCategories.Namespace);
 				elem.From.Is(expected);
 			}
 
-			expected.Identites[0].Name.Is("Foo");
-			expected.Identites[1].Name.Is("Bar");
-			expected.Identites[2].Name.Is("Hoge");
-			expected.Identites[3].Name.Is("Piyo");
+			expected.Identities[0].Name.Is("Foo");
+			expected.Identities[1].Name.Is("Bar");
+			expected.Identities[2].Name.Is("Hoge");
+			expected.Identities[3].Name.Is("Piyo");
 
 			yield return (sample, expected);
 		}

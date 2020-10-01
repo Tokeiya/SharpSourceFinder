@@ -33,22 +33,6 @@ namespace SharpSourceFinderCoreTests
 			Throws<NotSupportedException>(() => ImaginaryRoot.Root.RegisterChild(sample));
 		}
 
-		[Trait("TestLayer", nameof(ImaginaryRoot))]
-		[Fact]
-		public void DescribeWithStringBuilderTest()
-		{
-			var bld = new StringBuilder();
-
-			ImaginaryRoot.Root.Describe(bld, "  ", 0);
-			bld.ToString().IsEmpty();
-		}
-
-		[Trait("TestLayer", nameof(ImaginaryRoot))]
-		[Fact]
-		public void StringReturnsDescribeTest()
-		{
-			Throws<NotSupportedException>(() => ImaginaryRoot.Root.Describe());
-		}
 
 		[Trait("TestLayer", nameof(ImaginaryRoot))]
 		[Fact]
