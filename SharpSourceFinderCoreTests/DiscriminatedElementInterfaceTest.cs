@@ -1,8 +1,6 @@
-using System;
-using ChainingAssertion;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -41,7 +39,6 @@ namespace SharpSourceFinderCoreTests
 				y.IsLogicallyEquivalentTo(z).IsTrue();
 
 				x.IsLogicallyEquivalentTo(z).IsTrue();
-
 			}
 		}
 
@@ -89,9 +86,7 @@ namespace SharpSourceFinderCoreTests
 			GenerateLogicallyReflexiveSample().Any().IsTrue();
 
 			foreach (var element in GenerateLogicallyReflexiveSample())
-			{
 				element.IsLogicallyEquivalentTo(element).IsTrue();
-			}
 		}
 
 
@@ -231,7 +226,6 @@ namespace SharpSourceFinderCoreTests
 		}
 
 
-
 		protected abstract IEnumerable<(IDiscriminatedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateGetAncestorsSample(bool isContainSelf);
 
@@ -332,7 +326,7 @@ namespace SharpSourceFinderCoreTests
 			{
 				var actual = sample.GetQualifiedName();
 
-				AreEqual(actual,expected);
+				AreEqual(actual, expected);
 			}
 		}
 

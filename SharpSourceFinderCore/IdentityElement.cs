@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 using FastEnumUtility;
 
 namespace Tokeiya3.SharpSourceFinderCore
@@ -17,7 +16,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 		//
 
 
-
 		public CategoryNotFoundException(string name) : base($"{nameof(name)} category not found.")
 		{
 		}
@@ -28,6 +26,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 		}
 	}
+
 	public sealed class IdentityElement : TerminalElement, IIdentity
 	{
 		public IdentityElement(QualifiedElement from, IdentityCategories category, string name) : base(from)
@@ -40,7 +39,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public IdentityElement(QualifiedElement parent, string name) : base(parent)
 		{
 			var piv = parent.Parent;
-			IdentityCategories? cat=default;
+			IdentityCategories? cat = default;
 
 			while (!(piv is ImaginaryRoot))
 			{
@@ -54,14 +53,26 @@ namespace Tokeiya3.SharpSourceFinderCore
 					DelegateElement _ => IdentityCategories.Delegate,
 					_ => null
 				};
-				
+
 				piv = piv.Parent;
 
-				if(!(cat is null)) continue;
+				if (!(cat is null)) continue;
 				break;
 			}
 
 			Category = cat ?? throw new CategoryNotFoundException(name);
+		}
+
+		public int Order { get; internal set; }
+
+		public IdentityCategories Category { get; }
+		public string Name { get; }
+		public IQualified From { get; }
+
+		public bool IsEquivalentTo(IIdentity identity)
+		{
+#warning IsEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsEquivalentTo is not implemented");
 		}
 
 
@@ -71,22 +82,13 @@ namespace Tokeiya3.SharpSourceFinderCore
 			throw new NotImplementedException("GetQualifiedName is not implemented");
 		}
 
-		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator) => accumulator.Push((Category, Name));
+		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator) =>
+			accumulator.Push((Category, Name));
+
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
 #warning IsLogicallyEquivalentTo_Is_NotImpl
 			throw new NotImplementedException("IsLogicallyEquivalentTo is not implemented");
-		}
-
-		public int Order { get; internal set; }
-
-		public IdentityCategories Category { get; }
-		public string Name { get; }
-		public IQualified From { get; }
-		public bool IsEquivalentTo(IIdentity identity)
-		{
-#warning IsEquivalentTo_Is_NotImpl
-			throw new NotImplementedException("IsEquivalentTo is not implemented");
 		}
 	}
 }

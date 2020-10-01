@@ -1,5 +1,5 @@
-﻿using ChainingAssertion;
-using System;
+﻿using System;
+using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 

@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using Microsoft.CodeAnalysis;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class NameSpace : NonTerminalElement<IDiscriminatedElement>
 	{
+		private readonly IPhysicalStorage _storage;
+
 		//ここに参照持たせる
 		private IQualified? _identity;
-
-		private readonly IPhysicalStorage _storage;
 
 		public NameSpace() => _storage = StorageNotAvailable.NotAvailable;
 
@@ -27,18 +23,17 @@ namespace Tokeiya3.SharpSourceFinderCore
 			get
 			{
 				if (Parent is ImaginaryRoot) return _storage;
-				else return Parent.Storage;
+				return Parent.Storage;
 			}
 		}
-
 
 
 		public override void RegisterChild(IDiscriminatedElement child)
 		{
 			if (child is IQualified qualified)
 			{
-				if(_identity is null) throw new IdentityDuplicatedException();
-				else _identity = qualified;
+				if (_identity is null) throw new IdentityDuplicatedException();
+				_identity = qualified;
 			}
 
 			base.RegisterChild(child);
@@ -54,16 +49,15 @@ namespace Tokeiya3.SharpSourceFinderCore
 				AggregateIdentities(stack);
 				Parent.AggregateIdentities(stack);
 
-				var ret=new QualifiedElement();
+				var ret = new QualifiedElement();
 
 				while (stack.Count != 0)
 				{
 					var piv = stack.Pop();
-					_ =new IdentityElement(ret, piv.category, piv.name);
+					_ = new IdentityElement(ret, piv.category, piv.name);
 				}
 
 				return ret;
-
 			}
 			finally
 			{
@@ -74,15 +68,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
 		{
-			foreach (var elem in Identity.Identities)
-			{
-				accumulator.Push((elem.Category, elem.Name));
-			}
+			foreach (var elem in Identity.Identities) accumulator.Push((elem.Category, elem.Name));
 		}
 
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
-			var ret= other switch
+			var ret = other switch
 			{
 				NameSpace ns => Identity.IsEquivalentTo(ns.Identity),
 				_ => false

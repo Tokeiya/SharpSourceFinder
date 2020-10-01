@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
@@ -8,12 +7,20 @@ namespace Tokeiya3.SharpSourceFinderCore
 	{
 		public QualifiedElement()
 		{
-
 		}
+
 		public QualifiedElement(IDiscriminatedElement parent) : base(parent)
 		{
-
 		}
+
+		public IReadOnlyList<IIdentity> Identities => TypedChildren;
+
+		public bool IsEquivalentTo(IQualified other)
+		{
+#warning IsEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsEquivalentTo is not implemented");
+		}
+
 		public override QualifiedElement GetQualifiedName()
 		{
 #warning GetQualifiedName_Is_NotImpl
@@ -39,13 +46,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 #warning RegisterChild_Is_NotImpl
 			throw new NotImplementedException("RegisterChild is not implemented");
 			base.RegisterChild(child);
-		}
-
-		public IReadOnlyList<IIdentity> Identities => TypedChildren;
-		public bool IsEquivalentTo(IQualified other)
-		{
-#warning IsEquivalentTo_Is_NotImpl
-			throw new NotImplementedException("IsEquivalentTo is not implemented");
 		}
 	}
 }

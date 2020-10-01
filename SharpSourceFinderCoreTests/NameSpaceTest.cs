@@ -1,8 +1,6 @@
-using ChainingAssertion;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices.ComTypes;
+using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
 
@@ -14,9 +12,12 @@ namespace SharpSourceFinderCoreTests
 		private const string PathB = "D:\\Foo\\Bar.cs";
 
 
-		public NameSpaceTest(ITestOutputHelper output) : base(output) { }
+		public NameSpaceTest(ITestOutputHelper output) : base(output)
+		{
+		}
 
-		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) => ReferenceEquals(actual, expected).IsTrue();
+		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) =>
+			ReferenceEquals(actual, expected).IsTrue();
 
 
 		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) =>
@@ -34,7 +35,6 @@ namespace SharpSourceFinderCoreTests
 			yield return (ss, storage);
 
 			yield return (new NameSpace(StorageNotAvailable.NotAvailable), StorageNotAvailable.NotAvailable);
-
 		}
 
 
@@ -77,11 +77,10 @@ namespace SharpSourceFinderCoreTests
 			_ = new IdentityElement(new QualifiedElement(y), "tokeiya3");
 
 			yield return (x, y);
-
-
 		}
 
-		protected override IEnumerable<(IDiscriminatedElement x, IDiscriminatedElement y, IDiscriminatedElement z)> GeneratePhysicallyTransitiveSample()
+		protected override IEnumerable<(IDiscriminatedElement x, IDiscriminatedElement y, IDiscriminatedElement z)>
+			GeneratePhysicallyTransitiveSample()
 		{
 			var x = new NameSpace(new PhysicalStorage(PathA));
 			var q = new QualifiedElement(x);
@@ -103,7 +102,8 @@ namespace SharpSourceFinderCoreTests
 			yield return (x, y, z);
 		}
 
-		protected override IEnumerable<(IDiscriminatedElement x, IDiscriminatedElement y)> GeneratePhysicallyInEqualitySample()
+		protected override IEnumerable<(IDiscriminatedElement x, IDiscriminatedElement y)>
+			GeneratePhysicallyInEqualitySample()
 		{
 			var x = new NameSpace(new PhysicalStorage(PathA));
 			var q = new QualifiedElement(x);
@@ -123,7 +123,8 @@ namespace SharpSourceFinderCoreTests
 			yield return (x, y);
 		}
 
-		protected override IEnumerable<(IDiscriminatedElement sample, IDiscriminatedElement expected)> GenerateParentSample()
+		protected override IEnumerable<(IDiscriminatedElement sample, IDiscriminatedElement expected)>
+			GenerateParentSample()
 		{
 			var expected = new NameSpace(new PhysicalStorage(PathA));
 			var sample = new NameSpace(expected);
@@ -131,14 +132,14 @@ namespace SharpSourceFinderCoreTests
 			yield return (sample, expected);
 		}
 
-		protected override IEnumerable<(IDiscriminatedElement sample, IPhysicalStorage expected)> GeneratePhysicalStorageSample()
+		protected override IEnumerable<(IDiscriminatedElement sample, IPhysicalStorage expected)>
+			GeneratePhysicalStorageSample()
 		{
 			var storage = new PhysicalStorage(PathA);
 			var expected = new NameSpace(storage);
 			var sample = new NameSpace(expected);
 
 			yield return (sample, storage);
-
 		}
 
 		protected override IEnumerable<(IDiscriminatedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
@@ -148,19 +149,20 @@ namespace SharpSourceFinderCoreTests
 			var b = new NameSpace(a);
 			var c = new NameSpace(b);
 
-			yield return (c, new[] { a, b });
-
+			yield return (c, new[] {a, b});
 		}
 
-		protected override IEnumerable<(IDiscriminatedElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateChildrenSample()
+		protected override IEnumerable<(IDiscriminatedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateChildrenSample()
 		{
 			var sample = new NameSpace(new PhysicalStorage(PathA));
-			var expected = new[] { new NameSpace(sample), new NameSpace(sample), new NameSpace(sample) };
+			var expected = new[] {new NameSpace(sample), new NameSpace(sample), new NameSpace(sample)};
 
 			yield return (sample, expected);
 		}
 
-		protected override IEnumerable<(IDiscriminatedElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateDescendantsSample(bool isContainSelf)
+		protected override IEnumerable<(IDiscriminatedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateDescendantsSample(bool isContainSelf)
 		{
 			var expected = new List<IDiscriminatedElement>();
 
@@ -181,7 +183,6 @@ namespace SharpSourceFinderCoreTests
 			expected.Add(elem);
 
 			yield return (sample, expected);
-
 		}
 
 		protected override void AreEqual(IQualified actual, IQualified expected)
@@ -192,11 +193,11 @@ namespace SharpSourceFinderCoreTests
 			{
 				actual.Identities[i].Category.Is(expected.Identities[i].Category);
 				actual.Identities[i].Name.Is(expected.Identities[i].Name);
-
 			}
 		}
 
-		protected override IEnumerable<(IDiscriminatedElement sample, IQualified expected)> GenerateQualifiedNameSample()
+		protected override IEnumerable<(IDiscriminatedElement sample, IQualified expected)>
+			GenerateQualifiedNameSample()
 		{
 			var sample = new NameSpace(new PhysicalStorage(PathA));
 			var expected = new QualifiedElement(sample);
@@ -231,12 +232,14 @@ namespace SharpSourceFinderCoreTests
 		}
 
 
-		protected override IEnumerable<(IDiscriminatedElement sample, Stack<(IdentityCategories category, string identity)> expected)> GenerateAggregateIdentitiesSample()
+		protected override
+			IEnumerable<(IDiscriminatedElement sample, Stack<(IdentityCategories category, string identity)> expected)>
+			GenerateAggregateIdentitiesSample()
 		{
-			var sample=new NameSpace();
+			var sample = new NameSpace();
 			var nme = new QualifiedElement(sample);
 
-			var expected=new Stack<(IdentityCategories category,string identity)>();
+			var expected = new Stack<(IdentityCategories category, string identity)>();
 
 			yield return (sample, expected);
 
@@ -262,10 +265,11 @@ namespace SharpSourceFinderCoreTests
 			expected.Push((IdentityCategories.Namespace, "Hoge"));
 
 			yield return (sample, expected);
-
 		}
 
-		protected override IEnumerable<(NonTerminalElement<IDiscriminatedElement> sample, IReadOnlyList<IDiscriminatedElement> expected, Action<NonTerminalElement<IDiscriminatedElement>> registerAction)> GenerateRegisterChildSample()
+		protected override
+			IEnumerable<(NonTerminalElement<IDiscriminatedElement> sample, IReadOnlyList<IDiscriminatedElement> expected
+				, Action<NonTerminalElement<IDiscriminatedElement>> registerAction)> GenerateRegisterChildSample()
 		{
 			var expected = new List<IDiscriminatedElement>();
 			var sample = new NameSpace(new PhysicalStorage(PathA));
@@ -278,7 +282,6 @@ namespace SharpSourceFinderCoreTests
 			}
 
 			yield return (sample, expected, act);
-
 		}
 
 		protected override
@@ -287,8 +290,6 @@ namespace SharpSourceFinderCoreTests
 		{
 #warning GenerateErrSample_Is_NotImpl
 			throw new NotImplementedException("GenerateErrSample is not implemented");
-
 		}
-
 	}
 }

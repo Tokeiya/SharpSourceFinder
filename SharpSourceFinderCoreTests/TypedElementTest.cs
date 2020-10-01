@@ -1,5 +1,5 @@
-using ChainingAssertion;
 using System.Collections.Generic;
+using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -8,10 +8,8 @@ namespace SharpSourceFinderCoreTests
 {
 	public abstract class TypedElementTest : NonTerminalElementTest<IDiscriminatedElement>
 	{
-
 		protected TypedElementTest(ITestOutputHelper output) : base(output)
 		{
-
 		}
 
 		public abstract
@@ -28,10 +26,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			GenerateSample().IsNotEmpty();
 
-			foreach (var (sample, expected, _, _, _, _, _) in GenerateSample())
-			{
-				AreEqual(sample.Identity, expected);
-			}
+			foreach (var (sample, expected, _, _, _, _, _) in GenerateSample()) AreEqual(sample.Identity, expected);
 		}
 
 		[Trait("TestLayer", nameof(TypeElement))]
@@ -40,10 +35,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			GenerateSample().IsNotEmpty();
 
-			foreach (var (sample, _, expected, _, _, _, _) in GenerateSample())
-			{
-				sample.IsUnsafe.Is(expected);
-			}
+			foreach (var (sample, _, expected, _, _, _, _) in GenerateSample()) sample.IsUnsafe.Is(expected);
 		}
 
 		[Trait("TestLayer", nameof(TypeElement))]
@@ -52,10 +44,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			GenerateSample().IsNotEmpty();
 
-			foreach (var (sample, _, _, expected, _, _, _) in GenerateSample())
-			{
-				sample.IsPartial.Is(expected);
-			}
+			foreach (var (sample, _, _, expected, _, _, _) in GenerateSample()) sample.IsPartial.Is(expected);
 		}
 
 		[Trait("TestLayer", nameof(TypeElement))]
@@ -64,10 +53,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			GenerateSample().IsNotEmpty();
 
-			foreach (var (sample, _, _, _, expected, _, _) in GenerateSample())
-			{
-				sample.IsStatic.Is(expected);
-			}
+			foreach (var (sample, _, _, _, expected, _, _) in GenerateSample()) sample.IsStatic.Is(expected);
 		}
 
 		[Trait("TestLayer", nameof(TypeElement))]
@@ -76,13 +62,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			GenerateSample().IsNotEmpty();
 
-			foreach (var (sample, _, _, _, _, expected, _) in GenerateSample())
-			{
-				sample.Scope.Is(expected);
-			}
+			foreach (var (sample, _, _, _, _, expected, _) in GenerateSample()) sample.Scope.Is(expected);
 		}
-
-
-
 	}
 }

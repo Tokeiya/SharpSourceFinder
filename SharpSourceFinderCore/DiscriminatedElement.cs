@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
-using System.Text;
 using Microsoft.Extensions.ObjectPool;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
 	public abstract class DiscriminatedElement : IDiscriminatedElement
 	{
-		protected static ObjectPool<Stack<(IdentityCategories category, string name)>> StackPool { get; } 
-			= new DefaultObjectPool<Stack<(IdentityCategories category, string name)>>(new DefaultPooledObjectPolicy<Stack<(IdentityCategories category, string name)>>());
 		protected DiscriminatedElement(IDiscriminatedElement parent)
 		{
 			if (parent is ImaginaryRoot) throw new ArgumentException($"{nameof(parent)} can't accept ImaginaryRoot.");
@@ -17,6 +13,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 		}
 
 		protected DiscriminatedElement() => Parent = ImaginaryRoot.Root;
+
+		protected static ObjectPool<Stack<(IdentityCategories category, string name)>> StackPool { get; }
+			= new DefaultObjectPool<Stack<(IdentityCategories category, string name)>>(
+				new DefaultPooledObjectPolicy<Stack<(IdentityCategories category, string name)>>());
 
 		public IDiscriminatedElement Parent { get; }
 
@@ -40,10 +40,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 			yield return this;
 
-			foreach (var elem in Ancestors())
-			{
-				yield return elem;
-			}
+			foreach (var elem in Ancestors()) yield return elem;
 		}
 
 		public abstract IEnumerable<IDiscriminatedElement> Children();
@@ -51,18 +48,15 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public IEnumerable<IDiscriminatedElement> Descendants()
 		{
 			foreach (var elem in Children())
-				foreach (var ret in elem.Children())
-					yield return ret;
+			foreach (var ret in elem.Children())
+				yield return ret;
 		}
 
 		public IEnumerable<IDiscriminatedElement> DescendantsAndSelf()
 		{
 			yield return this;
 
-			foreach (var elem in Descendants())
-			{
-				yield return elem;
-			}
+			foreach (var elem in Descendants()) yield return elem;
 		}
 
 		public abstract QualifiedElement GetQualifiedName();

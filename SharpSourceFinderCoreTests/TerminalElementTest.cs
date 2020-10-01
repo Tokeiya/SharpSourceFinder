@@ -1,4 +1,3 @@
-using ChainingAssertion;
 using System;
 using System.Collections.Generic;
 using Tokeiya3.SharpSourceFinderCore;
@@ -9,7 +8,9 @@ namespace SharpSourceFinderCoreTests
 {
 	public abstract class TerminalElementTest : DiscriminatedElementInterfaceTest
 	{
-		private TerminalElementTest(ITestOutputHelper output) : base(output) { }
+		private TerminalElementTest(ITestOutputHelper output) : base(output)
+		{
+		}
 
 		protected abstract IEnumerable<TerminalElement> GenerateTerminalElementSample();
 
@@ -21,6 +22,5 @@ namespace SharpSourceFinderCoreTests
 #warning RegisterChildTest_Is_NotImpl
 			throw new NotImplementedException("RegisterChildTest is not implemented");
 		}
-
 	}
 }

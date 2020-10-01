@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection.Emit;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {

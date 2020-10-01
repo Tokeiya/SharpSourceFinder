@@ -1,6 +1,6 @@
-using ChainingAssertion;
 using System.Collections.Generic;
 using System.Linq;
+using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -99,8 +99,6 @@ namespace SharpSourceFinderCoreTests
 		}
 
 
-
-
 		protected abstract
 			IEnumerable<(IIdentity sample, string expectedName, IdentityCategories expectedCategory, IQualified
 				expectedFrom)> GenerateSample();
@@ -141,13 +139,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			GenerateOrderSample().IsNotEmpty();
 
-			foreach (var (sample,expected) in GenerateOrderSample())
-			{
-				sample.Order.Is(expected);	
-
-			}
+			foreach (var (sample, expected) in GenerateOrderSample()) sample.Order.Is(expected);
 		}
-
-
 	}
 }

@@ -1,6 +1,6 @@
 using System;
-using ChainingAssertion;
 using System.Collections.Generic;
+using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
 
@@ -8,12 +8,16 @@ namespace SharpSourceFinderCoreTests
 {
 	public class IdentityElementIdentityInterFaceTest : IdentityInterfaceTest
 	{
-		private readonly PhysicalStorage _strageA = new PhysicalStorage("C:\\Hoge\\Piyo.cs");
 		private readonly PhysicalStorage _storageB = new PhysicalStorage("D:\\Foo\\Bar.cs");
+		private readonly PhysicalStorage _strageA = new PhysicalStorage("C:\\Hoge\\Piyo.cs");
 
 
-		protected IdentityElementIdentityInterFaceTest(ITestOutputHelper output) : base(output) { }
-		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) => ReferenceEquals(actual, expected).IsTrue();
+		protected IdentityElementIdentityInterFaceTest(ITestOutputHelper output) : base(output)
+		{
+		}
+
+		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) =>
+			ReferenceEquals(actual, expected).IsTrue();
 
 		protected override void AreEqual(IQualified actual, IQualified expected) =>
 			ReferenceEquals(actual, expected).IsTrue();
@@ -31,8 +35,9 @@ namespace SharpSourceFinderCoreTests
 		}
 
 
-
-		protected override IEnumerable<(IIdentity sample, string expectedName, IdentityCategories expectedCategory, IQualified expectedFrom)> GenerateSample()
+		protected override
+			IEnumerable<(IIdentity sample, string expectedName, IdentityCategories expectedCategory, IQualified
+				expectedFrom)> GenerateSample()
 		{
 #warning GenerateSample_Is_NotImpl
 			throw new NotImplementedException("GenerateSample is not implemented");

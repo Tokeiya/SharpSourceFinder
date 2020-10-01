@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
@@ -20,6 +19,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public void RegisterChild(IDiscriminatedElement child) =>
 			throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support this method or property.");
+
 		public IEnumerable<IDiscriminatedElement> Ancestors() => Array.Empty<IDiscriminatedElement>();
 
 		public IEnumerable<IDiscriminatedElement> AncestorsAndSelf() =>
