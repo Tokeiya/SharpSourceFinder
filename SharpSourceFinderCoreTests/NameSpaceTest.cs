@@ -37,6 +37,7 @@ namespace SharpSourceFinderCoreTests
 
 		}
 
+
 		protected override IEnumerable<(IDiscriminatedElement x, IDiscriminatedElement y, IDiscriminatedElement z)>
 			GenerateLogicallyTransitiveSample()
 		{
@@ -288,5 +289,6 @@ namespace SharpSourceFinderCoreTests
 			throw new NotImplementedException("GenerateErrSample is not implemented");
 
 		}
+
 	}
 }

@@ -8,8 +8,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 		IPhysicalStorage Storage { get; }
 		bool IsLogicallyEquivalentTo(IDiscriminatedElement other);
 		bool IsPhysicallyEquivalentTo(IDiscriminatedElement other);
-		bool IsEquivalentTo(IDiscriminatedElement other);
-
 		void RegisterChild(IDiscriminatedElement child);
 		IEnumerable<IDiscriminatedElement> Ancestors();
 		IEnumerable<IDiscriminatedElement> AncestorsAndSelf();

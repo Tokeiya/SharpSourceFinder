@@ -1,6 +1,8 @@
+using System;
 using ChainingAssertion;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -21,6 +23,7 @@ namespace SharpSourceFinderCoreTests
 		protected abstract IEnumerable<(DiscriminatedElement sample, IPhysicalStorage expected)>
 			GenerateStorageGetTestSamples();
 
+
 		protected abstract IEnumerable<(IDiscriminatedElement x, IDiscriminatedElement y, IDiscriminatedElement z)>
 			GenerateLogicallyTransitiveSample();
 
@@ -34,8 +37,11 @@ namespace SharpSourceFinderCoreTests
 			foreach (var (x, y, z) in GenerateLogicallyTransitiveSample())
 			{
 				x.IsLogicallyEquivalentTo(y).IsTrue();
+
 				y.IsLogicallyEquivalentTo(z).IsTrue();
+
 				x.IsLogicallyEquivalentTo(z).IsTrue();
+
 			}
 		}
 
@@ -60,6 +66,7 @@ namespace SharpSourceFinderCoreTests
 			foreach (var (x, y) in GenerateLogicallySymmetricSample())
 			{
 				x.IsLogicallyEquivalentTo(y).IsTrue();
+
 				y.IsLogicallyEquivalentTo(x).IsTrue();
 			}
 		}
@@ -82,7 +89,9 @@ namespace SharpSourceFinderCoreTests
 			GenerateLogicallyReflexiveSample().Any().IsTrue();
 
 			foreach (var element in GenerateLogicallyReflexiveSample())
+			{
 				element.IsLogicallyEquivalentTo(element).IsTrue();
+			}
 		}
 
 

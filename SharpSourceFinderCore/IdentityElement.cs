@@ -72,12 +72,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 		}
 
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator) => accumulator.Push((Category, Name));
-
-		public override bool IsEquivalentTo(IDiscriminatedElement other)
+		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
-#warning IsEquivalentTo_Is_NotImpl
-			throw new NotImplementedException("IsEquivalentTo is not implemented");
+#warning IsLogicallyEquivalentTo_Is_NotImpl
+			throw new NotImplementedException("IsLogicallyEquivalentTo is not implemented");
 		}
+
 
 		public IdentityCategories Category { get; }
 		public string Name { get; }
