@@ -6,5 +6,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 	{
 		IReadOnlyList<IIdentity> Identities { get; }
 		bool IsEquivalentTo(IQualified other);
+		bool IsEquivalentTo(IQualified other, int order);
 	}
 }

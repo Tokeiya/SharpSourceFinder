@@ -89,7 +89,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 			return other switch
 			{
-				IdentityElement elem => IsEquivalentTo(elem) && Parent.IsLogicallyEquivalentTo(other.Parent),
+				IdentityElement elem => IsEquivalentTo(elem) && ((QualifiedElement)Parent).IsLogicallyEquivalentTo(((QualifiedElement)other.Parent),Order),
 				_ => false
 			};
 		}

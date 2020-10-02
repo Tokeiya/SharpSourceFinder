@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -23,8 +24,26 @@ namespace SharpSourceFinderCoreTests
 
 		protected override IEnumerable<(IdentityElement x, IdentityElement y, IdentityElement z)> GenerateLogicallyTransitiveSample()
 		{
-#warning GenerateLogicallyTransitiveSample_Is_NotImpl
-			throw new NotImplementedException("GenerateLogicallyTransitiveSample is not implemented");
+			var storage = new PhysicalStorage(PathA);
+			var ns = new NameSpace(storage);
+			var qx = new QualifiedElement(ns);
+			var x = new IdentityElement(qx, "Hoge");
+
+			ns = new NameSpace(new PhysicalStorage(PathB));
+			var qy = new QualifiedElement(ns);
+			var y = new IdentityElement(qy, "Hoge");
+
+			ns = new NameSpace(new PhysicalStorage(PathB));
+			var qz = new QualifiedElement(ns);
+			var z = new IdentityElement(qz, "Hoge");
+
+			yield return (x, y, z);
+
+			_ = new IdentityElement(qx, "Foo");
+			_ = new IdentityElement(qy, "Bar");
+			_ = new IdentityElement(qz, "Piyo");
+
+			yield return (x, y, z);
 		}
 
 		protected override IEnumerable<(IdentityElement x, IdentityElement y)> GenerateLogicallyInEquivalentSample()

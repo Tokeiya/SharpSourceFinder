@@ -18,6 +18,21 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public IReadOnlyList<IIdentity> Identities => TypedChildren;
 
+		public bool IsEquivalentTo(IQualified other, int order)
+		{
+			if (order <= 0) throw new ArgumentOutOfRangeException(nameof(order));
+			if (ReferenceEquals(this, other)) return true;
+
+
+			if (Identities.Count < order || other.Identities.Count < order) return false;
+
+			for (int i = 0; i < order; i++)
+			{
+				if (!Identities[i].IsEquivalentTo(other.Identities[i])) return false;
+			}
+
+			return true;
+		}
 		public bool IsEquivalentTo(IQualified other)
 		{
 			if (ReferenceEquals(this, other)) return true;
@@ -77,6 +92,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 				QualifiedElement elem => IsEquivalentTo(elem) && Parent.IsLogicallyEquivalentTo(other.Parent),
 				_ => false
 			};
+		}
+
+		public bool IsLogicallyEquivalentTo(QualifiedElement other, int order)
+		{
+			if (ReferenceEquals(other, this)) return true;
+			return IsEquivalentTo(other, order) && Parent.IsLogicallyEquivalentTo(other.Parent);
 		}
 
 		//Must coordinate the IdentityElement's Order property.
