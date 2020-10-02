@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
-	public abstract class DiscriminatedElementInterfaceTest<T> where T:IDiscriminatedElement
+	public abstract class DiscriminatedElementInterfaceTest<T> where T : IDiscriminatedElement
 	{
 		protected readonly ITestOutputHelper Output;
 
@@ -223,16 +223,16 @@ namespace SharpSourceFinderCoreTests
 
 
 		protected abstract IEnumerable<(T sample, IReadOnlyList<IDiscriminatedElement> expected)>
-			GenerateGetAncestorsSample(bool isContainSelf);
+			GenerateGetAncestorsSample();
 
 		[Trait("TestLayer", nameof(IDiscriminatedElement))]
 		[Fact]
 		public void AncestorsTest()
 		{
-			GenerateGetAncestorsSample(false).Any().IsTrue();
+			GenerateGetAncestorsSample().Any().IsTrue();
 
 			foreach ((IDiscriminatedElement sample, IReadOnlyList<IDiscriminatedElement> expected) in
-				GenerateGetAncestorsSample(false))
+				GenerateGetAncestorsSample())
 			{
 				var actual = sample.Ancestors().ToList();
 
@@ -246,14 +246,15 @@ namespace SharpSourceFinderCoreTests
 		[Fact]
 		public void AncestorsAndSelfTest()
 		{
-			GenerateGetAncestorsSample(true).Any().IsTrue();
+			GenerateGetAncestorsSample().Any().IsTrue();
 
-			foreach (var (sample, expected) in GenerateGetAncestorsSample(true))
+			foreach (var (sample, expected) in GenerateGetAncestorsSample())
 			{
 				var actual = sample.AncestorsAndSelf().ToArray();
-				actual.Length.Is(expected.Count);
+				actual.Length.Is(expected.Count + 1);
 
-				for (int i = 0; i < expected.Count; i++) AreEqual(actual[i], expected[i]);
+				AreEqual(actual[0], sample);
+				for (int i = 1; i < expected.Count; i++) AreEqual(actual[i], expected[i - 1]);
 			}
 		}
 
@@ -277,34 +278,36 @@ namespace SharpSourceFinderCoreTests
 		}
 
 		protected abstract IEnumerable<(T sample, IReadOnlyList<IDiscriminatedElement> expected)>
-			GenerateDescendantsSample(bool isContainSelf);
+			GenerateDescendantsSample();
 
 		[Fact]
 		public void DescendantsTest()
 		{
-			GenerateDescendantsSample(false).Any().IsTrue();
+			GenerateDescendantsSample().Any().IsTrue();
 
 			foreach ((IDiscriminatedElement sample, IReadOnlyList<IDiscriminatedElement> expected) in
-				GenerateDescendantsSample(false))
+				GenerateDescendantsSample())
 			{
 				var actual = sample.Descendants().ToArray();
 				actual.Length.Is(expected.Count);
 
-				for (int i = 0; i < expected.Count; i++) AreEqual(actual[i], expected[i]);
+				for (int i = 0; i < expected.Count; i++) AreEqual(actual[i], expected[i - 1]);
 			}
 		}
+
 
 		[Fact]
 		public void DescendantsAndSelfTest()
 		{
-			GenerateDescendantsSample(true).Any().IsTrue();
+			GenerateDescendantsSample().Any().IsTrue();
 
-			foreach (var (sample, expected) in GenerateDescendantsSample(true))
+			foreach (var (sample, expected) in GenerateDescendantsSample())
 			{
 				var actual = sample.DescendantsAndSelf().ToArray();
-				actual.Length.Is(expected.Count);
+				actual.Length.Is(expected.Count + 1);
 
-				for (int i = 0; i < expected.Count; i++) AreEqual(actual[i], expected[i]);
+				AreEqual(actual[0], sample);
+				for (var i = 1; i < expected.Count; i++) AreEqual(actual[i], expected[i]);
 			}
 		}
 
@@ -336,7 +339,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			GenerateAggregateIdentitiesSample().Any().IsTrue();
 
-			var actual = new Stack<(IdentityCategories category, string identiy)>();
+			var actual = new Stack<(IdentityCategories category, string identity)>();
 			foreach ((IDiscriminatedElement sample, Stack<(IdentityCategories category, string identity)> expected) in
 				GenerateAggregateIdentitiesSample())
 			{
@@ -348,11 +351,18 @@ namespace SharpSourceFinderCoreTests
 
 				while (expected.Count != 0)
 				{
+
+#pragma warning disable IDE0042 // 変数の宣言を分解
+					// ReSharper disable UseDeconstruction
 					var a = actual.Pop();
 					var e = expected.Pop();
+					// ReSharper restore UseDeconstruction
+#pragma warning restore IDE0042 // 変数の宣言を分解
+
 
 					a.category.Is(e.category);
-					a.identiy.Is(e.identity);
+					a.identity.Is(e.identity);
+
 				}
 			}
 		}

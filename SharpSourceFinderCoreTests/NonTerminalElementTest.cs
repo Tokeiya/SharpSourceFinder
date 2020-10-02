@@ -8,8 +8,9 @@ using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
-	public abstract class NonTerminalElementTest<T,U> : DiscriminatedElementInterfaceTest<T> where T : NonTerminalElement<U>
-	where U:IDiscriminatedElement
+	public abstract class NonTerminalElementTest<T, U> : DiscriminatedElementInterfaceTest<T>
+		where T : NonTerminalElement<U>
+		where U : IDiscriminatedElement
 	{
 		protected NonTerminalElementTest(ITestOutputHelper output) : base(output)
 		{
@@ -22,7 +23,7 @@ namespace SharpSourceFinderCoreTests
 		protected abstract IEnumerable<(T sample, U errSample)> GenerateErrSample();
 
 
-		[Trait("TestLayer", nameof(NonTerminalElementTest<T,U>))]
+		[Trait("TestLayer", nameof(NonTerminalElementTest<T, U>))]
 		[Fact]
 		public void RegisterChildTest()
 		{

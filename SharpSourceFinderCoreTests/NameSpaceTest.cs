@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
-	public class NameSpaceTest : NonTerminalElementTest<NameSpace,IDiscriminatedElement>
+	public class NameSpaceTest : NonTerminalElementTest<NameSpace, IDiscriminatedElement>
 	{
 		private const string PathA = "C:\\Hoge\\Piyo.cs";
 		private const string PathB = "D:\\Foo\\Bar.cs";
@@ -22,7 +22,6 @@ namespace SharpSourceFinderCoreTests
 
 		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) =>
 			ReferenceEquals(actual, expected).IsTrue();
-
 
 
 		protected override IEnumerable<(NameSpace x, NameSpace y, NameSpace z)>
@@ -130,7 +129,7 @@ namespace SharpSourceFinderCoreTests
 		}
 
 		protected override IEnumerable<(NameSpace sample, IReadOnlyList<IDiscriminatedElement> expected)>
-			GenerateGetAncestorsSample(bool isContainSelf)
+			GenerateGetAncestorsSample()
 		{
 			var a = new NameSpace(new PhysicalStorage(PathA));
 			var b = new NameSpace(a);
@@ -149,7 +148,7 @@ namespace SharpSourceFinderCoreTests
 		}
 
 		protected override IEnumerable<(NameSpace sample, IReadOnlyList<IDiscriminatedElement> expected)>
-			GenerateDescendantsSample(bool isContainSelf)
+			GenerateDescendantsSample()
 		{
 			var expected = new List<IDiscriminatedElement>();
 

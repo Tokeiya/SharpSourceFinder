@@ -9,8 +9,6 @@ namespace SharpSourceFinderCoreTests
 {
 	public class IdentityElementIIdentityTest : IdentityInterfaceTest
 	{
-
-
 		public IdentityElementIIdentityTest(ITestOutputHelper output) : base(output)
 		{
 		}
@@ -31,7 +29,6 @@ namespace SharpSourceFinderCoreTests
 
 				yield return (x, y, z);
 			}
-
 		}
 
 		protected override IEnumerable<(IIdentity x, IIdentity y)> GenerateInEquivalentSample()
@@ -49,8 +46,7 @@ namespace SharpSourceFinderCoreTests
 			x = new IdentityElement(new QualifiedElement(), IdentityCategories.Class, "Foo");
 			y = new IdentityElement(new QualifiedElement(), IdentityCategories.Class, "Bar");
 			yield return (x, y);
-
-	}
+		}
 
 
 		protected override
@@ -71,8 +67,6 @@ namespace SharpSourceFinderCoreTests
 				(new IdentityElement(q, IdentityCategories.Struct, "Hoge"), 3),
 				(new IdentityElement(new QualifiedElement(), IdentityCategories.Namespace, "Hoge"), 1)
 			};
-
-
 		}
 	}
 }

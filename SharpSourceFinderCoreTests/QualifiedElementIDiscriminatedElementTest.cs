@@ -1,79 +1,167 @@
 using System;
 using System.Collections.Generic;
+using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
-	public class QualifiedElementIDiscriminatedElementTest : NonTerminalElementTest<QualifiedElement,IdentityElement>
+	public class QualifiedElementIDiscriminatedElementTest : NonTerminalElementTest<QualifiedElement, IdentityElement>
 	{
+		private const string PathA = @"C:\Hoge\Piyo.cs";
+		private const string PathB = @"D:\Foo\Bar.cs";
+
 		public QualifiedElementIDiscriminatedElementTest(ITestOutputHelper output) : base(output)
 		{
 		}
 
 
-		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected)
-		{
-#warning AreEqual_Is_NotImpl
-			throw new NotImplementedException("AreEqual is not implemented");
-		}
+		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) =>
+			ReferenceEquals(actual, expected).IsTrue();
 
-		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected)
-		{
-#warning AreEqual_Is_NotImpl
-			throw new NotImplementedException("AreEqual is not implemented");
-		}
+		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) =>
+			ReferenceEquals(actual, expected).IsTrue();
 
-		protected override IEnumerable<(QualifiedElement x, QualifiedElement y, QualifiedElement z)> GenerateLogicallyTransitiveSample()
+
+		protected override IEnumerable<(QualifiedElement x, QualifiedElement y, QualifiedElement z)>
+			GenerateLogicallyTransitiveSample()
 		{
-#warning GenerateLogicallyTransitiveSample_Is_NotImpl
-			throw new NotImplementedException("GenerateLogicallyTransitiveSample is not implemented");
+			var x = new QualifiedElement();
+			var y = new QualifiedElement();
+			var z = new QualifiedElement();
+
+			_ = new IdentityElement(x, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(y, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(z, IdentityCategories.Namespace, "Hoge");
+
+			yield return (x, y, z);
+
+			x = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+			y = new QualifiedElement(new NameSpace(new PhysicalStorage(PathB)));
+			z = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+
+			_ = new IdentityElement(x, "Foo");
+			_ = new IdentityElement(y, "Foo");
+			_ = new IdentityElement(z, "Foo");
+
+			yield return (x, y, z);
 		}
 
 		protected override IEnumerable<(QualifiedElement x, QualifiedElement y)> GenerateLogicallyInEquivalentSample()
 		{
-#warning GenerateLogicallyInEquivalentSample_Is_NotImpl
-			throw new NotImplementedException("GenerateLogicallyInEquivalentSample is not implemented");
+			var x = new QualifiedElement();
+			var y = new QualifiedElement();
+
+			_ = new IdentityElement(x, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(y, IdentityCategories.Class, "Hoge");
+			yield return (x, y);
+
+			x = new QualifiedElement();
+			y = new QualifiedElement();
+
+			_ = new IdentityElement(x, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(y, IdentityCategories.Namespace, "hoge");
+			yield return (x, y);
+
+
+			x = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+			y = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+
+			_ = new IdentityElement(x, "Hoge");
+			_ = new IdentityElement(y, "Piyo");
+			yield return (x, y);
+
+			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var q = new QualifiedElement(ns);
+			_ = new IdentityElement(q, "Foo");
+
+			x = new QualifiedElement(new NameSpace(ns));
+			_ = new IdentityElement(x, "Bar");
+
+			y = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+			_ = new IdentityElement(y, "Bar");
+
+			yield return (x, y);
 		}
 
-		protected override IEnumerable<(QualifiedElement x, QualifiedElement y, QualifiedElement z)> GeneratePhysicallyTransitiveSample()
+		protected override IEnumerable<(QualifiedElement x, QualifiedElement y, QualifiedElement z)>
+			GeneratePhysicallyTransitiveSample()
 		{
-#warning GeneratePhysicallyTransitiveSample_Is_NotImpl
-			throw new NotImplementedException("GeneratePhysicallyTransitiveSample is not implemented");
+			var x = new QualifiedElement();
+			var y = new QualifiedElement();
+			var z = new QualifiedElement();
+
+			_ = new IdentityElement(x, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(y, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(z, IdentityCategories.Namespace, "Hoge");
+
+			yield return (x, y, z);
+
+			x = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+			y = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+			z = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+
+			_ = new IdentityElement(x, "Foo");
+			_ = new IdentityElement(y, "Foo");
+			_ = new IdentityElement(z, "Foo");
+
+			yield return (x, y, z);
 		}
 
 		protected override IEnumerable<(QualifiedElement x, QualifiedElement y)> GeneratePhysicallyInEqualitySample()
 		{
-#warning GeneratePhysicallyInEqualitySample_Is_NotImpl
-			throw new NotImplementedException("GeneratePhysicallyInEqualitySample is not implemented");
+			var x = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+			var y = new QualifiedElement(new NameSpace(new PhysicalStorage(PathB)));
+			yield return (x, y);
 		}
 
 		protected override IEnumerable<(QualifiedElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
-#warning GenerateParentSample_Is_NotImpl
-			throw new NotImplementedException("GenerateParentSample is not implemented");
+			var expected = new NameSpace(new PhysicalStorage(PathA));
+			var sample = new QualifiedElement(expected);
+
+			yield return (sample, expected);
 		}
 
-		protected override IEnumerable<(QualifiedElement sample, IPhysicalStorage expected)> GeneratePhysicalStorageSample()
+		protected override IEnumerable<(QualifiedElement sample, IPhysicalStorage expected)>
+			GeneratePhysicalStorageSample()
 		{
-#warning GeneratePhysicalStorageSample_Is_NotImpl
-			throw new NotImplementedException("GeneratePhysicalStorageSample is not implemented");
+			var expected = new PhysicalStorage(PathA);
+			var ns = new NameSpace(expected);
+			var qa = new QualifiedElement(ns);
+
+			yield return (qa, expected);
+
+			ns = new NameSpace(ns);
+			qa = new QualifiedElement(ns);
+
+			yield return (qa, expected);
 		}
 
-		protected override IEnumerable<(QualifiedElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateGetAncestorsSample(bool isContainSelf)
+		protected override IEnumerable<(QualifiedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateGetAncestorsSample()
 		{
-#warning GenerateGetAncestorsSample_Is_NotImpl
-			throw new NotImplementedException("GenerateGetAncestorsSample is not implemented");
+			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var sample = new QualifiedElement(ns);
+
+			yield return (sample, new[] {ns});
+
+			var nsa = new NameSpace(ns);
+			sample = new QualifiedElement(nsa);
+
+			yield return (sample, new[] {nsa, ns});
 		}
 
-		protected override IEnumerable<(QualifiedElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateChildrenSample()
+		protected override IEnumerable<(QualifiedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateChildrenSample()
 		{
 #warning GenerateChildrenSample_Is_NotImpl
 			throw new NotImplementedException("GenerateChildrenSample is not implemented");
 			throw new NotImplementedException();
 		}
 
-		protected override IEnumerable<(QualifiedElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateDescendantsSample(bool isContainSelf)
+		protected override IEnumerable<(QualifiedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateDescendantsSample()
 		{
 #warning GenerateDescendantsSample_Is_NotImpl
 			throw new NotImplementedException("GenerateDescendantsSample is not implemented");
@@ -94,14 +182,18 @@ namespace SharpSourceFinderCoreTests
 			throw new NotImplementedException();
 		}
 
-		protected override IEnumerable<(QualifiedElement sample, Stack<(IdentityCategories category, string identity)> expected)> GenerateAggregateIdentitiesSample()
+		protected override
+			IEnumerable<(QualifiedElement sample, Stack<(IdentityCategories category, string identity)> expected)>
+			GenerateAggregateIdentitiesSample()
 		{
 #warning GenerateAggregateIdentitiesSample_Is_NotImpl
 			throw new NotImplementedException("GenerateAggregateIdentitiesSample is not implemented");
 			throw new NotImplementedException();
 		}
 
-		protected override IEnumerable<(QualifiedElement sample, IReadOnlyList<IDiscriminatedElement> expected, Action<QualifiedElement> registerAction)> GenerateRegisterChildSample()
+		protected override
+			IEnumerable<(QualifiedElement sample, IReadOnlyList<IDiscriminatedElement> expected,
+				Action<QualifiedElement> registerAction)> GenerateRegisterChildSample()
 		{
 #warning GenerateRegisterChildSample_Is_NotImpl
 			throw new NotImplementedException("GenerateRegisterChildSample is not implemented");

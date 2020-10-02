@@ -13,7 +13,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 			if (!category.IsDefined()) throw new ArgumentException($"{nameof(category)} is unexpected value");
 			Category = category;
 			Name = name;
-			from.RegisterChild(this);
 		}
 
 		public IdentityElement(QualifiedElement parent, string name) : base(parent)
@@ -42,8 +41,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 			Name = name;
 			Category = cat ?? throw new CategoryNotFoundException(name);
-			parent.RegisterChild(this);
-
 		}
 
 		public int Order { get; internal set; }
@@ -51,7 +48,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public IdentityCategories Category { get; }
 		public string Name { get; }
 		public IQualified From => (IQualified) Parent;
-		public bool IsEquivalentTo(IIdentity identity) => (Name == identity.Name && Category == identity.Category && Order == identity.Order);
+
+		public bool IsEquivalentTo(IIdentity identity) =>
+			(Name == identity.Name && Category == identity.Category && Order == identity.Order);
+
 		public override QualifiedElement GetQualifiedName()
 		{
 			var accum = StackPool.Get();
@@ -59,16 +59,14 @@ namespace Tokeiya3.SharpSourceFinderCore
 			try
 			{
 				foreach (var identity in From.Identities.Take(Order).Cast<IdentityElement>().Reverse())
-				{
 					identity.AggregateIdentities(accum);
-				}
 
 				var ret = new QualifiedElement();
 
 				while (accum.Count != 0)
 				{
-					var cursor = accum.Pop();
-					_ = new IdentityElement(ret, cursor.category, cursor.name);
+					var (category, name) = accum.Pop();
+					_ = new IdentityElement(ret, category, name);
 				}
 
 				return ret;
@@ -89,7 +87,9 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 			return other switch
 			{
-				IdentityElement elem => IsEquivalentTo(elem) && ((QualifiedElement)Parent).IsLogicallyEquivalentTo(((QualifiedElement)other.Parent),Order),
+				IdentityElement elem => IsEquivalentTo(elem) &&
+				                        ((QualifiedElement) Parent).IsLogicallyEquivalentTo(
+					                        ((QualifiedElement) other.Parent), Order),
 				_ => false
 			};
 		}

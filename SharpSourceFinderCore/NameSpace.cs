@@ -32,7 +32,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 			if (child is IQualified qualified)
 			{
-				if (_identity is null) throw new IdentityDuplicatedException();
+				if (!(_identity is null)) throw new IdentityDuplicatedException();
 				_identity = qualified;
 			}
 
@@ -53,8 +53,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 				while (stack.Count != 0)
 				{
-					var piv = stack.Pop();
-					_ = new IdentityElement(ret, piv.category, piv.name);
+					var (category, name) = stack.Pop();
+					_ = new IdentityElement(ret, category, name);
 				}
 
 				return ret;

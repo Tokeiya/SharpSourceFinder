@@ -10,6 +10,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 			if (parent is ImaginaryRoot) throw new ArgumentException($"{nameof(parent)} can't accept ImaginaryRoot.");
 			Parent = parent;
+			parent.RegisterChild(this);
 		}
 
 		protected DiscriminatedElement() => Parent = ImaginaryRoot.Root;
@@ -66,10 +67,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public abstract bool IsLogicallyEquivalentTo(IDiscriminatedElement other);
 
-		public bool IsPhysicallyEquivalentTo(IDiscriminatedElement other)
-		{
-#warning IsPhysicallyEquivalentTo_Is_NotImpl
-			throw new NotImplementedException("IsPhysicallyEquivalentTo is not implemented");
-		}
+		public virtual bool IsPhysicallyEquivalentTo(IDiscriminatedElement other) =>
+			IsLogicallyEquivalentTo(other) && Storage.IsEquivalentTo(other.Storage);
 	}
 }

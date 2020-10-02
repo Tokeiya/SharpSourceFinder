@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
@@ -27,21 +26,20 @@ namespace Tokeiya3.SharpSourceFinderCore
 			if (Identities.Count < order || other.Identities.Count < order) return false;
 
 			for (int i = 0; i < order; i++)
-			{
-				if (!Identities[i].IsEquivalentTo(other.Identities[i])) return false;
-			}
+				if (!Identities[i].IsEquivalentTo(other.Identities[i]))
+					return false;
 
 			return true;
 		}
+
 		public bool IsEquivalentTo(IQualified other)
 		{
 			if (ReferenceEquals(this, other)) return true;
 			if (Identities.Count != other.Identities.Count) return false;
 
 			for (int i = 0; i < Identities.Count; i++)
-			{
-				if (!Identities[i].IsEquivalentTo(other.Identities[i])) return false;
-			}
+				if (!Identities[i].IsEquivalentTo(other.Identities[i]))
+					return false;
 
 			return true;
 		}
@@ -52,10 +50,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 			try
 			{
-				foreach (var element in AncestorsAndSelf())
-				{
-					element.AggregateIdentities(accum);
-				}
+				foreach (var element in AncestorsAndSelf()) element.AggregateIdentities(accum);
 
 				var ret = new QualifiedElement();
 
@@ -69,18 +64,14 @@ namespace Tokeiya3.SharpSourceFinderCore
 			}
 			finally
 			{
-				Debug.Assert(accum.Count!=0);
+				Debug.Assert(accum.Count != 0);
 				StackPool.Return(accum);
 			}
 		}
 
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
 		{
-			foreach (var elem in TypedChildren.Reverse())
-			{
-				accumulator.Push((elem.Category, elem.Name));
-			}
-
+			foreach (var elem in TypedChildren.Reverse()) accumulator.Push((elem.Category, elem.Name));
 		}
 
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
@@ -94,11 +85,21 @@ namespace Tokeiya3.SharpSourceFinderCore
 			};
 		}
 
+		public override bool IsPhysicallyEquivalentTo(IDiscriminatedElement other)
+		{
+			if (!IsLogicallyEquivalentTo(other)) return false;
+
+			if (Parent is ImaginaryRoot) return true;
+
+			return base.IsPhysicallyEquivalentTo(other);
+		}
+
 		public bool IsLogicallyEquivalentTo(QualifiedElement other, int order)
 		{
 			if (ReferenceEquals(other, this)) return true;
 			return IsEquivalentTo(other, order) && Parent.IsLogicallyEquivalentTo(other.Parent);
 		}
+
 
 		//Must coordinate the IdentityElement's Order property.
 		public override void RegisterChild(IDiscriminatedElement child)

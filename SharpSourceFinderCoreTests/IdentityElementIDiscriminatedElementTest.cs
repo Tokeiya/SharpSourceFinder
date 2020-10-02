@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -16,13 +15,15 @@ namespace SharpSourceFinderCoreTests
 		{
 		}
 
-		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) => ReferenceEquals(actual, expected);
+		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) =>
+			ReferenceEquals(actual, expected);
 
 		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) =>
 			ReferenceEquals(actual, expected);
 
 
-		protected override IEnumerable<(IdentityElement x, IdentityElement y, IdentityElement z)> GenerateLogicallyTransitiveSample()
+		protected override IEnumerable<(IdentityElement x, IdentityElement y, IdentityElement z)>
+			GenerateLogicallyTransitiveSample()
 		{
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
@@ -52,7 +53,8 @@ namespace SharpSourceFinderCoreTests
 			throw new NotImplementedException("GenerateLogicallyInEquivalentSample is not implemented");
 		}
 
-		protected override IEnumerable<(IdentityElement x, IdentityElement y, IdentityElement z)> GeneratePhysicallyTransitiveSample()
+		protected override IEnumerable<(IdentityElement x, IdentityElement y, IdentityElement z)>
+			GeneratePhysicallyTransitiveSample()
 		{
 #warning GeneratePhysicallyTransitiveSample_Is_NotImpl
 			throw new NotImplementedException("GeneratePhysicallyTransitiveSample is not implemented");
@@ -70,7 +72,8 @@ namespace SharpSourceFinderCoreTests
 			throw new NotImplementedException("GenerateParentSample is not implemented");
 		}
 
-		protected override IEnumerable<(IdentityElement sample, IPhysicalStorage expected)> GeneratePhysicalStorageSample()
+		protected override IEnumerable<(IdentityElement sample, IPhysicalStorage expected)>
+			GeneratePhysicalStorageSample()
 		{
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
@@ -78,22 +81,24 @@ namespace SharpSourceFinderCoreTests
 			var sample = new IdentityElement(q, "Name");
 
 			yield return (sample, storage);
-
 		}
 
-		protected override IEnumerable<(IdentityElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateGetAncestorsSample(bool isContainSelf)
+		protected override IEnumerable<(IdentityElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateGetAncestorsSample()
 		{
 #warning GenerateGetAncestorsSample_Is_NotImpl
 			throw new NotImplementedException("GenerateGetAncestorsSample is not implemented");
 		}
 
-		protected override IEnumerable<(IdentityElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateChildrenSample()
+		protected override IEnumerable<(IdentityElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateChildrenSample()
 		{
 #warning GenerateChildrenSample_Is_NotImpl
 			throw new NotImplementedException("GenerateChildrenSample is not implemented");
 		}
 
-		protected override IEnumerable<(IdentityElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateDescendantsSample(bool isContainSelf)
+		protected override IEnumerable<(IdentityElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateDescendantsSample()
 		{
 #warning GenerateDescendantsSample_Is_NotImpl
 			throw new NotImplementedException("GenerateDescendantsSample is not implemented");
@@ -111,7 +116,9 @@ namespace SharpSourceFinderCoreTests
 			throw new NotImplementedException("AreEqual is not implemented");
 		}
 
-		protected override IEnumerable<(IdentityElement sample, Stack<(IdentityCategories category, string identity)> expected)> GenerateAggregateIdentitiesSample()
+		protected override
+			IEnumerable<(IdentityElement sample, Stack<(IdentityCategories category, string identity)> expected)>
+			GenerateAggregateIdentitiesSample()
 		{
 #warning GenerateAggregateIdentitiesSample_Is_NotImpl
 			throw new NotImplementedException("GenerateAggregateIdentitiesSample is not implemented");
@@ -124,9 +131,8 @@ namespace SharpSourceFinderCoreTests
 			var q = new QualifiedElement();
 			var sample = new IdentityElement(q, IdentityCategories.Struct, "Foo");
 
-			Assert.Throws<InvalidOperationException>(() => sample.RegisterChild(new IdentityElement(q,IdentityCategories.Struct,"foo")));
-
+			Assert.Throws<InvalidOperationException>(() =>
+				sample.RegisterChild(new IdentityElement(q, IdentityCategories.Struct, "foo")));
 		}
-
 	}
 }

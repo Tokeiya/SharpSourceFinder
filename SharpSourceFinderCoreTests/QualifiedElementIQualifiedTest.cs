@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
 using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
@@ -33,7 +32,11 @@ namespace SharpSourceFinderCoreTests
 			GenerateIdentitiesSample()
 		{
 			var sample = new QualifiedElement();
-			var expected = new[] {new IdentityElement(sample, IdentityCategories.Namespace,"Hoge"), new IdentityElement(sample,IdentityCategories.Namespace, "Piyo")};
+			var expected = new[]
+			{
+				new IdentityElement(sample, IdentityCategories.Namespace, "Hoge"),
+				new IdentityElement(sample, IdentityCategories.Namespace, "Piyo")
+			};
 
 			yield return (sample, expected);
 
@@ -79,7 +82,6 @@ namespace SharpSourceFinderCoreTests
 			_ = new IdentityElement(z, "Piyo");
 
 			yield return (x, y, z);
-
 		}
 
 		protected override IEnumerable<(IQualified x, IQualified y)> GenerateInEquivalentSample()
@@ -97,8 +99,6 @@ namespace SharpSourceFinderCoreTests
 			_ = new IdentityElement(x, IdentityCategories.Namespace, "Hoge");
 			_ = new IdentityElement(y, IdentityCategories.Namespace, "hoge");
 			yield return (x, y);
-			
-
 		}
 
 		[Trait("TestLayer", nameof(QualifiedElement))]
@@ -110,7 +110,7 @@ namespace SharpSourceFinderCoreTests
 
 			_ = new IdentityElement(x, IdentityCategories.Namespace, "Foo");
 			_ = new IdentityElement(y, IdentityCategories.Namespace, "Foo");
-			
+
 			_ = new IdentityElement(x, IdentityCategories.Namespace, "Bar");
 			_ = new IdentityElement(y, IdentityCategories.Namespace, "Hoge");
 
@@ -121,8 +121,6 @@ namespace SharpSourceFinderCoreTests
 			y.IsEquivalentTo(x, 2).IsFalse();
 
 			Assert.Throws<ArgumentOutOfRangeException>(() => x.IsEquivalentTo(y, 0));
-
 		}
-
 	}
 }
