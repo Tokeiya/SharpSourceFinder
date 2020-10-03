@@ -49,8 +49,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public IEnumerable<IDiscriminatedElement> Descendants()
 		{
 			foreach (var elem in Children())
-			foreach (var ret in elem.Children())
-				yield return ret;
+			{
+				yield return elem;
+
+				foreach (var ret in elem.Children())
+					yield return ret;
+			}
 		}
 
 		public IEnumerable<IDiscriminatedElement> DescendantsAndSelf()

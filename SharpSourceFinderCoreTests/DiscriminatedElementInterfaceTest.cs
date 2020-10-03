@@ -291,7 +291,7 @@ namespace SharpSourceFinderCoreTests
 				var actual = sample.Descendants().ToArray();
 				actual.Length.Is(expected.Count);
 
-				for (int i = 0; i < expected.Count; i++) AreEqual(actual[i], expected[i - 1]);
+				for (int i = 0; i < expected.Count; i++) AreEqual(actual[i], expected[i]);
 			}
 		}
 
@@ -307,7 +307,7 @@ namespace SharpSourceFinderCoreTests
 				actual.Length.Is(expected.Count + 1);
 
 				AreEqual(actual[0], sample);
-				for (var i = 1; i < expected.Count; i++) AreEqual(actual[i], expected[i]);
+				for (var i = 1; i < expected.Count; i++) AreEqual(actual[i], expected[i-1]);
 			}
 		}
 

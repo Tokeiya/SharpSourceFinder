@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Xml;
+using Tokeiya3.SharpSourceFinderCore;
 
 namespace Playground
 {
@@ -9,19 +11,25 @@ namespace Playground
 	{
 		static void Main(string[] args)
 		{
-			Func<int[], int> hgoe = Add;
-		}
+			var q = new QualifiedElement();
+			_ = new IdentityElement(q, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(q, IdentityCategories.Namespace, "Bar");
 
-		static unsafe int Add(int[] array)
-		{
-			var accum = 0;
+			var qq = q.GetQualifiedName();
 
-			fixed (int* ptr = array)
+
+
+			for (int i = 0; i < q.Identities.Count; i++)
 			{
-				for (int i = 0; i < array.Length; i++) accum += *(ptr + i);
+				var a = q.Identities[i];
+				var b = qq.Identities[i];
+				Console.WriteLine($"{a.Name},{b.Name},{a.Name==b.Name}");
+				Console.WriteLine($"{a.Category},{b.Category},{a.Category==b.Category}");
+				Console.WriteLine($"{a.Order},{b.Order},{a.Order==b.Order}");
+				Console.WriteLine("");
 			}
 
-			return accum;
 		}
+
 	}
 }

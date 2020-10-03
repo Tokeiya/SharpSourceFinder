@@ -50,7 +50,18 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 			try
 			{
-				foreach (var element in AncestorsAndSelf()) element.AggregateIdentities(accum);
+				AggregateIdentities(accum);
+
+				var piv = Parent switch
+				{
+					NameSpace ns => ns.Parent,
+					_ => Parent
+				};
+
+				if (!(piv is ImaginaryRoot))
+				{
+					foreach (var element in piv.AncestorsAndSelf()) element.AggregateIdentities(accum);
+				}
 
 				var ret = new QualifiedElement();
 
@@ -64,7 +75,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			}
 			finally
 			{
-				Debug.Assert(accum.Count != 0);
+				Debug.Assert(accum.Count == 0);
 				StackPool.Return(accum);
 			}
 		}

@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Metadata;
+using System.Threading;
 using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
@@ -155,31 +158,56 @@ namespace SharpSourceFinderCoreTests
 		protected override IEnumerable<(QualifiedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateChildrenSample()
 		{
-#warning GenerateChildrenSample_Is_NotImpl
-			throw new NotImplementedException("GenerateChildrenSample is not implemented");
-			throw new NotImplementedException();
+			var sample = new QualifiedElement();
+			var expected = new[]
+			{
+				new IdentityElement(sample, IdentityCategories.Namespace, "Foo"),
+				new IdentityElement(sample, IdentityCategories.Namespace, "Bar")
+			};
+
+			yield return (sample, expected);
 		}
 
 		protected override IEnumerable<(QualifiedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
-			GenerateDescendantsSample()
-		{
-#warning GenerateDescendantsSample_Is_NotImpl
-			throw new NotImplementedException("GenerateDescendantsSample is not implemented");
-			throw new NotImplementedException();
-		}
+			GenerateDescendantsSample() => GenerateChildrenSample();
 
 		protected override IEnumerable<(QualifiedElement sample, IQualified expected)> GenerateQualifiedNameSample()
 		{
-#warning GenerateQualifiedNameSample_Is_NotImpl
-			throw new NotImplementedException("GenerateQualifiedNameSample is not implemented");
-			throw new NotImplementedException();
-		}
+			var sample = new QualifiedElement();
+			_ = new IdentityElement(sample, IdentityCategories.Namespace, "Foo");
+			_ = new IdentityElement(sample, IdentityCategories.Namespace, "Bar");
+
+			yield return (sample, sample);
+
+			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var q = new QualifiedElement(ns);
+			_ = new IdentityElement(q, "Upper");
+
+			ns = new NameSpace(ns);
+			q = new QualifiedElement(ns);
+			_ = new IdentityElement(q, "Bottom");
+
+			var expected = new QualifiedElement();
+			_ = new IdentityElement(expected, IdentityCategories.Namespace, "Upper");
+			_ = new IdentityElement(expected, IdentityCategories.Namespace, "Bottom");
+
+			yield return (q, expected);
+
+	}
 
 		protected override void AreEqual(IQualified actual, IQualified expected)
 		{
-#warning AreEqual_Is_NotImpl
-			throw new NotImplementedException("AreEqual is not implemented");
-			throw new NotImplementedException();
+			actual.Identities.Count.Is(expected.Identities.Count);
+
+			for (int i = 0; i < expected.Identities.Count; i++)
+			{
+				var a = actual.Identities[i];
+				var e = actual.Identities[i];
+
+				a.Category.Is(e.Category);
+				a.Name.Is(e.Name);
+				a.Order.Is(e.Order);
+			}
 		}
 
 		protected override
