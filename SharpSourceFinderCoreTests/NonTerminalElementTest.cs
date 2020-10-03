@@ -20,7 +20,7 @@ namespace SharpSourceFinderCoreTests
 				Action<T> registerAction)>
 			GenerateRegisterChildSample();
 
-		protected abstract IEnumerable<(T sample, U errSample)> GenerateErrSample();
+		protected abstract IEnumerable<(T sample, IDiscriminatedElement errSample)> GenerateErrSample();
 
 
 		[Trait("TestLayer", nameof(NonTerminalElementTest<T, U>))]
@@ -46,7 +46,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			GenerateErrSample().IsNotEmpty();
 
-			foreach ((T sample, U errSample) in GenerateErrSample())
+			foreach ((T sample, IDiscriminatedElement errSample) in GenerateErrSample())
 				Assert.Throws<ArgumentException>(() => sample.RegisterChild(errSample));
 		}
 	}

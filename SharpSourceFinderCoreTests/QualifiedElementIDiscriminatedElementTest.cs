@@ -214,25 +214,57 @@ namespace SharpSourceFinderCoreTests
 			IEnumerable<(QualifiedElement sample, Stack<(IdentityCategories category, string identity)> expected)>
 			GenerateAggregateIdentitiesSample()
 		{
-#warning GenerateAggregateIdentitiesSample_Is_NotImpl
-			throw new NotImplementedException("GenerateAggregateIdentitiesSample is not implemented");
-			throw new NotImplementedException();
+			var sample = new QualifiedElement();
+			_ = new IdentityElement(sample, IdentityCategories.Namespace, "NameSpace");
+			_ = new IdentityElement(sample, IdentityCategories.Class, "Class");
+
+			var expected = new Stack<(IdentityCategories, string)>();
+			expected.Push((IdentityCategories.Class, "Class"));
+			expected.Push((IdentityCategories.Namespace, "NameSpace"));
+
+			yield return (sample, expected);
+
+			expected.Clear();
+
+			sample = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+			_ = new IdentityElement(sample, "No1");
+			_ = new IdentityElement(sample, "No2");
+
+
+			expected.Push((IdentityCategories.Namespace, "No2"));
+			expected.Push((IdentityCategories.Namespace, "No1"));
+
+			yield return (sample, expected);
+
+
 		}
 
 		protected override
 			IEnumerable<(QualifiedElement sample, IReadOnlyList<IDiscriminatedElement> expected,
 				Action<QualifiedElement> registerAction)> GenerateRegisterChildSample()
 		{
-#warning GenerateRegisterChildSample_Is_NotImpl
-			throw new NotImplementedException("GenerateRegisterChildSample is not implemented");
-			throw new NotImplementedException();
+			var sample = new QualifiedElement();
+			var expected = new List<IDiscriminatedElement>();
+
+			void act(QualifiedElement parent)
+			{
+				expected.Add(new IdentityElement(parent, IdentityCategories.Namespace, "Ns"));
+				expected.Add(new IdentityElement(parent, IdentityCategories.Class, "Cls"));
+			}
+
+			yield return (sample, expected,act);
+
 		}
 
-		protected override IEnumerable<(QualifiedElement sample, IdentityElement errSample)> GenerateErrSample()
+		protected override IEnumerable<(QualifiedElement sample, IDiscriminatedElement errSample)> GenerateErrSample()
 		{
-#warning GenerateErrSample_Is_NotImpl
-			throw new NotImplementedException("GenerateErrSample is not implemented");
-			throw new NotImplementedException();
+			var sample=new QualifiedElement();
+			IDiscriminatedElement err = new IdentityElement(new QualifiedElement(), IdentityCategories.Namespace, "Err");
+			yield return (sample, err);
+
+			err = new NameSpace(new PhysicalStorage(PathA));
+			yield return (sample, err);
+
 		}
 	}
 }
