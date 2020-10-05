@@ -2,6 +2,7 @@ using ChainingAssertion;
 using FastEnumUtility;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Threading;
 using Tokeiya3.SharpSourceFinderCore;
@@ -157,20 +158,58 @@ namespace SharpSourceFinderCoreTests
 
 		protected override IEnumerable<(ClassElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
-#warning GenerateParentSample_Is_NotImpl
-			throw new NotImplementedException("GenerateParentSample is not implemented");
+			IDiscriminatedElement expected = new NameSpace(new PhysicalStorage(PathA));
+			var q = new QualifiedElement(expected);
+			_ = new IdentityElement(q, "Hoge");
+
+			var sample = new ClassElement(expected, ScopeCategories.Public, false, false, false);
+			q = new QualifiedElement(sample);
+			_ = new IdentityElement(q, "Piyo");
+
+			yield return (sample, expected);
+
+			expected = sample;
+
+			sample = new ClassElement(expected, ScopeCategories.Private, false, false, false);
+			q = new QualifiedElement(sample);
+			_ = new IdentityElement(q, "InternalElement");
+
+			yield return (sample, expected);
 		}
 
 		protected override IEnumerable<(ClassElement sample, IPhysicalStorage expected)> GeneratePhysicalStorageSample()
 		{
-#warning GeneratePhysicalStorageSample_Is_NotImpl
-			throw new NotImplementedException("GeneratePhysicalStorageSample is not implemented");
+			var expected = new PhysicalStorage(PathA);
+			var ns = new NameSpace(expected);
+			var q = new QualifiedElement(ns);
+			_ = new IdentityElement(q, "NameSpace");
+
+			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false);
+			q = new QualifiedElement(sample);
+			_ = new IdentityElement(q, "Class");
+
+			yield return (sample, expected);
 		}
 
 		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateGetAncestorsSample()
 		{
-#warning GenerateGetAncestorsSample_Is_NotImpl
-			throw new NotImplementedException("GenerateGetAncestorsSample is not implemented");
+			var list = new List<IDiscriminatedElement>();
+
+
+			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var q = new QualifiedElement(ns);
+			_ = new IdentityElement(q, "NameSpace");
+			list.Add(ns);
+
+			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false);
+			q = new QualifiedElement(sample);
+			_ = new IdentityElement(q, "ExtClass");
+			list.Reverse();
+			yield return (sample, list);
+
+#warning NotImplemented
+			throw new NotImplementedException();
+
 		}
 
 		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
