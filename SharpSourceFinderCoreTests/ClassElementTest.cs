@@ -205,7 +205,7 @@ namespace SharpSourceFinderCoreTests
 			q = new QualifiedElement(sample);
 			_ = new IdentityElement(q, "ExtClass");
 			list.Reverse();
-			yield return (sample, list);
+			yield return (sample, list); 
 
 #warning NotImplemented
 			throw new NotImplementedException();
