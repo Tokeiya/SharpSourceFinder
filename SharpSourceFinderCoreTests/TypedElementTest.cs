@@ -11,13 +11,30 @@ namespace SharpSourceFinderCoreTests
 		protected TypedElementTest(ITestOutputHelper output) : base(output)
 		{
 		}
-
-		public abstract
+		
+		protected abstract
 			IEnumerable<(TypeElement sample, IQualified expectedIdentity, bool expectedIsUnsafe, bool
 				expectedIsPartial, bool expectedIsStatic, ScopeCategories expectedScope, IPhysicalStorage
 				expectedStorage)> GenerateSample();
 
+		protected abstract IEnumerable<TypeElement> GenerateIdentityErrorGetterSample();
+
+
 		protected abstract void AreEqual(IdentityElement actual, IQualified expected);
+
+		[Trait("TestLayer", nameof(TypeElement))]
+		[Fact]
+		public void IdentityErrorTest()
+		{
+			GenerateIdentityErrorGetterSample().IsNotEmpty();
+
+			foreach (var elem in GenerateIdentityErrorGetterSample())
+			{
+				Assert.Throws<IdentityNotFoundException>(() => _ = elem.Identity);
+			}
+		}
+
+
 
 
 		[Trait("TestLayer", nameof(TypeElement))]

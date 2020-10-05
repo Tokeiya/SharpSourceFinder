@@ -30,5 +30,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 #warning IsLogicallyEquivalentTo_Is_NotImpl
 			throw new NotImplementedException("IsLogicallyEquivalentTo is not implemented");
 		}
+
 	}
 }
