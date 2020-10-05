@@ -3,12 +3,13 @@ using FastEnumUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
-	public class ClassElementTest : TypedElementTest
+	public class ClassElementTest : TypedElementTest<ClassElement>
 	{
 		const string PathA = @"C:\Hoge\Piyo.cs";
 		const string PathB = @"D:\Foo\Bar.cs";
@@ -25,7 +26,7 @@ namespace SharpSourceFinderCoreTests
 
 		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) => actual.IsSameReferenceAs(expected);
 
-		protected override IEnumerable<(TypeElement x, TypeElement y, TypeElement z)> GenerateLogicallyTransitiveSample()
+		protected override IEnumerable<(ClassElement x, ClassElement y, ClassElement z)> GenerateLogicallyTransitiveSample()
 		{
 			var boolAry = new[] { true, false };
 
@@ -57,7 +58,7 @@ namespace SharpSourceFinderCoreTests
 			return ret;
 		}
 
-		protected override IEnumerable<(TypeElement x, TypeElement y)> GenerateLogicallyInEquivalentSample()
+		protected override IEnumerable<(ClassElement x, ClassElement y)> GenerateLogicallyInEquivalentSample()
 		{
 			var boolAry = new[] { true, false };
 
@@ -95,48 +96,95 @@ namespace SharpSourceFinderCoreTests
 				Generate(PathB,NsA, ScopeCategories.Public, true, true, false, "Hoge"));
 		}
 
-		protected override IEnumerable<(TypeElement x, TypeElement y, TypeElement z)> GeneratePhysicallyTransitiveSample()
+		protected override IEnumerable<(ClassElement x, ClassElement y, ClassElement z)> GeneratePhysicallyTransitiveSample()
 		{
-#warning GeneratePhysicallyTransitiveSample_Is_NotImpl
-			throw new NotImplementedException("GeneratePhysicallyTransitiveSample is not implemented");
+			var boolAry = new[] { true, false };
+
+			var seq = from isUnsafe in boolAry
+					  from isPartial in boolAry
+					  from isStatic in boolAry
+					  from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
+					  select (isUnsafe, isPartial, isStatic, scope);
+
+			foreach (var (isUnsafe, isPartial, isStatic, scope) in seq)
+			{
+				yield return (Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class"),
+					Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class"),
+					Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class"));
+			}
 		}
 
-		protected override IEnumerable<(TypeElement x, TypeElement y)> GeneratePhysicallyInEqualitySample()
+		protected override IEnumerable<(ClassElement x, ClassElement y)> GeneratePhysicallyInEqualitySample()
 		{
-#warning GeneratePhysicallyInEqualitySample_Is_NotImpl
-			throw new NotImplementedException("GeneratePhysicallyInEqualitySample is not implemented");
+			var boolAry = new[] { true, false };
+
+			var seq = from isUnsafe in boolAry
+					  from isPartial in boolAry
+					  from isStatic in boolAry
+					  from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
+					  select (isUnsafe, isPartial, isStatic, scope);
+
+			{
+				foreach (var (isUnsafe, isPartial, isStatic, scope) in seq)
+
+				{
+					var x = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "ClassA");
+					var y = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "ClassN");
+					yield return (x, y);
+
+					x = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
+					y = Generate(PathA, NsB, scope, isUnsafe, isPartial, isStatic, "Class");
+					yield return (x, y);
+
+					x = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
+					y = Generate(PathB, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
+					yield return (x, y);
+				}
+			}
+
+			yield return (Generate(PathB, NsA, ScopeCategories.Public, true, true, true, "Hoge"),
+					Generate(PathB, NsA, ScopeCategories.Private, true, true, true, "Hoge"));
+
+			yield return (Generate(PathA, NsB, ScopeCategories.Public, true, true, true, "Hoge"),
+					Generate(PathA, NsB, ScopeCategories.Public, false, true, true, "Hoge"));
+
+			yield return (Generate(PathB, NsB, ScopeCategories.Public, true, true, true, "Hoge"),
+				Generate(PathB, NsB, ScopeCategories.Public, true, false, true, "Hoge"));
+
+			yield return (Generate(PathB, NsA, ScopeCategories.Public, true, true, true, "Hoge"),
+				Generate(PathB, NsA, ScopeCategories.Public, true, true, false, "Hoge"));
 		}
 
-		protected override IEnumerable<(TypeElement sample, IDiscriminatedElement expected)> GenerateParentSample()
+		protected override IEnumerable<(ClassElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
 #warning GenerateParentSample_Is_NotImpl
 			throw new NotImplementedException("GenerateParentSample is not implemented");
 		}
 
-		protected override IEnumerable<(TypeElement sample, IPhysicalStorage expected)> GeneratePhysicalStorageSample()
+		protected override IEnumerable<(ClassElement sample, IPhysicalStorage expected)> GeneratePhysicalStorageSample()
 		{
 #warning GeneratePhysicalStorageSample_Is_NotImpl
 			throw new NotImplementedException("GeneratePhysicalStorageSample is not implemented");
 		}
 
-		protected override IEnumerable<(TypeElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateGetAncestorsSample()
+		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateGetAncestorsSample()
 		{
 #warning GenerateGetAncestorsSample_Is_NotImpl
 			throw new NotImplementedException("GenerateGetAncestorsSample is not implemented");
 		}
 
-		protected override IEnumerable<(TypeElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateChildrenSample()
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override IEnumerable<(TypeElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateDescendantsSample()
+		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateDescendantsSample()
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override IEnumerable<(TypeElement sample, IQualified expected)> GenerateQualifiedNameSample()
+		protected override IEnumerable<(ClassElement sample, IQualified expected)> GenerateQualifiedNameSample()
 		{
 			throw new NotImplementedException();
 		}
@@ -146,27 +194,27 @@ namespace SharpSourceFinderCoreTests
 			throw new NotImplementedException();
 		}
 
-		protected override IEnumerable<(TypeElement sample, Stack<(IdentityCategories category, string identity)> expected)> GenerateAggregateIdentitiesSample()
+		protected override IEnumerable<(ClassElement sample, Stack<(IdentityCategories category, string identity)> expected)> GenerateAggregateIdentitiesSample()
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override IEnumerable<(TypeElement sample, IReadOnlyList<IDiscriminatedElement> expected, Action<TypeElement> registerAction)> GenerateRegisterChildSample()
+		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected, Action<ClassElement> registerAction)> GenerateRegisterChildSample()
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override IEnumerable<(TypeElement sample, IDiscriminatedElement errSample)> GenerateErrSample()
+		protected override IEnumerable<(ClassElement sample, IDiscriminatedElement errSample)> GenerateErrSample()
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override IEnumerable<(TypeElement sample, IQualified expectedIdentity, bool expectedIsUnsafe, bool expectedIsPartial, bool expectedIsStatic, ScopeCategories expectedScope, IPhysicalStorage expectedStorage)> GenerateSample()
+		protected override IEnumerable<(ClassElement sample, IQualified expectedIdentity, bool expectedIsUnsafe, bool expectedIsPartial, bool expectedIsStatic, ScopeCategories expectedScope, IPhysicalStorage expectedStorage)> GenerateSample()
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override IEnumerable<TypeElement> GenerateIdentityErrorGetterSample()
+		protected override IEnumerable<ClassElement> GenerateIdentityErrorGetterSample()
 		{
 			throw new NotImplementedException();
 		}

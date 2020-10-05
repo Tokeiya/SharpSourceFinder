@@ -6,18 +6,18 @@ using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
-	public abstract class TypedElementTest : NonTerminalElementTest<TypeElement, IDiscriminatedElement>
+	public abstract class TypedElementTest<T> : NonTerminalElementTest<T, IDiscriminatedElement> where T:TypeElement
 	{
 		protected TypedElementTest(ITestOutputHelper output) : base(output)
 		{
 		}
 		
 		protected abstract
-			IEnumerable<(TypeElement sample, IQualified expectedIdentity, bool expectedIsUnsafe, bool
+			IEnumerable<(T sample, IQualified expectedIdentity, bool expectedIsUnsafe, bool
 				expectedIsPartial, bool expectedIsStatic, ScopeCategories expectedScope, IPhysicalStorage
 				expectedStorage)> GenerateSample();
 
-		protected abstract IEnumerable<TypeElement> GenerateIdentityErrorGetterSample();
+		protected abstract IEnumerable<T> GenerateIdentityErrorGetterSample();
 
 
 		protected abstract void AreEqual(IdentityElement actual, IQualified expected);
