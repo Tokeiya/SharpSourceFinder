@@ -1,0 +1,24 @@
+# Class,struct and interfaces
+
+œIDiscriminatedElement
+	œImaginaryRoot
+	œQualifiedElement
+	œIdentityElement
+ 	œDiscriminatedElement
+	œTerminalElement
+	œNonTerminalElement
+		œNameSpace
+		œTypeElement
+			œDelegateElement
+			œStructElement
+			œClassElement
+			œEnumElement
+			œInterfaceElement
+
+œIPhysicalStorage
+	œStorageNotAvailable
+	œPhysicalStorage
+
+#Enumerations
+œIdentityCategories
+œScopeCategories

@@ -1,10 +1,9 @@
+using ChainingAssertion;
+using FastEnumUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ChainingAssertion;
-using FastEnumUtility;
 using Tokeiya3.SharpSourceFinderCore;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
@@ -30,49 +29,31 @@ namespace SharpSourceFinderCoreTests
 		{
 			var boolAry = new[] { true, false };
 
+			var seq = from isUnsafe in boolAry
+					  from isPartial in boolAry
+					  from isStatic in boolAry
+					  from scope in FastEnum.GetMembers<ScopeCategories>().Select(x=>x.Value)
+					  select (isUnsafe, isPartial, isStatic, scope);
 
-			foreach (var isUnsafe in boolAry)
-			foreach (var isPartial in boolAry)
-			foreach (var isStatic in boolAry)
-			foreach (var scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value))
+			foreach (var (isUnsafe, isPartial, isStatic, scope) in seq)
 			{
-				var ns = new NameSpace(new PhysicalStorage(PathA));
-				var q = new QualifiedElement();
-				_ = new IdentityElement(q, NsA);
-
-				var x = new ClassElement(ns, scope, isUnsafe, isPartial, isStatic);
-				q = new QualifiedElement();
-				_ = new IdentityElement(q, "Class");
-
-
-				ns = new NameSpace(new PhysicalStorage(PathB));
-				q = new QualifiedElement();
-				_ = new IdentityElement(q, NsA);
-
-				var y = new ClassElement(ns, scope, isUnsafe, isPartial, isStatic);
-				q = new QualifiedElement();
-				_ = new IdentityElement(q, "Class");
-
-				ns = new NameSpace(new PhysicalStorage(PathA));
-				q = new QualifiedElement();
-				_ = new IdentityElement(q, NsA);
-
-				var z = new ClassElement(ns, scope, isUnsafe, isPartial, isStatic);
-				q = new QualifiedElement();
-				_ = new IdentityElement(q, "Class");
+				var x = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
+				var y = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
+				var z = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
 
 				yield return (x, y, z);
-
-
-
 			}
 		}
 
-		static ClassElement Generate(NameSpace ns, ScopeCategories scope, bool isUnsafe, bool isPartial, bool isStatic,
-			string identity)
+		static ClassElement Generate(string path, string nameSpace, ScopeCategories scope, bool isUnsafe, bool isPartial, bool isStatic, string identity)
 		{
+			var ns = new NameSpace(new PhysicalStorage(path));
+			var q = new QualifiedElement(ns);
+			_ = new IdentityElement(q, nameSpace);
+
 			var ret = new ClassElement(ns, scope, isUnsafe, isPartial, isStatic);
-			_ = new IdentityElement(new QualifiedElement(ret), identity);
+			q = new QualifiedElement(ret);
+			_ = new IdentityElement(q, identity);
 			return ret;
 		}
 
@@ -80,64 +61,44 @@ namespace SharpSourceFinderCoreTests
 		{
 			var boolAry = new[] { true, false };
 
-			static NameSpace nsA()
-			{
-				var ns = new NameSpace(new PhysicalStorage(PathA));
-				var q = new QualifiedElement();
-				_ = new IdentityElement(q, NsA);
-
-				return ns;
-			}
-
-			static NameSpace nsB()
-			{
-				var ns = new NameSpace(new PhysicalStorage(PathA));
-				var q = new QualifiedElement();
-				_ = new IdentityElement(q, NsB);
-
-				return ns;
-			}
+			var seq = from isUnsafe in boolAry
+					  from isPartial in boolAry
+					  from isStatic in boolAry
+					  from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
+					  select (isUnsafe, isPartial, isStatic, scope);
 
 			{
-				foreach (var isUnsafe in boolAry)
-				foreach (var isPartial in boolAry)
-				foreach (var isStatic in boolAry)
-				foreach (var scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value))
+				foreach (var (isUnsafe, isPartial, isStatic, scope) in seq)
+
 				{
-					var x = new ClassElement(nsA(), scope, isUnsafe, isPartial, isStatic);
-					var q = new QualifiedElement();
-					_ = new IdentityElement(q, "ClassA");
-
-					var y = new ClassElement(nsA(), scope, isUnsafe, isPartial, isStatic);
-					q = new QualifiedElement();
-					_ = new IdentityElement(q, "ClassN");
-
+					var x = Generate(PathA,NsA, scope, isUnsafe, isPartial, isStatic, "ClassA");
+					var y = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "ClassN");
 					yield return (x, y);
+
+					x = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
+					y = Generate(PathA, NsB, scope, isUnsafe, isPartial, isStatic, "Class");
+					yield return (x, y);
+
 				}
 			}
 
-			yield return (Generate(nsA(), ScopeCategories.Public, true, true, true, "Hoge"),
-				Generate(nsB(), ScopeCategories.Public, true, true, true, "HOge"));
+			yield return (Generate(PathB,NsA, ScopeCategories.Public, true, true, true, "Hoge"),
+					Generate(PathB,NsA, ScopeCategories.Private, true, true, true, "Hoge"));
 
-			yield return (Generate(nsA(), ScopeCategories.Public, true, true, true, "Hoge"),
-					Generate(nsA(), ScopeCategories.Private, true, true, true, "Hoge"));
+			yield return (Generate(PathA,NsB, ScopeCategories.Public, true, true, true, "Hoge"),
+					Generate(PathA,NsB, ScopeCategories.Public, false, true, true, "Hoge"));
 
-			yield return (Generate(nsA(), ScopeCategories.Public, true, true, true, "Hoge"),
-					Generate(nsA(), ScopeCategories.Public, false, true, true, "Hoge"));
+			yield return (Generate(PathB,NsB, ScopeCategories.Public, true, true, true, "Hoge"),
+				Generate(PathB,NsB, ScopeCategories.Public, true, false, true, "Hoge"));
 
-			yield return (Generate(nsA(), ScopeCategories.Public, true, true, true, "Hoge"),
-				Generate(nsA(), ScopeCategories.Public, true, false, true, "Hoge"));
-
-			yield return (Generate(nsA(), ScopeCategories.Public, true, true, true, "Hoge"),
-				Generate(nsA(), ScopeCategories.Public, true, true, false, "Hoge"));
-
-
+			yield return (Generate(PathB,NsA, ScopeCategories.Public, true, true, true, "Hoge"),
+				Generate(PathB,NsA, ScopeCategories.Public, true, true, false, "Hoge"));
 		}
 
 		protected override IEnumerable<(TypeElement x, TypeElement y, TypeElement z)> GeneratePhysicallyTransitiveSample()
 		{
 #warning GeneratePhysicallyTransitiveSample_Is_NotImpl
-			throw new NotImplementedException("GeneratePhysicallyTransitiveSample is not implemented");	
+			throw new NotImplementedException("GeneratePhysicallyTransitiveSample is not implemented");
 		}
 
 		protected override IEnumerable<(TypeElement x, TypeElement y)> GeneratePhysicallyInEqualitySample()
