@@ -6,7 +6,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 	public sealed class InterfaceElement : TypeElement
 	{
 		public InterfaceElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe, bool isPartial) :
-			base(parent, scope, isUnsafe, isPartial, false)
+			base(parent, scope,true,false, isUnsafe, isPartial, false)
 		{
 		}
 

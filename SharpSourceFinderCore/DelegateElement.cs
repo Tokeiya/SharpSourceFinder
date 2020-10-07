@@ -5,7 +5,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class DelegateElement : TypeElement
 	{
-		public DelegateElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe) : base(parent, scope,
+		public DelegateElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe) : base(parent, scope,false,true,
 			isUnsafe, false, false)
 		{
 #warning DelegateElement_Is_NotImpl

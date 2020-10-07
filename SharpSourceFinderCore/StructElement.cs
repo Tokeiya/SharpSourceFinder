@@ -5,13 +5,9 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class StructElement : TypeElement
 	{
-		public StructElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe, bool isPartial) : base(
-			parent, scope, isUnsafe, isPartial, false)
+		public StructElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe, bool isPartial, bool isStatic) : base(parent, scope, false, true, isUnsafe, isPartial, isStatic)
 		{
-#warning StructElement_Is_NotImpl
-			throw new NotImplementedException("StructElement is not implemented");
 		}
-
 
 		public override QualifiedElement GetQualifiedName()
 		{

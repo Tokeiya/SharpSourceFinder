@@ -22,9 +22,10 @@ namespace SharpSourceFinderCoreTests
 
 			public override bool Equals(object? obj)
 			{
-				++EqualCount; 
-				
-				
+				++EqualCount;
+
+				return ReferenceEquals(this, obj);
+
 			}
 		}
 	}

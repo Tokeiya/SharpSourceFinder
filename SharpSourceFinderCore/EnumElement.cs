@@ -6,7 +6,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 	public sealed class EnumElement : TypeElement
 	{
 		public EnumElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe, bool isPartial,
-			bool isStatic) : base(parent, scope, isUnsafe, isPartial, isStatic)
+			bool isStatic) : base(parent, scope, false,true,isUnsafe, isPartial, isStatic)
 		{
 		}
 

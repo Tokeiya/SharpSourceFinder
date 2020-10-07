@@ -8,6 +8,7 @@
 
 	<ItemGroup>
 	  <Compile Remove="EquatabilityTester.cs" />
+	  <Compile Remove="EquivalentTestHelperTest.cs" />
 	  <Compile Remove="InspectionOfEquatabilityTester.cs" />
 	  <Compile Remove="Mock.cs" />
 	</ItemGroup>

@@ -10,11 +10,14 @@ namespace Tokeiya3.SharpSourceFinderCore
 		private IQualified? _identity;
 
 
-		protected TypeElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe, bool isPartial,
+		protected TypeElement(IDiscriminatedElement parent, ScopeCategories scope,bool isAbstract,bool isSealed, bool isUnsafe, bool isPartial,
 			bool isStatic) : base(parent)
 		{
-			if(!FastEnum.IsDefined(scope)) throw new ArgumentOutOfRangeException(nameof(scope));
+			if (!FastEnum.IsDefined(scope)) throw new ArgumentOutOfRangeException(nameof(scope));
+			if(isAbstract&&isSealed) throw new ArgumentException($"{nameof(isAbstract)} and {nameof(isSealed)} status is conflicted");
 
+			IsAbstract = isAbstract;
+			IsSealed = isSealed;
 			Scope = scope;
 			IsUnsafe = isUnsafe;
 			IsPartial = isPartial;
@@ -41,6 +44,9 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public bool IsStatic { get; }
 
+		public bool IsAbstract { get; }
+
+		public bool IsSealed { get; }
 		public ScopeCategories Scope { get; }
 
 		public override IPhysicalStorage Storage => Parent.Storage;

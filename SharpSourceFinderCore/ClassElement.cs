@@ -5,13 +5,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class ClassElement : TypeElement
 	{
-		public ClassElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe, bool isPartial,
-			bool isStatic) : base(parent, scope, isUnsafe, isPartial, isStatic)
+		public ClassElement(IDiscriminatedElement parent, ScopeCategories scope, bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic) : base(parent, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic)
 		{
 #warning ClassElement_Is_NotImpl
 			throw new NotImplementedException("ClassElement is not implemented");
 		}
-
 
 		public override QualifiedElement GetQualifiedName()
 		{
@@ -30,6 +28,5 @@ namespace Tokeiya3.SharpSourceFinderCore
 #warning IsLogicallyEquivalentTo_Is_NotImpl
 			throw new NotImplementedException("IsLogicallyEquivalentTo is not implemented");
 		}
-
 	}
 }
