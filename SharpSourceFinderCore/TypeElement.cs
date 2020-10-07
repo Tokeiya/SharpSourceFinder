@@ -57,6 +57,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 			return (
 				GetQualifiedName().IsEquivalentTo(other.GetQualifiedName()) &&
+				IsAbstract==other.IsAbstract &&
+				IsSealed==other.IsSealed &&
 				IsUnsafe == other.IsUnsafe &&
 				IsPartial == other.IsPartial &&
 				IsStatic == other.IsStatic &&
