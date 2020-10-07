@@ -1,85 +1,135 @@
-//using System.Collections.Generic;
-//using ChainingAssertion;
-//using Tokeiya3.SharpSourceFinderCore;
-//using Xunit;
-//using Xunit.Abstractions;
+using System.Collections.Generic;
+using ChainingAssertion;
+using FastEnumUtility;
+using Tokeiya3.SharpSourceFinderCore;
+using Xunit;
+using Xunit.Abstractions;
 
-//namespace SharpSourceFinderCoreTests
-//{
-//	public abstract class TypedElementTest<T> : NonTerminalElementTest<T, IDiscriminatedElement> where T:TypeElement
-//	{
-//		protected TypedElementTest(ITestOutputHelper output) : base(output)
-//		{
-//		}
+namespace SharpSourceFinderCoreTests
+{
+	public abstract class TypedElementTest<T> : NonTerminalElementTest<T, IDiscriminatedElement> where T : TypeElement
+	{
+		protected TypedElementTest(ITestOutputHelper output) : base(output)
+		{
+		}
+
+		protected abstract IEnumerable<T> GenerateIdentityErrorGetterSample();
+
+
+		protected abstract void AreEqual(IdentityElement actual, IQualified expected);
+
+		[Trait("TestLayer", nameof(TypeElement))]
+		[Fact]
+		public void IdentityErrorTest()
+		{
+			GenerateIdentityErrorGetterSample().IsNotEmpty();
+
+			foreach (var elem in GenerateIdentityErrorGetterSample())
+			{
+				Assert.Throws<IdentityNotFoundException>(() => _ = elem.Identity);
+			}
+		}
+
+
+		protected abstract IEnumerable<(T sample, IQualified expected)> GenerateIdentityGetterSample();
+
+
+		[Trait("TestLayer", nameof(TypeElement))]
+		[Fact]
+		public void IdentityTest()
+		{
+			GenerateIdentityGetterSample().IsNotEmpty();
+
+			foreach ((T sample, IQualified expected)  in GenerateIdentityGetterSample())
+			{
+				AreEqual(sample.Identity,expected);
+			}
+		}
+
+		protected abstract IEnumerable<(T sample, bool expected)> GenerateIsUnsafeGetterSample();
+
+
+		[Trait("TestLayer", nameof(TypeElement))]
+		[Fact]
+		public void IsUnsafeGetterTest()
+		{
+			GenerateIsUnsafeGetterSample().IsNotEmpty();
+
+			foreach (var (sample, expected) in GenerateIsUnsafeGetterSample()) sample.IsUnsafe.Is(expected);
+		}
+
+		protected abstract IEnumerable<(T sample, bool expected)> GenerateIsPartialGetterSample();
+
+		[Trait("TestLayer", nameof(TypeElement))]
+		[Fact]
+		public void IsPartialGetterTest()
+		{
+			GenerateIsPartialGetterSample().IsNotEmpty();
+			foreach (var (sample,expected) in GenerateIsPartialGetterSample()) sample.IsPartial.Is(expected);
+		}
+
+		protected abstract IEnumerable<(T sample, bool expected)> GenerateIsStaticGetterTest();
 		
-//		protected abstract
-//			IEnumerable<(T sample, IQualified expectedIdentity, bool expectedIsUnsafe, bool
-//				expectedIsPartial, bool expectedIsStatic, ScopeCategories expectedScope, IPhysicalStorage
-//				expectedStorage)> GenerateSample();
+		
+		[Trait("TestLayer", nameof(TypeElement))]
+		[Fact]
+		public void IsStaticGetterTest()
+		{
+			GenerateIsStaticGetterTest().IsNotEmpty();
 
-//		protected abstract IEnumerable<T> GenerateIdentityErrorGetterSample();
+			foreach (var (sample, expected) in GenerateIsStaticGetterTest()) sample.IsStatic.Is(expected);
+		}
+
+		protected abstract IEnumerable<(T sample, ScopeCategories expected)> GenerateScopeGetterSample();
+
+		[Trait("TestLayer", nameof(TypeElement))]
+		[Fact]
+		public void ScopeGetterTest()
+		{
+			GenerateScopeGetterSample().IsNotEmpty();
+
+			foreach (var (sample, expected) in GenerateScopeGetterSample())
+			{
+				FastEnum.IsDefined(sample.Scope).IsTrue();
+				FastEnum.IsDefined(expected).IsTrue();
+
+				sample.Scope.Is(expected);
+			}
+		}
+
+		protected abstract IEnumerable<(T sample, bool expected)> GenerateIsAbstractSample();
+
+		[Trait("TestLayer", nameof(TypeElement))]
+		[Fact]
+		public void IsAbstractGetterTest()
+		{
+			GenerateIsAbstractSample().IsNotEmpty();
+
+			foreach ((T sample, bool expected)  in GenerateIsAbstractSample())
+			{
+				sample.IsAbstract.Is(expected);
+
+				if(sample.IsAbstract) sample.IsSealed.IsFalse();
+			}
+		}
+
+		protected abstract IEnumerable<(T sample, bool expected)> GenerateIsSealedSample();
+
+		[Trait("TestLayer", nameof(TypeElement))]
+		[Fact]
+		public void IsSealedGetterTest()
+		{
+			GenerateIsSealedSample().IsNotEmpty();
+
+			foreach (var (sample,expected) in GenerateIsSealedSample())
+			{
+				sample.IsSealed.Is(expected);
+
+				if (sample.IsSealed) sample.IsAbstract.IsFalse();
+			}
+		}
 
 
-//		protected abstract void AreEqual(IdentityElement actual, IQualified expected);
 
-//		[Trait("TestLayer", nameof(TypeElement))]
-//		[Fact]
-//		public void IdentityErrorTest()
-//		{
-//			GenerateIdentityErrorGetterSample().IsNotEmpty();
-
-//			foreach (var elem in GenerateIdentityErrorGetterSample())
-//			{
-//				Assert.Throws<IdentityNotFoundException>(() => _ = elem.Identity);
-//			}
-//		}
-
-
-
-
-//		[Trait("TestLayer", nameof(TypeElement))]
-//		[Fact]
-//		public void IdentityTest()
-//		{
-//			GenerateSample().IsNotEmpty();
-
-//			foreach (var (sample, expected, _, _, _, _, _) in GenerateSample()) AreEqual(sample.Identity, expected);
-//		}
-
-//		[Trait("TestLayer", nameof(TypeElement))]
-//		[Fact]
-//		public void IsUnsafeGetterTest()
-//		{
-//			GenerateSample().IsNotEmpty();
-
-//			foreach (var (sample, _, expected, _, _, _, _) in GenerateSample()) sample.IsUnsafe.Is(expected);
-//		}
-
-//		[Trait("TestLayer", nameof(TypeElement))]
-//		[Fact]
-//		public void IsPartialGetterTest()
-//		{
-//			GenerateSample().IsNotEmpty();
-
-//			foreach (var (sample, _, _, expected, _, _, _) in GenerateSample()) sample.IsPartial.Is(expected);
-//		}
-
-//		[Trait("TestLayer", nameof(TypeElement))]
-//		[Fact]
-//		public void IsStaticGetterTest()
-//		{
-//			GenerateSample().IsNotEmpty();
-
-//			foreach (var (sample, _, _, _, expected, _, _) in GenerateSample()) sample.IsStatic.Is(expected);
-//		}
-
-//		[Trait("TestLayer", nameof(TypeElement))]
-//		[Fact]
-//		public void ScopeGetterTest()
-//		{
-//			GenerateSample().IsNotEmpty();
-
-//			foreach (var (sample, _, _, _, _, expected, _) in GenerateSample()) sample.Scope.Is(expected);
-//		}
-//	}
-//}
+	}
+}
