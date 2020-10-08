@@ -135,7 +135,7 @@ namespace SharpSourceFinderCoreTests
 			var b = new NameSpace(a);
 			var c = new NameSpace(b);
 
-			yield return (c, new[] {a, b});
+			yield return (c, new[] {b, a});
 		}
 
 		protected override IEnumerable<(NameSpace sample, IReadOnlyList<IDiscriminatedElement> expected)>
@@ -196,6 +196,7 @@ namespace SharpSourceFinderCoreTests
 
 
 			sample = new NameSpace(sample);
+			expected=new QualifiedElement(sample);
 			_ = new IdentityElement(expected, "Hoge");
 			_ = new IdentityElement(expected, "Piyo");
 
@@ -247,8 +248,6 @@ namespace SharpSourceFinderCoreTests
 
 			expected.Push((IdentityCategories.Namespace, "Bar"));
 			expected.Push((IdentityCategories.Namespace, "Foo"));
-			expected.Push((IdentityCategories.Namespace, "Piyo"));
-			expected.Push((IdentityCategories.Namespace, "Hoge"));
 
 			yield return (sample, expected);
 		}
@@ -274,8 +273,12 @@ namespace SharpSourceFinderCoreTests
 			IEnumerable<(NameSpace sample, IDiscriminatedElement errSample)>
 			GenerateErrSample()
 		{
-#warning GenerateErrSample_Is_NotImpl
-			throw new NotImplementedException("GenerateErrSample is not implemented");
+			var sample = new NameSpace(new PhysicalStorage(PathA));
+
+			var q = new QualifiedElement();
+
+			yield return (sample, q);
+
 		}
 	}
 }

@@ -12,6 +12,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public string Path { get; }
 
-		public bool IsEquivalentTo(IPhysicalStorage other) => Path == other.Path;
+		public bool IsEquivalentTo(IPhysicalStorage other) => other switch
+		{
+			StorageNotAvailable _ => false,
+			PhysicalStorage ps => ps.Path == Path,
+			_ => false
+		};
 	}
 }

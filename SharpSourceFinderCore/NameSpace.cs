@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
@@ -68,7 +69,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
 		{
-			foreach (var elem in Identity.Identities) accumulator.Push((elem.Category, elem.Name));
+			foreach (var elem in Identity.Identities.Reverse()) accumulator.Push((elem.Category, elem.Name));
 		}
 
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)

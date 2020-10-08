@@ -11,7 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpSourceFinderCoreTests"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OnGoing", "OnGoing", "{4AB676AE-7657-4240-BF90-C075105AEFD8}"
 	ProjectSection(SolutionItems) = preProject
-		SharpSourceFinderCore\ClassElement.cs = SharpSourceFinderCore\ClassElement.cs
 		SharpSourceFinderCore\DelegateElement.cs = SharpSourceFinderCore\DelegateElement.cs
 		SharpSourceFinderCore\EnumElement.cs = SharpSourceFinderCore\EnumElement.cs
 		SharpSourceFinderCore\InterfaceElement.cs = SharpSourceFinderCore\InterfaceElement.cs

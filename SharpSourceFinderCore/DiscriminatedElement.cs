@@ -51,9 +51,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 			foreach (var elem in Children())
 			{
 				yield return elem;
-
-				foreach (var ret in elem.Children())
+				foreach (var ret in elem.Descendants())
+				{
 					yield return ret;
+				}
+
 			}
 		}
 

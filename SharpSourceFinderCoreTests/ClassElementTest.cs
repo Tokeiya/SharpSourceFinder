@@ -100,8 +100,6 @@ namespace SharpSourceFinderCoreTests
 			yield return (Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
 				Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, false, "Hoge"));
 
-			yield return (Generate(PathA, NameSpaceA, ScopeCategories.Public, true, false, true, true, true, "Hoge"),
-					Generate(PathA, NameSpaceA, ScopeCategories.Public, false, false, true, true, true, "Hoge"));
 
 		}
 
@@ -200,7 +198,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			var expected = new PhysicalStorage(PathA);
 			var ns = new NameSpace(expected);
-			var q=new QualifiedElement();
+			var q=new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
 			var sample=new ClassElement(ns,ScopeCategories.Public,false,false,false,false,false);
@@ -216,7 +214,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
-			var q = new QualifiedElement();
+			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
 			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
@@ -231,7 +229,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
-			var q = new QualifiedElement();
+			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
 			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
@@ -246,14 +244,14 @@ namespace SharpSourceFinderCoreTests
 		{
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
-			var q = new QualifiedElement();
+			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
 			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
 			q = new QualifiedElement(sample);
-			_ = new IdentityElement(q, "Hoge");
+			var i = new IdentityElement(q, "Hoge");
 
-			yield return (sample, new[] { q });
+			yield return (sample, new IDiscriminatedElement[] { q,i });
 
 		}
 
@@ -261,7 +259,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
-			var q = new QualifiedElement();
+			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
 			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
@@ -269,8 +267,8 @@ namespace SharpSourceFinderCoreTests
 			_ = new IdentityElement(q, "Hoge");
 
 			var expected = new QualifiedElement();
-			_ = new IdentityElement(expected, "Foo");
-			_ = new IdentityElement(expected, "Hoge");
+			_ = new IdentityElement(expected, IdentityCategories.Namespace,"Foo");
+			_ = new IdentityElement(expected, IdentityCategories.Class,"Hoge");
 
 			yield return (sample, expected);
 
@@ -283,7 +281,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
-			var q = new QualifiedElement();
+			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
 			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
@@ -301,7 +299,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
-			var q = new QualifiedElement();
+			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
 			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
@@ -322,15 +320,13 @@ namespace SharpSourceFinderCoreTests
 		{
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
-			var q = new QualifiedElement();
+			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
 			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
-			q = new QualifiedElement(sample);
-			_ = new IdentityElement(q, "Hoge");
 
 			var expected = new QualifiedElement();
-			_ = new IdentityElement(expected, "Error");
+			_ = new IdentityElement(expected,  IdentityCategories.Class,"Error");
 
 			yield return (sample, expected);
 		}
@@ -339,7 +335,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
-			var q = new QualifiedElement();
+			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
 			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
@@ -358,7 +354,7 @@ namespace SharpSourceFinderCoreTests
 			_ = new IdentityElement(q, nameSpace);
 
 			var sample = new ClassElement(ns,scope,isAbstract,isSealed,isUnsafe,isPartial,isStatic);
-			q = new QualifiedElement();
+			q = new QualifiedElement(sample);
 			_ = new IdentityElement(q, identity);
 
 

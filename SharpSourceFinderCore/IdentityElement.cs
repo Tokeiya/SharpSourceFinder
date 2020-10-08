@@ -35,7 +35,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 				piv = piv.Parent;
 
-				if (!(cat is null)) continue;
+				if (cat is null) continue;
 				break;
 			}
 

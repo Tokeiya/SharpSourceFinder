@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using Tokeiya3.SharpSourceFinderCore;
 
@@ -11,23 +13,28 @@ namespace Playground
 	{
 		static void Main(string[] args)
 		{
-			var q = new QualifiedElement();
-			_ = new IdentityElement(q, IdentityCategories.Namespace, "Hoge");
-			_ = new IdentityElement(q, IdentityCategories.Namespace, "Bar");
+			var expected = new List<IDiscriminatedElement>();
 
-			var qq = q.GetQualifiedName();
+			var sample = new NameSpace(new PhysicalStorage("PathA"));
+			var name = new QualifiedElement(sample);
+			var elem = new IdentityElement(name, "Tokeiya3");
+
+			expected.Add(name);
+			expected.Add(elem);
 
 
+			var a = new NameSpace(sample);
+			name = new QualifiedElement(a);
+			elem = new IdentityElement(name, "SharpSourceFinder");
 
-			for (int i = 0; i < q.Identities.Count; i++)
-			{
-				var a = q.Identities[i];
-				var b = qq.Identities[i];
-				Console.WriteLine($"{a.Name},{b.Name},{a.Name==b.Name}");
-				Console.WriteLine($"{a.Category},{b.Category},{a.Category==b.Category}");
-				Console.WriteLine($"{a.Order},{b.Order},{a.Order==b.Order}");
-				Console.WriteLine("");
-			}
+			expected.Add(a);
+			expected.Add(name);
+			expected.Add(elem);
+
+
+			var hoge = a.Descendants().ToArray();
+			var act = sample.Descendants().ToArray();
+
 
 		}
 
