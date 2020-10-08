@@ -5,7 +5,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class StructElement : TypeElement
 	{
-		public StructElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe, bool isPartial, bool isStatic) : base(parent, scope, false, true, isUnsafe, isPartial, isStatic)
+		public StructElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe, bool isPartial,
+			bool isStatic) : base(parent, scope, false, true, isUnsafe, isPartial, isStatic)
 		{
 		}
 

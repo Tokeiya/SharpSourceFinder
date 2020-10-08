@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Threading;
 using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
@@ -192,8 +189,7 @@ namespace SharpSourceFinderCoreTests
 			_ = new IdentityElement(expected, IdentityCategories.Namespace, "Bottom");
 
 			yield return (q, expected);
-
-	}
+		}
 
 		protected override void AreEqual(IQualified actual, IQualified expected)
 		{
@@ -235,8 +231,6 @@ namespace SharpSourceFinderCoreTests
 			expected.Push((IdentityCategories.Namespace, "No1"));
 
 			yield return (sample, expected);
-
-
 		}
 
 		protected override
@@ -252,19 +246,18 @@ namespace SharpSourceFinderCoreTests
 				expected.Add(new IdentityElement(parent, IdentityCategories.Class, "Cls"));
 			}
 
-			yield return (sample, expected,act);
-
+			yield return (sample, expected, act);
 		}
 
 		protected override IEnumerable<(QualifiedElement sample, IDiscriminatedElement errSample)> GenerateErrSample()
 		{
-			var sample=new QualifiedElement();
-			IDiscriminatedElement err = new IdentityElement(new QualifiedElement(), IdentityCategories.Namespace, "Err");
+			var sample = new QualifiedElement();
+			IDiscriminatedElement err =
+				new IdentityElement(new QualifiedElement(), IdentityCategories.Namespace, "Err");
 			yield return (sample, err);
 
 			err = new NameSpace(new PhysicalStorage(PathA));
 			yield return (sample, err);
-
 		}
 	}
 }

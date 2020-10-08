@@ -59,9 +59,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 				};
 
 				if (!(piv is ImaginaryRoot))
-				{
-					foreach (var element in piv.AncestorsAndSelf()) element.AggregateIdentities(accum);
-				}
+					foreach (var element in piv.AncestorsAndSelf())
+						element.AggregateIdentities(accum);
 
 				var ret = new QualifiedElement();
 

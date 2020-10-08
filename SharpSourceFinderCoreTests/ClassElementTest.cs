@@ -1,11 +1,8 @@
-using ChainingAssertion;
-using FastEnumUtility;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.IO;
 using System.Linq;
-using System.Threading;
+using ChainingAssertion;
+using FastEnumUtility;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
 
@@ -13,18 +10,20 @@ namespace SharpSourceFinderCoreTests
 {
 	public class ClassElementTest : TypedElementTest<ClassElement>
 	{
-
 		public ClassElementTest(ITestOutputHelper output) : base(output)
 		{
-
 		}
-		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) => actual.IsSameReferenceAs(expected);
 
-		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) => actual.IsSameReferenceAs(expected);
+		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) =>
+			actual.IsSameReferenceAs(expected);
 
-		protected override IEnumerable<(ClassElement x, ClassElement y, ClassElement z)> GenerateLogicallyTransitiveSample()
+		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) =>
+			actual.IsSameReferenceAs(expected);
+
+		protected override IEnumerable<(ClassElement x, ClassElement y, ClassElement z)>
+			GenerateLogicallyTransitiveSample()
 		{
-			var boolAry = new[] { true, false };
+			var boolAry = new[] {true, false};
 
 			var seq = from isAbstract in boolAry
 				from isSealed in boolAry
@@ -32,28 +31,32 @@ namespace SharpSourceFinderCoreTests
 				from isPartial in boolAry
 				from isStatic in boolAry
 				from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
-				select (isAbstract,isSealed,isUnsafe, isPartial, isStatic, scope);
+				select (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope);
 
 			foreach (var (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope) in seq)
 			{
 				if (isAbstract && (isSealed || isStatic)) continue;
 				if (isSealed && isStatic) continue;
 
-				var x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
-				var y = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
-				var z = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
+				var x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
+					"Class");
+				var y = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
+					"Class");
+				var z = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
+					"Class");
 
 				yield return (x, y, z);
 			}
 		}
 
-		static ClassElement Generate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,bool isSealed,bool isUnsafe, bool isPartial, bool isStatic, string identity)
+		static ClassElement Generate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
+			bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, string identity)
 		{
 			var ns = new NameSpace(new PhysicalStorage(path));
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, nameSpace);
 
-			var ret = new ClassElement(ns, scope,isAbstract,isSealed, isUnsafe, isPartial, isStatic);
+			var ret = new ClassElement(ns, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic);
 			q = new QualifiedElement(ret);
 			_ = new IdentityElement(q, identity);
 			return ret;
@@ -74,18 +77,18 @@ namespace SharpSourceFinderCoreTests
 			foreach (var (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope) in seq)
 			{
 				if (isAbstract && (isSealed || isStatic)) continue;
-				if (isSealed&&isStatic) continue;
-				
+				if (isSealed && isStatic) continue;
 
 
-				var x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "ClassA");
-				var y = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "ClassN");
+				var x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
+					"ClassA");
+				var y = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
+					"ClassN");
 				yield return (x, y);
 
 				x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
 				y = Generate(PathA, NameSpaceB, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
 				yield return (x, y);
-
 			}
 
 			yield return (Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
@@ -99,8 +102,6 @@ namespace SharpSourceFinderCoreTests
 
 			yield return (Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
 				Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, false, "Hoge"));
-
-
 		}
 
 		protected override IEnumerable<(ClassElement x, ClassElement y, ClassElement z)>
@@ -121,7 +122,8 @@ namespace SharpSourceFinderCoreTests
 				if (isAbstract && (isSealed || isStatic)) continue;
 				if (isSealed && isStatic) continue;
 
-				yield return (Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class"),
+				yield return (
+					Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class"),
 					Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class"),
 					Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class"));
 			}
@@ -144,8 +146,10 @@ namespace SharpSourceFinderCoreTests
 				if (isAbstract && (isSealed || isStatic)) continue;
 				if (isSealed && isStatic) continue;
 
-				var x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "ClassA");
-				var y = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "ClassN");
+				var x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
+					"ClassA");
+				var y = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
+					"ClassN");
 				yield return (x, y);
 
 				x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
@@ -161,7 +165,7 @@ namespace SharpSourceFinderCoreTests
 				Generate(PathB, NameSpaceA, ScopeCategories.Private, false, false, true, true, true, "Hoge"));
 
 			yield return (Generate(PathA, NameSpaceB, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
-							Generate(PathA, NameSpaceB, ScopeCategories.Public, false, false, false, true, true, "Hoge"));
+				Generate(PathA, NameSpaceB, ScopeCategories.Public, false, false, false, true, true, "Hoge"));
 
 			yield return (Generate(PathB, NameSpaceB, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
 				Generate(PathB, NameSpaceB, ScopeCategories.Public, false, false, true, false, true, "Hoge"));
@@ -170,9 +174,7 @@ namespace SharpSourceFinderCoreTests
 				Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, false, "Hoge"));
 
 			yield return (Generate(PathA, NameSpaceA, ScopeCategories.Public, true, false, true, true, false, "Hoge"),
-					Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, false, "Hoge"));
-
-
+				Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, false, "Hoge"));
 		}
 
 		protected override IEnumerable<(ClassElement sample, IDiscriminatedElement expected)> GenerateParentSample()
@@ -191,22 +193,20 @@ namespace SharpSourceFinderCoreTests
 			q = new QualifiedElement(sample);
 			_ = new IdentityElement(q, "InnerClass");
 			yield return (sample, expected);
-
 		}
 
 		protected override IEnumerable<(ClassElement sample, IPhysicalStorage expected)> GeneratePhysicalStorageSample()
 		{
 			var expected = new PhysicalStorage(PathA);
 			var ns = new NameSpace(expected);
-			var q=new QualifiedElement(ns);
+			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
-			var sample=new ClassElement(ns,ScopeCategories.Public,false,false,false,false,false);
+			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
 			q = new QualifiedElement(sample);
-			_ = new IdentityElement(q,"Hoge");
+			_ = new IdentityElement(q, "Hoge");
 
 			yield return (sample, expected);
-
 		}
 
 		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
@@ -237,10 +237,10 @@ namespace SharpSourceFinderCoreTests
 			_ = new IdentityElement(q, "Hoge");
 
 			yield return (sample, new[] {q});
-
 		}
 
-		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateDescendantsSample()
+		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateDescendantsSample()
 		{
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
@@ -251,8 +251,7 @@ namespace SharpSourceFinderCoreTests
 			q = new QualifiedElement(sample);
 			var i = new IdentityElement(q, "Hoge");
 
-			yield return (sample, new IDiscriminatedElement[] { q,i });
-
+			yield return (sample, new IDiscriminatedElement[] {q, i});
 		}
 
 		protected override IEnumerable<(ClassElement sample, IQualified expected)> GenerateQualifiedNameSample()
@@ -267,17 +266,19 @@ namespace SharpSourceFinderCoreTests
 			_ = new IdentityElement(q, "Hoge");
 
 			var expected = new QualifiedElement();
-			_ = new IdentityElement(expected, IdentityCategories.Namespace,"Foo");
-			_ = new IdentityElement(expected, IdentityCategories.Class,"Hoge");
+			_ = new IdentityElement(expected, IdentityCategories.Namespace, "Foo");
+			_ = new IdentityElement(expected, IdentityCategories.Class, "Hoge");
 
 			yield return (sample, expected);
-
 		}
 
-		protected override void AreEqual(IQualified actual, IQualified expected) => actual.IsEquivalentTo(expected).IsTrue();
+		protected override void AreEqual(IQualified actual, IQualified expected) =>
+			actual.IsEquivalentTo(expected).IsTrue();
 
 
-		protected override IEnumerable<(ClassElement sample, Stack<(IdentityCategories category, string identity)> expected)> GenerateAggregateIdentitiesSample()
+		protected override
+			IEnumerable<(ClassElement sample, Stack<(IdentityCategories category, string identity)> expected)>
+			GenerateAggregateIdentitiesSample()
 		{
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
@@ -288,14 +289,15 @@ namespace SharpSourceFinderCoreTests
 			q = new QualifiedElement(sample);
 			_ = new IdentityElement(q, "Hoge");
 
-			var expected=new Stack<(IdentityCategories,string)>();
+			var expected = new Stack<(IdentityCategories, string)>();
 			expected.Push((IdentityCategories.Class, "Hoge"));
 
 			yield return (sample, expected);
-
 		}
 
-		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected, Action<ClassElement> registerAction)> GenerateRegisterChildSample()
+		protected override
+			IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected, Action<ClassElement>
+				registerAction)> GenerateRegisterChildSample()
 		{
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
@@ -312,8 +314,8 @@ namespace SharpSourceFinderCoreTests
 				expected.Add(q);
 				_ = new IdentityElement(q, "Hoge");
 			}
-			yield return (sample, expected, act);
 
+			yield return (sample, expected, act);
 		}
 
 		protected override IEnumerable<(ClassElement sample, IDiscriminatedElement errSample)> GenerateErrSample()
@@ -326,7 +328,7 @@ namespace SharpSourceFinderCoreTests
 			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
 
 			var expected = new QualifiedElement();
-			_ = new IdentityElement(expected,  IdentityCategories.Class,"Error");
+			_ = new IdentityElement(expected, IdentityCategories.Class, "Error");
 
 			yield return (sample, expected);
 		}
@@ -343,9 +345,11 @@ namespace SharpSourceFinderCoreTests
 			yield return sample;
 		}
 
-		protected override bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract, bool isSealed, bool isUnsafe,
+		protected override bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
+			bool isSealed, bool isUnsafe,
 			bool isPartial, bool isStatic, string identity,
-			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace, IQualified expectedIdentity, ClassElement sample
+			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace, IQualified expectedIdentity,
+				ClassElement sample
 				) generated)
 		{
 			var storage = new PhysicalStorage(path);
@@ -353,7 +357,7 @@ namespace SharpSourceFinderCoreTests
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, nameSpace);
 
-			var sample = new ClassElement(ns,scope,isAbstract,isSealed,isUnsafe,isPartial,isStatic);
+			var sample = new ClassElement(ns, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic);
 			q = new QualifiedElement(sample);
 			_ = new IdentityElement(q, identity);
 

@@ -307,7 +307,7 @@ namespace SharpSourceFinderCoreTests
 				actual.Length.Is(expected.Count + 1);
 
 				AreEqual(actual[0], sample);
-				for (var i = 1; i < expected.Count; i++) AreEqual(actual[i], expected[i-1]);
+				for (var i = 1; i < expected.Count; i++) AreEqual(actual[i], expected[i - 1]);
 			}
 		}
 
@@ -351,7 +351,6 @@ namespace SharpSourceFinderCoreTests
 
 				while (expected.Count != 0)
 				{
-
 #pragma warning disable IDE0042 // 変数の宣言を分解
 					// ReSharper disable UseDeconstruction
 					var a = actual.Pop();
@@ -362,7 +361,6 @@ namespace SharpSourceFinderCoreTests
 
 					a.category.Is(e.category);
 					a.identity.Is(e.identity);
-
 				}
 			}
 		}

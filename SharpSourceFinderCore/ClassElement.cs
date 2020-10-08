@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class ClassElement : TypeElement
 	{
-		public ClassElement(IDiscriminatedElement parent, ScopeCategories scope, bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic) : base(parent, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic)
+		public ClassElement(IDiscriminatedElement parent, ScopeCategories scope, bool isAbstract, bool isSealed,
+			bool isUnsafe, bool isPartial, bool isStatic) : base(parent, scope, isAbstract, isSealed, isUnsafe,
+			isPartial, isStatic)
 		{
 		}
 
@@ -44,9 +45,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
 			if (other is ClassElement elem)
-			{
-				if (elem.IsBasementEquivalentTo(this)) return true;
-			}
+				if (elem.IsBasementEquivalentTo(this))
+					return true;
 
 			return false;
 		}

@@ -196,7 +196,7 @@ namespace SharpSourceFinderCoreTests
 
 
 			sample = new NameSpace(sample);
-			expected=new QualifiedElement(sample);
+			expected = new QualifiedElement(sample);
 			_ = new IdentityElement(expected, "Hoge");
 			_ = new IdentityElement(expected, "Piyo");
 
@@ -278,7 +278,6 @@ namespace SharpSourceFinderCoreTests
 			var q = new QualifiedElement();
 
 			yield return (sample, q);
-
 		}
 	}
 }

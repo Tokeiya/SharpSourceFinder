@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Design.Serialization;
-using System.Runtime.InteropServices;
 using FastEnumUtility;
 
 namespace Tokeiya3.SharpSourceFinderCore
@@ -10,12 +8,15 @@ namespace Tokeiya3.SharpSourceFinderCore
 		private IQualified? _identity;
 
 
-		protected TypeElement(IDiscriminatedElement parent, ScopeCategories scope,bool isAbstract,bool isSealed, bool isUnsafe, bool isPartial,
+		protected TypeElement(IDiscriminatedElement parent, ScopeCategories scope, bool isAbstract, bool isSealed,
+			bool isUnsafe, bool isPartial,
 			bool isStatic) : base(parent)
 		{
 			if (!FastEnum.IsDefined(scope)) throw new ArgumentOutOfRangeException(nameof(scope));
 
-			if (isAbstract&&(isStatic||isSealed)) throw new ArgumentException($"If {nameof(isAbstract)} is true then {nameof(isStatic)} or {nameof(isSealed)} can't true.");
+			if (isAbstract && (isStatic || isSealed))
+				throw new ArgumentException(
+					$"If {nameof(isAbstract)} is true then {nameof(isStatic)} or {nameof(isSealed)} can't true.");
 			if (isStatic && isSealed)
 				throw new ArgumentException($"{nameof(isStatic)} and {nameof(isSealed)} status are conflicted.");
 
@@ -25,17 +26,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 			IsUnsafe = isUnsafe;
 			IsPartial = isPartial;
 			IsStatic = isStatic;
-		}
-
-		public override void RegisterChild(IDiscriminatedElement child)
-		{
-			if (child is IQualified id)
-			{
-				if (!(_identity is null)) throw new IdentityDuplicatedException();
-				_identity = id;
-			}
-
-			base.RegisterChild(child);
 		}
 
 		public IQualified Identity =>
@@ -54,20 +44,30 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override IPhysicalStorage Storage => Parent.Storage;
 
+		public override void RegisterChild(IDiscriminatedElement child)
+		{
+			if (child is IQualified id)
+			{
+				if (!(_identity is null)) throw new IdentityDuplicatedException();
+				_identity = id;
+			}
+
+			base.RegisterChild(child);
+		}
+
 		protected bool IsBasementEquivalentTo(TypeElement other)
 		{
-			if(other._identity is null || _identity is null) throw new IdentityNotFoundException();
+			if (other._identity is null || _identity is null) throw new IdentityNotFoundException();
 
 			return (
 				GetQualifiedName().IsEquivalentTo(other.GetQualifiedName()) &&
-				IsAbstract==other.IsAbstract &&
-				IsSealed==other.IsSealed &&
+				IsAbstract == other.IsAbstract &&
+				IsSealed == other.IsSealed &&
 				IsUnsafe == other.IsUnsafe &&
 				IsPartial == other.IsPartial &&
 				IsStatic == other.IsStatic &&
 				Scope == other.Scope
 			);
-
 		}
 	}
 }

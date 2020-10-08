@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using Tokeiya3.SharpSourceFinderCore;
 
 namespace Playground
@@ -34,9 +32,6 @@ namespace Playground
 
 			var hoge = a.Descendants().ToArray();
 			var act = sample.Descendants().ToArray();
-
-
 		}
-
 	}
 }

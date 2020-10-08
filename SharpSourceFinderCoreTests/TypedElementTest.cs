@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using ChainingAssertion;
 using FastEnumUtility;
 using Tokeiya3.SharpSourceFinderCore;
@@ -19,14 +17,7 @@ namespace SharpSourceFinderCoreTests
 
 		protected TypedElementTest(ITestOutputHelper output) : base(output)
 		{
-
 		}
-
-		protected abstract IEnumerable<T> GenerateIdentityErrorGetterSample();
-
-		protected abstract bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
-			bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, string identity,
-			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace,IQualified expectedIdentity, T sample) generated);
 
 		private IReadOnlyList<(bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic,
 			ScopeCategories scope)> Combination { get; } =
@@ -37,12 +28,19 @@ namespace SharpSourceFinderCoreTests
 				from isUnsafe in boolAry
 				from isPartial in boolAry
 				from isStatic in boolAry
-				where !((isAbstract&&(isSealed||isStatic))||(isSealed&&isStatic))
+				where !((isAbstract && (isSealed || isStatic)) || (isSealed && isStatic))
 				select (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope)).ToArray();
 
-			
+		protected abstract IEnumerable<T> GenerateIdentityErrorGetterSample();
 
-		protected virtual void AreEqual(IdentityElement actual, IQualified expected)=>ReferenceEquals(actual,expected).IsTrue();
+		protected abstract bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
+			bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, string identity,
+			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace, IQualified expectedIdentity, T sample)
+				generated);
+
+
+		protected virtual void AreEqual(IdentityElement actual, IQualified expected) =>
+			ReferenceEquals(actual, expected).IsTrue();
 
 		[Trait("TestLayer", nameof(TypeElement))]
 		[Fact]
@@ -51,11 +49,8 @@ namespace SharpSourceFinderCoreTests
 			GenerateIdentityErrorGetterSample().IsNotEmpty();
 
 			foreach (var elem in GenerateIdentityErrorGetterSample())
-			{
 				Assert.Throws<IdentityNotFoundException>(() => _ = elem.Identity);
-			}
 		}
-
 
 
 		[Trait("TestLayer", nameof(TypeElement))]
@@ -64,8 +59,8 @@ namespace SharpSourceFinderCoreTests
 		{
 			var isRun = false;
 
-			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
-			{
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic,
+				ScopeCategories scope) in Combination)
 				if (TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Hoge",
 					out var generated))
 				{
@@ -73,7 +68,6 @@ namespace SharpSourceFinderCoreTests
 
 					AreEqual(generated.sample.Identity, generated.expectedIdentity);
 				}
-			}
 
 			isRun.IsTrue();
 		}
@@ -85,18 +79,16 @@ namespace SharpSourceFinderCoreTests
 		{
 			var isRun = false;
 
-			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
-			{
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic,
+				ScopeCategories scope) in Combination)
 				if (TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Hoge",
 					out var generated))
 				{
 					isRun = true;
 					generated.sample.IsUnsafe.Is(isUnsafe);
 				}
-			}
 
 			isRun.IsTrue();
-
 		}
 
 
@@ -106,15 +98,14 @@ namespace SharpSourceFinderCoreTests
 		{
 			var isRun = true;
 
-			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
-			{
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic,
+				ScopeCategories scope) in Combination)
 				if (TryGenerate(PathB, NameSpaceB, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Piyo",
 					out var generated))
 				{
 					isRun = true;
 					generated.sample.IsPartial.Is(isPartial);
 				}
-			}
 
 			isRun.IsTrue();
 		}
@@ -126,21 +117,17 @@ namespace SharpSourceFinderCoreTests
 		{
 			var isRun = true;
 
-			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
-			{
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic,
+				ScopeCategories scope) in Combination)
 				if (TryGenerate(PathB, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Foo",
 					out var generated))
 				{
 					isRun = true;
 					generated.sample.IsStatic.Is(isStatic);
-
 				}
-			}
 
 			isRun.IsTrue();
-
 		}
-
 
 
 		[Trait("TestLayer", nameof(TypeElement))]
@@ -149,18 +136,16 @@ namespace SharpSourceFinderCoreTests
 		{
 			var isRun = true;
 
-			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
-			{
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic,
+				ScopeCategories scope) in Combination)
 				if (TryGenerate(PathA, NameSpaceB, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Bar",
 					out var generated))
 				{
 					isRun = true;
 					generated.sample.Scope.Is(scope);
-
 				}
-			}
-			isRun.IsTrue();
 
+			isRun.IsTrue();
 		}
 
 
@@ -170,18 +155,16 @@ namespace SharpSourceFinderCoreTests
 		{
 			var isRun = true;
 
-			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
-			{
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic,
+				ScopeCategories scope) in Combination)
 				if (TryGenerate(PathB, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "ClassA",
 					out var generated))
 				{
 					isRun = true;
 					generated.sample.IsAbstract.Is(isAbstract);
 				}
-			}
 
 			isRun.IsTrue();
-
 		}
 
 
@@ -191,21 +174,16 @@ namespace SharpSourceFinderCoreTests
 		{
 			var isRun = true;
 
-			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
-			{
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic,
+				ScopeCategories scope) in Combination)
 				if (TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isStatic, isPartial, isStatic,
 					"Identity", out var generated))
 				{
 					isRun = true;
 					generated.sample.IsSealed.Is(isSealed);
 				}
-			}
 
 			isRun.IsTrue();
-
 		}
-
-
-
 	}
 }
