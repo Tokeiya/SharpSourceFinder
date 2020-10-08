@@ -53,8 +53,11 @@ namespace SharpSourceFinderCoreTests
 			IEnumerable<(IIdentity sample, string expectedName, IdentityCategories expectedCategory, IQualified
 				expectedFrom)> GenerateSample()
 		{
-#warning GenerateSample_Is_NotImpl
-			throw new NotImplementedException("GenerateSample is not implemented");
+			var q = new QualifiedElement();
+			var sample = new IdentityElement(q, IdentityCategories.Class,"Hoge");
+
+			yield return (sample, "Hoge", IdentityCategories.Class, q);
+
 		}
 
 		protected override IEnumerable<(IIdentity sample, int expected)> GenerateOrderSample()

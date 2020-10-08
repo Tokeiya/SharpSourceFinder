@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -16,10 +17,10 @@ namespace SharpSourceFinderCoreTests
 		}
 
 		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) =>
-			ReferenceEquals(actual, expected);
+			ReferenceEquals(actual, expected).IsTrue();
 
 		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) =>
-			ReferenceEquals(actual, expected);
+			ReferenceEquals(actual, expected).IsTrue();
 
 
 		protected override IEnumerable<(IdentityElement x, IdentityElement y, IdentityElement z)>
@@ -40,36 +41,58 @@ namespace SharpSourceFinderCoreTests
 
 			yield return (x, y, z);
 
-			_ = new IdentityElement(qx, "Foo");
-			_ = new IdentityElement(qy, "Bar");
-			_ = new IdentityElement(qz, "Piyo");
-
-			yield return (x, y, z);
 		}
 
 		protected override IEnumerable<(IdentityElement x, IdentityElement y)> GenerateLogicallyInEquivalentSample()
 		{
-#warning GenerateLogicallyInEquivalentSample_Is_NotImpl
-			throw new NotImplementedException("GenerateLogicallyInEquivalentSample is not implemented");
+			var qx = new QualifiedElement();
+			var x = new IdentityElement(qx, IdentityCategories.Delegate, "Hoge");
+
+			var qy = new QualifiedElement();
+			var y = new IdentityElement(qy, IdentityCategories.Class, "Hoge");
+
+			yield return (x, y);
 		}
 
 		protected override IEnumerable<(IdentityElement x, IdentityElement y, IdentityElement z)>
 			GeneratePhysicallyTransitiveSample()
 		{
-#warning GeneratePhysicallyTransitiveSample_Is_NotImpl
-			throw new NotImplementedException("GeneratePhysicallyTransitiveSample is not implemented");
+			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var q = new QualifiedElement(ns);
+			var x = new IdentityElement(q, "Foo");
+
+			ns = new NameSpace(new PhysicalStorage(PathA));
+			q = new QualifiedElement(ns);
+			var y = new IdentityElement(q, "Foo");
+
+			ns = new NameSpace(new PhysicalStorage(PathA));
+			q = new QualifiedElement(ns);
+			var z = new IdentityElement(q, "Foo");
+
+			yield return (x, y, z);
+
 		}
 
 		protected override IEnumerable<(IdentityElement x, IdentityElement y)> GeneratePhysicallyInEqualitySample()
 		{
-#warning GeneratePhysicallyInEqualitySample_Is_NotImpl
-			throw new NotImplementedException("GeneratePhysicallyInEqualitySample is not implemented");
+			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var q = new QualifiedElement(ns);
+			var x = new IdentityElement(q, "Foo");
+
+			ns = new NameSpace(new PhysicalStorage(PathB));
+			q = new QualifiedElement(ns);
+			var y = new IdentityElement(q, "Foo");
+
+			yield return (x, y);
 		}
 
 		protected override IEnumerable<(IdentityElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
-#warning GenerateParentSample_Is_NotImpl
-			throw new NotImplementedException("GenerateParentSample is not implemented");
+			var expected = new QualifiedElement();
+			var sample = new IdentityElement(expected, IdentityCategories.Class, "Hoge");
+
+			yield return (sample, expected);
+
 		}
 
 		protected override IEnumerable<(IdentityElement sample, IPhysicalStorage expected)>
@@ -86,42 +109,62 @@ namespace SharpSourceFinderCoreTests
 		protected override IEnumerable<(IdentityElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateGetAncestorsSample()
 		{
-#warning GenerateGetAncestorsSample_Is_NotImpl
-			throw new NotImplementedException("GenerateGetAncestorsSample is not implemented");
+			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var q = new QualifiedElement(ns);
+			var sample = new IdentityElement(q, "Identity");
+
+			yield return (sample, new IDiscriminatedElement[] {q,ns});
 		}
 
 		protected override IEnumerable<(IdentityElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateChildrenSample()
 		{
-#warning GenerateChildrenSample_Is_NotImpl
-			throw new NotImplementedException("GenerateChildrenSample is not implemented");
+			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var q = new QualifiedElement(ns);
+			var sample = new IdentityElement(q, "Identity");
+
+			yield return (sample, Array.Empty<IDiscriminatedElement>());
+
+
 		}
 
 		protected override IEnumerable<(IdentityElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateDescendantsSample()
 		{
-#warning GenerateDescendantsSample_Is_NotImpl
-			throw new NotImplementedException("GenerateDescendantsSample is not implemented");
+			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var q = new QualifiedElement(ns);
+			var sample = new IdentityElement(q, "Identity");
+
+			yield return (sample, Array.Empty<IDiscriminatedElement>());
 		}
 
 		protected override IEnumerable<(IdentityElement sample, IQualified expected)> GenerateQualifiedNameSample()
 		{
-#warning GenerateQualifiedNameSample_Is_NotImpl
-			throw new NotImplementedException("GenerateQualifiedNameSample is not implemented");
+			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var q = new QualifiedElement(ns);
+			var sample = new IdentityElement(q, "Identity");
+
+			var expected = new QualifiedElement();
+			_ = new IdentityElement(expected, IdentityCategories.Namespace, "Identity");
+
+			yield return (sample, expected);
 		}
 
-		protected override void AreEqual(IQualified actual, IQualified expected)
-		{
-#warning AreEqual_Is_NotImpl
-			throw new NotImplementedException("AreEqual is not implemented");
-		}
+		protected override void AreEqual(IQualified actual, IQualified expected) => actual.IsEquivalentTo(expected).IsTrue();
 
 		protected override
 			IEnumerable<(IdentityElement sample, Stack<(IdentityCategories category, string identity)> expected)>
 			GenerateAggregateIdentitiesSample()
 		{
-#warning GenerateAggregateIdentitiesSample_Is_NotImpl
-			throw new NotImplementedException("GenerateAggregateIdentitiesSample is not implemented");
+			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var q = new QualifiedElement(ns);
+			var sample = new IdentityElement(q, "Identity");
+
+			var expected = new Stack<(IdentityCategories, string)>();
+			expected.Push((IdentityCategories.Namespace, "Identity"));
+
+			yield return (sample, expected);
+
 		}
 
 		[Trait("TestLayer", nameof(IdentityElement))]
