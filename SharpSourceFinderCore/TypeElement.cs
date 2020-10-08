@@ -14,7 +14,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 			bool isStatic) : base(parent)
 		{
 			if (!FastEnum.IsDefined(scope)) throw new ArgumentOutOfRangeException(nameof(scope));
-			if(isAbstract&&isSealed) throw new ArgumentException($"{nameof(isAbstract)} and {nameof(isSealed)} status is conflicted");
+
+			if (isAbstract&&(isStatic||isSealed)) throw new ArgumentException($"If {nameof(isAbstract)} is true then {nameof(isStatic)} or {nameof(isSealed)} can't true.");
+			if (isStatic && isSealed)
+				throw new ArgumentException($"{nameof(isStatic)} and {nameof(isSealed)} status are conflicted.");
 
 			IsAbstract = isAbstract;
 			IsSealed = isSealed;

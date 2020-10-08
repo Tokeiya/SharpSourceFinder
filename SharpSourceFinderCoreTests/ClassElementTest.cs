@@ -3,6 +3,7 @@ using FastEnumUtility;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using Tokeiya3.SharpSourceFinderCore;
@@ -12,12 +13,6 @@ namespace SharpSourceFinderCoreTests
 {
 	public class ClassElementTest : TypedElementTest<ClassElement>
 	{
-		const string PathA = @"C:\Hoge\Piyo.cs";
-		const string PathB = @"D:\Foo\Bar.cs";
-
-		const string NsA = "Tokeiya3";
-		const string NsB = "時計屋";
-
 
 		public ClassElementTest(ITestOutputHelper output) : base(output)
 		{
@@ -31,29 +26,34 @@ namespace SharpSourceFinderCoreTests
 		{
 			var boolAry = new[] { true, false };
 
-			var seq = from isUnsafe in boolAry
-					  from isPartial in boolAry
-					  from isStatic in boolAry
-					  from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
-					  select (isUnsafe, isPartial, isStatic, scope);
+			var seq = from isAbstract in boolAry
+				from isSealed in boolAry
+				from isUnsafe in boolAry
+				from isPartial in boolAry
+				from isStatic in boolAry
+				from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
+				select (isAbstract,isSealed,isUnsafe, isPartial, isStatic, scope);
 
-			foreach (var (isUnsafe, isPartial, isStatic, scope) in seq)
+			foreach (var (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope) in seq)
 			{
-				var x = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
-				var y = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
-				var z = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
+				if (isAbstract && (isSealed || isStatic)) continue;
+				if (isSealed && isStatic) continue;
+
+				var x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
+				var y = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
+				var z = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
 
 				yield return (x, y, z);
 			}
 		}
 
-		static ClassElement Generate(string path, string nameSpace, ScopeCategories scope, bool isUnsafe, bool isPartial, bool isStatic, string identity)
+		static ClassElement Generate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,bool isSealed,bool isUnsafe, bool isPartial, bool isStatic, string identity)
 		{
 			var ns = new NameSpace(new PhysicalStorage(path));
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, nameSpace);
 
-			var ret = new ClassElement(ns, scope, isUnsafe, isPartial, isStatic);
+			var ret = new ClassElement(ns, scope,isAbstract,isSealed, isUnsafe, isPartial, isStatic);
 			q = new QualifiedElement(ret);
 			_ = new IdentityElement(q, identity);
 			return ret;
@@ -61,203 +61,313 @@ namespace SharpSourceFinderCoreTests
 
 		protected override IEnumerable<(ClassElement x, ClassElement y)> GenerateLogicallyInEquivalentSample()
 		{
-			var boolAry = new[] { true, false };
+			var boolAry = new[] {true, false};
 
-			var seq = from isUnsafe in boolAry
-					  from isPartial in boolAry
-					  from isStatic in boolAry
-					  from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
-					  select (isUnsafe, isPartial, isStatic, scope);
+			var seq = from isAbstract in boolAry
+				from isSealed in boolAry
+				from isUnsafe in boolAry
+				from isPartial in boolAry
+				from isStatic in boolAry
+				from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
+				select (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope);
 
+			foreach (var (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope) in seq)
 			{
-				foreach (var (isUnsafe, isPartial, isStatic, scope) in seq)
+				if (isAbstract && (isSealed || isStatic)) continue;
+				if (isSealed&&isStatic) continue;
+				
 
-				{
-					var x = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "ClassA");
-					var y = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "ClassN");
-					yield return (x, y);
 
-					x = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
-					y = Generate(PathA, NsB, scope, isUnsafe, isPartial, isStatic, "Class");
-					yield return (x, y);
+				var x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "ClassA");
+				var y = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "ClassN");
+				yield return (x, y);
 
-				}
+				x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
+				y = Generate(PathA, NameSpaceB, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
+				yield return (x, y);
+
 			}
 
-			yield return (Generate(PathB, NsA, ScopeCategories.Public, true, true, true, "Hoge"),
-					Generate(PathB, NsA, ScopeCategories.Private, true, true, true, "Hoge"));
+			yield return (Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
+				Generate(PathB, NameSpaceA, ScopeCategories.Private, false, false, true, true, true, "Hoge"));
 
-			yield return (Generate(PathA, NsB, ScopeCategories.Public, true, true, true, "Hoge"),
-					Generate(PathA, NsB, ScopeCategories.Public, false, true, true, "Hoge"));
+			yield return (Generate(PathA, NameSpaceB, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
+				Generate(PathA, NameSpaceB, ScopeCategories.Public, false, false, false, true, true, "Hoge"));
 
-			yield return (Generate(PathB, NsB, ScopeCategories.Public, true, true, true, "Hoge"),
-				Generate(PathB, NsB, ScopeCategories.Public, true, false, true, "Hoge"));
+			yield return (Generate(PathB, NameSpaceB, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
+				Generate(PathB, NameSpaceB, ScopeCategories.Public, false, false, true, false, true, "Hoge"));
 
-			yield return (Generate(PathB, NsA, ScopeCategories.Public, true, true, true, "Hoge"),
-				Generate(PathB, NsA, ScopeCategories.Public, true, true, false, "Hoge"));
+			yield return (Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
+				Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, false, "Hoge"));
+
+			yield return (Generate(PathA, NameSpaceA, ScopeCategories.Public, true, false, true, true, true, "Hoge"),
+					Generate(PathA, NameSpaceA, ScopeCategories.Public, false, false, true, true, true, "Hoge"));
+
 		}
 
-		protected override IEnumerable<(ClassElement x, ClassElement y, ClassElement z)> GeneratePhysicallyTransitiveSample()
+		protected override IEnumerable<(ClassElement x, ClassElement y, ClassElement z)>
+			GeneratePhysicallyTransitiveSample()
 		{
-			var boolAry = new[] { true, false };
+			var boolAry = new[] {true, false};
 
-			var seq = from isUnsafe in boolAry
-					  from isPartial in boolAry
-					  from isStatic in boolAry
-					  from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
-					  select (isUnsafe, isPartial, isStatic, scope);
+			var seq = from isAbstract in boolAry
+				from isSealed in boolAry
+				from isUnsafe in boolAry
+				from isPartial in boolAry
+				from isStatic in boolAry
+				from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
+				select (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope);
 
-			foreach (var (isUnsafe, isPartial, isStatic, scope) in seq)
+			foreach (var (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope) in seq)
 			{
-				yield return (Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class"),
-					Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class"),
-					Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class"));
+				if (isAbstract && (isSealed || isStatic)) continue;
+				if (isSealed && isStatic) continue;
+
+				yield return (Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class"),
+					Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class"),
+					Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class"));
 			}
 		}
 
 		protected override IEnumerable<(ClassElement x, ClassElement y)> GeneratePhysicallyInEqualitySample()
 		{
-			var boolAry = new[] { true, false };
+			var boolAry = new[] {true, false};
 
-			var seq = from isUnsafe in boolAry
-					  from isPartial in boolAry
-					  from isStatic in boolAry
-					  from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
-					  select (isUnsafe, isPartial, isStatic, scope);
+			var seq = from isAbstract in boolAry
+				from isSealed in boolAry
+				from isUnsafe in boolAry
+				from isPartial in boolAry
+				from isStatic in boolAry
+				from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
+				select (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope);
 
+			foreach (var (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope) in seq)
 			{
-				foreach (var (isUnsafe, isPartial, isStatic, scope) in seq)
+				if (isAbstract && (isSealed || isStatic)) continue;
+				if (isSealed && isStatic) continue;
 
-				{
-					var x = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "ClassA");
-					var y = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "ClassN");
-					yield return (x, y);
+				var x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "ClassA");
+				var y = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "ClassN");
+				yield return (x, y);
 
-					x = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
-					y = Generate(PathA, NsB, scope, isUnsafe, isPartial, isStatic, "Class");
-					yield return (x, y);
+				x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
+				y = Generate(PathA, NameSpaceB, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
+				yield return (x, y);
 
-					x = Generate(PathA, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
-					y = Generate(PathB, NsA, scope, isUnsafe, isPartial, isStatic, "Class");
-					yield return (x, y);
-				}
+				x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
+				y = Generate(PathB, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
+				yield return (x, y);
 			}
 
-			yield return (Generate(PathB, NsA, ScopeCategories.Public, true, true, true, "Hoge"),
-					Generate(PathB, NsA, ScopeCategories.Private, true, true, true, "Hoge"));
+			yield return (Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
+				Generate(PathB, NameSpaceA, ScopeCategories.Private, false, false, true, true, true, "Hoge"));
 
-			yield return (Generate(PathA, NsB, ScopeCategories.Public, true, true, true, "Hoge"),
-					Generate(PathA, NsB, ScopeCategories.Public, false, true, true, "Hoge"));
+			yield return (Generate(PathA, NameSpaceB, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
+							Generate(PathA, NameSpaceB, ScopeCategories.Public, false, false, false, true, true, "Hoge"));
 
-			yield return (Generate(PathB, NsB, ScopeCategories.Public, true, true, true, "Hoge"),
-				Generate(PathB, NsB, ScopeCategories.Public, true, false, true, "Hoge"));
+			yield return (Generate(PathB, NameSpaceB, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
+				Generate(PathB, NameSpaceB, ScopeCategories.Public, false, false, true, false, true, "Hoge"));
 
-			yield return (Generate(PathB, NsA, ScopeCategories.Public, true, true, true, "Hoge"),
-				Generate(PathB, NsA, ScopeCategories.Public, true, true, false, "Hoge"));
+			yield return (Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
+				Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, false, "Hoge"));
+
+			yield return (Generate(PathA, NameSpaceA, ScopeCategories.Public, true, false, true, true, false, "Hoge"),
+					Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, false, "Hoge"));
+
+
 		}
 
 		protected override IEnumerable<(ClassElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
 			IDiscriminatedElement expected = new NameSpace(new PhysicalStorage(PathA));
 			var q = new QualifiedElement(expected);
-			_ = new IdentityElement(q, "Hoge");
+			_ = new IdentityElement(q, "Foo");
 
-			var sample = new ClassElement(expected, ScopeCategories.Public, false, false, false);
+			var sample = new ClassElement(expected, ScopeCategories.Public, false, false, false, false, false);
 			q = new QualifiedElement(sample);
-			_ = new IdentityElement(q, "Piyo");
-
+			_ = new IdentityElement(q, "SampleClass");
 			yield return (sample, expected);
 
 			expected = sample;
-
-			sample = new ClassElement(expected, ScopeCategories.Private, false, false, false);
+			sample = new ClassElement(expected, ScopeCategories.Public, false, false, false, false, false);
 			q = new QualifiedElement(sample);
-			_ = new IdentityElement(q, "InternalElement");
-
+			_ = new IdentityElement(q, "InnerClass");
 			yield return (sample, expected);
+
 		}
 
 		protected override IEnumerable<(ClassElement sample, IPhysicalStorage expected)> GeneratePhysicalStorageSample()
 		{
 			var expected = new PhysicalStorage(PathA);
 			var ns = new NameSpace(expected);
-			var q = new QualifiedElement(ns);
-			_ = new IdentityElement(q, "NameSpace");
+			var q=new QualifiedElement();
+			_ = new IdentityElement(q, "Foo");
 
-			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false);
+			var sample=new ClassElement(ns,ScopeCategories.Public,false,false,false,false,false);
 			q = new QualifiedElement(sample);
-			_ = new IdentityElement(q, "Class");
+			_ = new IdentityElement(q,"Hoge");
 
 			yield return (sample, expected);
+
 		}
 
-		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateGetAncestorsSample()
+		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateGetAncestorsSample()
 		{
-			var list = new List<IDiscriminatedElement>();
+			var storage = new PhysicalStorage(PathA);
+			var ns = new NameSpace(storage);
+			var q = new QualifiedElement();
+			_ = new IdentityElement(q, "Foo");
 
-
-			var ns = new NameSpace(new PhysicalStorage(PathA));
-			var q = new QualifiedElement(ns);
-			_ = new IdentityElement(q, "NameSpace");
-			list.Add(ns);
-
-			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false);
+			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
 			q = new QualifiedElement(sample);
-			_ = new IdentityElement(q, "ExtClass");
-			list.Reverse();
-			yield return (sample, list);
+			_ = new IdentityElement(q, "Hoge");
 
+			yield return (sample, new[] {ns});
 		}
 
 		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateChildrenSample()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
-			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false);
+			var storage = new PhysicalStorage(PathA);
+			var ns = new NameSpace(storage);
+			var q = new QualifiedElement();
+			_ = new IdentityElement(q, "Foo");
 
-			throw new NotImplementedException();
+			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
+			q = new QualifiedElement(sample);
+			_ = new IdentityElement(q, "Hoge");
+
+			yield return (sample, new[] {q});
+
 		}
 
 		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateDescendantsSample()
 		{
-			throw new NotImplementedException();
+			var storage = new PhysicalStorage(PathA);
+			var ns = new NameSpace(storage);
+			var q = new QualifiedElement();
+			_ = new IdentityElement(q, "Foo");
+
+			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
+			q = new QualifiedElement(sample);
+			_ = new IdentityElement(q, "Hoge");
+
+			yield return (sample, new[] { q });
+
 		}
 
 		protected override IEnumerable<(ClassElement sample, IQualified expected)> GenerateQualifiedNameSample()
 		{
-			throw new NotImplementedException();
+			var storage = new PhysicalStorage(PathA);
+			var ns = new NameSpace(storage);
+			var q = new QualifiedElement();
+			_ = new IdentityElement(q, "Foo");
+
+			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
+			q = new QualifiedElement(sample);
+			_ = new IdentityElement(q, "Hoge");
+
+			var expected = new QualifiedElement();
+			_ = new IdentityElement(expected, "Foo");
+			_ = new IdentityElement(expected, "Hoge");
+
+			yield return (sample, expected);
+
 		}
 
-		protected override void AreEqual(IQualified actual, IQualified expected) => actual.IsSameReferenceAs(expected);
+		protected override void AreEqual(IQualified actual, IQualified expected) => actual.IsEquivalentTo(expected).IsTrue();
+
 
 		protected override IEnumerable<(ClassElement sample, Stack<(IdentityCategories category, string identity)> expected)> GenerateAggregateIdentitiesSample()
 		{
-			throw new NotImplementedException();
+			var storage = new PhysicalStorage(PathA);
+			var ns = new NameSpace(storage);
+			var q = new QualifiedElement();
+			_ = new IdentityElement(q, "Foo");
+
+			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
+			q = new QualifiedElement(sample);
+			_ = new IdentityElement(q, "Hoge");
+
+			var expected=new Stack<(IdentityCategories,string)>();
+			expected.Push((IdentityCategories.Class, "Hoge"));
+
+			yield return (sample, expected);
+
 		}
 
 		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected, Action<ClassElement> registerAction)> GenerateRegisterChildSample()
 		{
-			throw new NotImplementedException();
+			var storage = new PhysicalStorage(PathA);
+			var ns = new NameSpace(storage);
+			var q = new QualifiedElement();
+			_ = new IdentityElement(q, "Foo");
+
+			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
+			var expected = new List<IDiscriminatedElement>();
+
+
+			void act(ClassElement elem)
+			{
+				q = new QualifiedElement(elem);
+				expected.Add(q);
+				_ = new IdentityElement(q, "Hoge");
+			}
+			yield return (sample, expected, act);
+
 		}
 
 		protected override IEnumerable<(ClassElement sample, IDiscriminatedElement errSample)> GenerateErrSample()
 		{
-			throw new NotImplementedException();
-		}
+			var storage = new PhysicalStorage(PathA);
+			var ns = new NameSpace(storage);
+			var q = new QualifiedElement();
+			_ = new IdentityElement(q, "Foo");
 
-		protected override IEnumerable<(ClassElement sample, IQualified expectedIdentity, bool expectedIsUnsafe, bool expectedIsPartial, bool expectedIsStatic, ScopeCategories expectedScope, IPhysicalStorage expectedStorage)> GenerateSample()
-		{
-			throw new NotImplementedException();
+			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
+			q = new QualifiedElement(sample);
+			_ = new IdentityElement(q, "Hoge");
+
+			var expected = new QualifiedElement();
+			_ = new IdentityElement(expected, "Error");
+
+			yield return (sample, expected);
 		}
 
 		protected override IEnumerable<ClassElement> GenerateIdentityErrorGetterSample()
 		{
-			throw new NotImplementedException();
+			var storage = new PhysicalStorage(PathA);
+			var ns = new NameSpace(storage);
+			var q = new QualifiedElement();
+			_ = new IdentityElement(q, "Foo");
+
+			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
+
+			yield return sample;
 		}
 
-		protected override void AreEqual(IdentityElement actual, IQualified expected)
+		protected override bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract, bool isSealed, bool isUnsafe,
+			bool isPartial, bool isStatic, string identity,
+			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace, IQualified expectedIdentity, ClassElement sample
+				) generated)
 		{
-			throw new NotImplementedException();
+			var storage = new PhysicalStorage(path);
+			var ns = new NameSpace(storage);
+			var q = new QualifiedElement(ns);
+			_ = new IdentityElement(q, nameSpace);
+
+			var sample = new ClassElement(ns,scope,isAbstract,isSealed,isUnsafe,isPartial,isStatic);
+			q = new QualifiedElement();
+			_ = new IdentityElement(q, identity);
+
+
+			generated.sample = sample;
+			generated.expectedIdentity = q;
+			generated.expectedNameSpace = ns;
+			generated.expectedStorage = storage;
+
+			return true;
 		}
 	}
 }

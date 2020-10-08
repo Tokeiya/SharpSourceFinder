@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using ChainingAssertion;
 using FastEnumUtility;
 using Tokeiya3.SharpSourceFinderCore;
@@ -9,14 +12,37 @@ namespace SharpSourceFinderCoreTests
 {
 	public abstract class TypedElementTest<T> : NonTerminalElementTest<T, IDiscriminatedElement> where T : TypeElement
 	{
+		protected const string PathA = @"C:\Hoge\Piyo.cs";
+		protected const string PathB = @"D:\Foo\Bar.cs";
+		protected const string NameSpaceA = "Tokeiya3";
+		protected const string NameSpaceB = "時計屋";
+
 		protected TypedElementTest(ITestOutputHelper output) : base(output)
 		{
+
 		}
 
 		protected abstract IEnumerable<T> GenerateIdentityErrorGetterSample();
 
+		protected abstract bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
+			bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, string identity,
+			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace,IQualified expectedIdentity, T sample) generated);
 
-		protected abstract void AreEqual(IdentityElement actual, IQualified expected);
+		private IReadOnlyList<(bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic,
+			ScopeCategories scope)> Combination { get; } =
+			(from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
+				let boolAry = new[] {true, false}
+				from isAbstract in boolAry
+				from isSealed in boolAry
+				from isUnsafe in boolAry
+				from isPartial in boolAry
+				from isStatic in boolAry
+				where !((isAbstract&&(isSealed||isStatic))||(isSealed&&isStatic))
+				select (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope)).ToArray();
+
+			
+
+		protected virtual void AreEqual(IdentityElement actual, IQualified expected)=>ReferenceEquals(actual,expected).IsTrue();
 
 		[Trait("TestLayer", nameof(TypeElement))]
 		[Fact]
@@ -31,102 +57,152 @@ namespace SharpSourceFinderCoreTests
 		}
 
 
-		protected abstract IEnumerable<(T sample, IQualified expected)> GenerateIdentityGetterSample();
-
 
 		[Trait("TestLayer", nameof(TypeElement))]
 		[Fact]
-		public void IdentityTest()
+		public void IdentityGetTest()
 		{
-			GenerateIdentityGetterSample().IsNotEmpty();
+			var isRun = false;
 
-			foreach ((T sample, IQualified expected)  in GenerateIdentityGetterSample())
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
 			{
-				AreEqual(sample.Identity,expected);
-			}
-		}
+				if (TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Hoge",
+					out var generated))
+				{
+					isRun = true;
 
-		protected abstract IEnumerable<(T sample, bool expected)> GenerateIsUnsafeGetterSample();
+					AreEqual(generated.sample.Identity, generated.expectedIdentity);
+				}
+			}
+
+			isRun.IsTrue();
+		}
 
 
 		[Trait("TestLayer", nameof(TypeElement))]
 		[Fact]
 		public void IsUnsafeGetterTest()
 		{
-			GenerateIsUnsafeGetterSample().IsNotEmpty();
+			var isRun = false;
 
-			foreach (var (sample, expected) in GenerateIsUnsafeGetterSample()) sample.IsUnsafe.Is(expected);
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
+			{
+				if (TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Hoge",
+					out var generated))
+				{
+					isRun = true;
+					generated.sample.IsUnsafe.Is(isUnsafe);
+				}
+			}
+
+			isRun.IsTrue();
+
 		}
 
-		protected abstract IEnumerable<(T sample, bool expected)> GenerateIsPartialGetterSample();
 
 		[Trait("TestLayer", nameof(TypeElement))]
 		[Fact]
 		public void IsPartialGetterTest()
 		{
-			GenerateIsPartialGetterSample().IsNotEmpty();
-			foreach (var (sample,expected) in GenerateIsPartialGetterSample()) sample.IsPartial.Is(expected);
+			var isRun = true;
+
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
+			{
+				if (TryGenerate(PathB, NameSpaceB, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Piyo",
+					out var generated))
+				{
+					isRun = true;
+					generated.sample.IsPartial.Is(isPartial);
+				}
+			}
+
+			isRun.IsTrue();
 		}
 
-		protected abstract IEnumerable<(T sample, bool expected)> GenerateIsStaticGetterTest();
-		
-		
+
 		[Trait("TestLayer", nameof(TypeElement))]
 		[Fact]
 		public void IsStaticGetterTest()
 		{
-			GenerateIsStaticGetterTest().IsNotEmpty();
+			var isRun = true;
 
-			foreach (var (sample, expected) in GenerateIsStaticGetterTest()) sample.IsStatic.Is(expected);
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
+			{
+				if (TryGenerate(PathB, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Foo",
+					out var generated))
+				{
+					isRun = true;
+					generated.sample.IsStatic.Is(isStatic);
+
+				}
+			}
+
+			isRun.IsTrue();
+
 		}
 
-		protected abstract IEnumerable<(T sample, ScopeCategories expected)> GenerateScopeGetterSample();
+
 
 		[Trait("TestLayer", nameof(TypeElement))]
 		[Fact]
 		public void ScopeGetterTest()
 		{
-			GenerateScopeGetterSample().IsNotEmpty();
+			var isRun = true;
 
-			foreach (var (sample, expected) in GenerateScopeGetterSample())
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
 			{
-				FastEnum.IsDefined(sample.Scope).IsTrue();
-				FastEnum.IsDefined(expected).IsTrue();
+				if (TryGenerate(PathA, NameSpaceB, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Bar",
+					out var generated))
+				{
+					isRun = true;
+					generated.sample.Scope.Is(scope);
 
-				sample.Scope.Is(expected);
+				}
 			}
+			isRun.IsTrue();
+
 		}
 
-		protected abstract IEnumerable<(T sample, bool expected)> GenerateIsAbstractSample();
 
 		[Trait("TestLayer", nameof(TypeElement))]
 		[Fact]
 		public void IsAbstractGetterTest()
 		{
-			GenerateIsAbstractSample().IsNotEmpty();
+			var isRun = true;
 
-			foreach ((T sample, bool expected)  in GenerateIsAbstractSample())
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
 			{
-				sample.IsAbstract.Is(expected);
-
-				if(sample.IsAbstract) sample.IsSealed.IsFalse();
+				if (TryGenerate(PathB, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "ClassA",
+					out var generated))
+				{
+					isRun = true;
+					generated.sample.IsAbstract.Is(isAbstract);
+				}
 			}
+
+			isRun.IsTrue();
+
 		}
 
-		protected abstract IEnumerable<(T sample, bool expected)> GenerateIsSealedSample();
 
 		[Trait("TestLayer", nameof(TypeElement))]
 		[Fact]
 		public void IsSealedGetterTest()
 		{
-			GenerateIsSealedSample().IsNotEmpty();
+			var isRun = true;
 
-			foreach (var (sample,expected) in GenerateIsSealedSample())
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
 			{
-				sample.IsSealed.Is(expected);
-
-				if (sample.IsSealed) sample.IsAbstract.IsFalse();
+				if (TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isStatic, isPartial, isStatic,
+					"Identity", out var generated))
+				{
+					isRun = true;
+					generated.sample.IsSealed.Is(isSealed);
+				}
 			}
+
+			isRun.IsTrue();
+
 		}
 
 
