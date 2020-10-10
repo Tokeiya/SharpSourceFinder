@@ -1,5 +1,5 @@
-using ChainingAssertion;
 using System.Collections.Generic;
+using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;

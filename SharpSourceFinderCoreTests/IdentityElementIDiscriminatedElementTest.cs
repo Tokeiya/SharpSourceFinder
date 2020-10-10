@@ -1,6 +1,6 @@
-using ChainingAssertion;
 using System;
 using System.Collections.Generic;
+using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -40,7 +40,6 @@ namespace SharpSourceFinderCoreTests
 			var z = new IdentityElement(qz, "Hoge");
 
 			yield return (x, y, z);
-
 		}
 
 		protected override IEnumerable<(IdentityElement x, IdentityElement y)> GenerateLogicallyInEquivalentSample()
@@ -70,7 +69,6 @@ namespace SharpSourceFinderCoreTests
 			var z = new IdentityElement(q, "Foo");
 
 			yield return (x, y, z);
-
 		}
 
 		protected override IEnumerable<(IdentityElement x, IdentityElement y)> GeneratePhysicallyInEqualitySample()
@@ -92,7 +90,6 @@ namespace SharpSourceFinderCoreTests
 			var sample = new IdentityElement(expected, IdentityCategories.Class, "Hoge");
 
 			yield return (sample, expected);
-
 		}
 
 		protected override IEnumerable<(IdentityElement sample, IPhysicalStorage expected)>
@@ -113,7 +110,7 @@ namespace SharpSourceFinderCoreTests
 			var q = new QualifiedElement(ns);
 			var sample = new IdentityElement(q, "Identity");
 
-			yield return (sample, new IDiscriminatedElement[] { q, ns });
+			yield return (sample, new IDiscriminatedElement[] {q, ns});
 		}
 
 		protected override IEnumerable<(IdentityElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
@@ -124,8 +121,6 @@ namespace SharpSourceFinderCoreTests
 			var sample = new IdentityElement(q, "Identity");
 
 			yield return (sample, Array.Empty<IDiscriminatedElement>());
-
-
 		}
 
 		protected override IEnumerable<(IdentityElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
@@ -150,7 +145,8 @@ namespace SharpSourceFinderCoreTests
 			yield return (sample, expected);
 		}
 
-		protected override void AreEqual(IQualified actual, IQualified expected) => actual.IsEquivalentTo(expected).IsTrue();
+		protected override void AreEqual(IQualified actual, IQualified expected) =>
+			actual.IsEquivalentTo(expected).IsTrue();
 
 		protected override
 			IEnumerable<(IdentityElement sample, Stack<(IdentityCategories category, string identity)> expected)>
@@ -164,7 +160,6 @@ namespace SharpSourceFinderCoreTests
 			expected.Push((IdentityCategories.Namespace, "Identity"));
 
 			yield return (sample, expected);
-
 		}
 
 		[Trait("TestLayer", nameof(IdentityElement))]

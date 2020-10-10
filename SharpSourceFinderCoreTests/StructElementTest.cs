@@ -1,35 +1,33 @@
 using System;
 using System.Collections.Generic;
-using Tokeiya3.SharpSourceFinderCore;
-using Xunit.Abstractions;
 using ChainingAssertion;
+using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
-
+using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
 	public class StructElementTest : TypedElementTest<StructElement>
 	{
-
 		public StructElementTest(ITestOutputHelper output) : base(output)
 		{
 		}
 
-		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) => actual.IsSameReferenceAs(expected);
+		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) =>
+			actual.IsSameReferenceAs(expected);
 
-		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) => actual.IsSameReferenceAs(expected);
+		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) =>
+			actual.IsSameReferenceAs(expected);
 
-		static IQualified AttachName(IDiscriminatedElement target,params string[] name)
+		static IQualified AttachName(IDiscriminatedElement target, params string[] name)
 		{
 			var q = new QualifiedElement(target);
 
-			foreach (var s in name)
-			{
-				_ = new IdentityElement(q, s);
-			}
+			foreach (var s in name) _ = new IdentityElement(q, s);
 
 			return q;
 		}
+
 		[Trait("TestLayer", nameof(StructElement))]
 		[Fact]
 		public void GetQualifiedTest()
@@ -41,8 +39,8 @@ namespace SharpSourceFinderCoreTests
 				actual.Name.Is(expectedName);
 				actual.From.IsSameReferenceAs(expectedQualified);
 				actual.Order.Is(expectedOrder);
-
 			}
+
 			IDiscriminatedElement parent = new NameSpace(new PhysicalStorage(PathA));
 			AttachName(parent, "Hoge", "Piyo");
 
@@ -68,9 +66,10 @@ namespace SharpSourceFinderCoreTests
 
 			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
 			yield return (sample, ns);
-
 		}
-		protected override IEnumerable<(StructElement sample, IPhysicalStorage expected)> GeneratePhysicalStorageSample()
+
+		protected override IEnumerable<(StructElement sample, IPhysicalStorage expected)>
+			GeneratePhysicalStorageSample()
 		{
 			var storage = new PhysicalStorage(PathB);
 			var ns = new NameSpace(storage);
@@ -80,7 +79,8 @@ namespace SharpSourceFinderCoreTests
 			yield return (sample, storage);
 		}
 
-		protected override IEnumerable<(StructElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateGetAncestorsSample()
+		protected override IEnumerable<(StructElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateGetAncestorsSample()
 		{
 			var ns = new NameSpace(new PhysicalStorage(PathA));
 			var upper = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
@@ -88,8 +88,7 @@ namespace SharpSourceFinderCoreTests
 
 			var sample = new StructElement(upper, ScopeCategories.Public, false, false);
 
-			yield return (sample, new IDiscriminatedElement[] {upper,ns});
-
+			yield return (sample, new IDiscriminatedElement[] {upper, ns});
 		}
 
 		protected override IEnumerable<(StructElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
@@ -99,17 +98,17 @@ namespace SharpSourceFinderCoreTests
 			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
 			var q = AttachName(sample, "Hoge");
 
-			yield return (sample, new IDiscriminatedElement[] {(QualifiedElement)q});
-
+			yield return (sample, new IDiscriminatedElement[] {(QualifiedElement) q});
 		}
 
-		protected override IEnumerable<(StructElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateDescendantsSample()
+		protected override IEnumerable<(StructElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateDescendantsSample()
 		{
 			var ns = new NameSpace(new PhysicalStorage(PathA));
 			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
 			var q = AttachName(sample, "Foo");
 
-			yield return (sample, new [] { (IDiscriminatedElement)q,(IDiscriminatedElement)q.Identities[0] });
+			yield return (sample, new[] {(IDiscriminatedElement) q, (IDiscriminatedElement) q.Identities[0]});
 		}
 
 		protected override IEnumerable<(StructElement sample, IQualified expected)> GenerateQualifiedNameSample()
@@ -125,11 +124,10 @@ namespace SharpSourceFinderCoreTests
 			_ = new IdentityElement(expected, IdentityCategories.Struct, "Foo");
 
 			yield return (sample, expected);
-
-
 		}
 
-		protected override void AreEqual(IQualified actual, IQualified expected) => actual.IsEquivalentTo(expected).IsTrue();
+		protected override void AreEqual(IQualified actual, IQualified expected) =>
+			actual.IsEquivalentTo(expected).IsTrue();
 
 
 		protected override
@@ -154,10 +152,11 @@ namespace SharpSourceFinderCoreTests
 			expected.Push((IdentityCategories.Struct, "ValueType"));
 
 			yield return (sample, expected);
-
 		}
 
-		protected override IEnumerable<(StructElement sample, IReadOnlyList<IDiscriminatedElement> expected, Action<StructElement> registerAction)> GenerateRegisterChildSample()
+		protected override
+			IEnumerable<(StructElement sample, IReadOnlyList<IDiscriminatedElement> expected, Action<StructElement>
+				registerAction)> GenerateRegisterChildSample()
 		{
 			var ns = new NameSpace(new PhysicalStorage(PathA));
 			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
@@ -181,7 +180,6 @@ namespace SharpSourceFinderCoreTests
 			var another = new StructElement(ns, ScopeCategories.Public, false, false);
 
 			yield return (sample, another);
-
 		}
 
 		protected override IEnumerable<StructElement> GenerateIdentityErrorGetterSample()
@@ -209,7 +207,7 @@ namespace SharpSourceFinderCoreTests
 
 			var storage = new PhysicalStorage(path);
 			var ns = new NameSpace(storage);
-			AttachName(ns,nameSpace);
+			AttachName(ns, nameSpace);
 
 			var sample = new StructElement(ns, scope, isUnsafe, isPartial);
 			var q = AttachName(sample, identity);
@@ -220,7 +218,6 @@ namespace SharpSourceFinderCoreTests
 			generated.expectedStorage = storage;
 
 			return true;
-
 		}
 	}
 }

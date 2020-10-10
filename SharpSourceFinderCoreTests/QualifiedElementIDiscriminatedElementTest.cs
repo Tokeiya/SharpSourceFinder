@@ -1,6 +1,6 @@
-using ChainingAssertion;
 using System;
 using System.Collections.Generic;
+using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
 
@@ -144,12 +144,12 @@ namespace SharpSourceFinderCoreTests
 			var ns = new NameSpace(new PhysicalStorage(PathA));
 			var sample = new QualifiedElement(ns);
 
-			yield return (sample, new[] { ns });
+			yield return (sample, new[] {ns});
 
 			var nsa = new NameSpace(ns);
 			sample = new QualifiedElement(nsa);
 
-			yield return (sample, new[] { nsa, ns });
+			yield return (sample, new[] {nsa, ns});
 		}
 
 		protected override IEnumerable<(QualifiedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>

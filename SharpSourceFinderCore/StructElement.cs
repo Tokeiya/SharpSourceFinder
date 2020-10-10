@@ -5,7 +5,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class StructElement : TypeElement
 	{
-		public StructElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe, bool isPartial) 
+		public StructElement(IDiscriminatedElement parent, ScopeCategories scope, bool isUnsafe, bool isPartial)
 			: base(parent, scope, false, true, isUnsafe, isPartial, false)
 		{
 		}
@@ -16,11 +16,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 			try
 			{
-
-				foreach (var elem in AncestorsAndSelf())
-				{
-					elem.AggregateIdentities(stack);
-				}
+				foreach (var elem in AncestorsAndSelf()) elem.AggregateIdentities(stack);
 				var ret = new QualifiedElement();
 
 				while (stack.Count != 0)
@@ -40,10 +36,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
 		{
-			foreach (var elem in Identity.Identities)
-			{
-				accumulator.Push((elem.Category, elem.Name));
-			}
+			foreach (var elem in Identity.Identities) accumulator.Push((elem.Category, elem.Name));
 		}
 
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)

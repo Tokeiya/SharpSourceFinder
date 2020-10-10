@@ -1,7 +1,6 @@
-using ChainingAssertion;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
+using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -25,11 +24,7 @@ namespace SharpSourceFinderCoreTests
 		{
 			var ret = new QualifiedElement(target);
 
-			foreach (var name in names)
-			{
-				_ = new IdentityElement(ret, name);
-
-			}
+			foreach (var name in names) _ = new IdentityElement(ret, name);
 
 			return ret;
 		}
@@ -45,8 +40,8 @@ namespace SharpSourceFinderCoreTests
 				actual.Name.Is(expectedName);
 				actual.From.IsSameReferenceAs(expectedQualified);
 				actual.Order.Is(expectedOrder);
-
 			}
+
 			IDiscriminatedElement parent = new NameSpace(new PhysicalStorage(PathA));
 			AttachName(parent, "Hoge", "Piyo");
 
@@ -59,12 +54,11 @@ namespace SharpSourceFinderCoreTests
 
 			actual.Identities.Count.Is(4);
 
-			areEquivalent(actual.Identities[0], IdentityCategories.Namespace,"Hoge",actual,1);
-			areEquivalent(actual.Identities[1],IdentityCategories.Namespace,"Piyo",actual,2);
+			areEquivalent(actual.Identities[0], IdentityCategories.Namespace, "Hoge", actual, 1);
+			areEquivalent(actual.Identities[1], IdentityCategories.Namespace, "Piyo", actual, 2);
 			areEquivalent(actual.Identities[2], IdentityCategories.Class, "Foo", actual, 3);
-			areEquivalent(actual.Identities[3], IdentityCategories.Class, "Bar", actual,4);
+			areEquivalent(actual.Identities[3], IdentityCategories.Class, "Bar", actual, 4);
 		}
-
 
 
 		protected override IEnumerable<(ClassElement sample, IDiscriminatedElement expected)> GenerateParentSample()
@@ -111,7 +105,7 @@ namespace SharpSourceFinderCoreTests
 			q = new QualifiedElement(sample);
 			_ = new IdentityElement(q, "Hoge");
 
-			yield return (sample, new[] { ns });
+			yield return (sample, new[] {ns});
 		}
 
 		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
@@ -126,7 +120,7 @@ namespace SharpSourceFinderCoreTests
 			q = new QualifiedElement(sample);
 			_ = new IdentityElement(q, "Hoge");
 
-			yield return (sample, new[] { q });
+			yield return (sample, new[] {q});
 		}
 
 		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
@@ -141,7 +135,7 @@ namespace SharpSourceFinderCoreTests
 			q = new QualifiedElement(sample);
 			var i = new IdentityElement(q, "Hoge");
 
-			yield return (sample, new IDiscriminatedElement[] { q, i });
+			yield return (sample, new IDiscriminatedElement[] {q, i});
 		}
 
 		protected override IEnumerable<(ClassElement sample, IQualified expected)> GenerateQualifiedNameSample()

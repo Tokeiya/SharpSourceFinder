@@ -115,7 +115,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public override void RegisterChild(IDiscriminatedElement child)
 		{
 			base.RegisterChild(child);
-			((IdentityElement)child).Order = TypedChildren.Count;
+			((IdentityElement) child).Order = TypedChildren.Count;
 		}
 	}
 }

@@ -17,11 +17,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 			try
 			{
-
-				foreach (var elem in AncestorsAndSelf())
-				{
-					elem.AggregateIdentities(stack);
-				}
+				foreach (var elem in AncestorsAndSelf()) elem.AggregateIdentities(stack);
 
 				var ret = new QualifiedElement();
 

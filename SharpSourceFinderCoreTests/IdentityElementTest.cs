@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using ChainingAssertion;
 using FastEnumUtility;
-using System.Collections.Generic;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
 
@@ -56,7 +56,6 @@ namespace SharpSourceFinderCoreTests
 			var sample = new IdentityElement(q, IdentityCategories.Class, "Hoge");
 
 			yield return (sample, "Hoge", IdentityCategories.Class, q);
-
 		}
 
 		protected override IEnumerable<(IIdentity sample, int expected)> GenerateOrderSample()
