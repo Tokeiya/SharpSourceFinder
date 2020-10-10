@@ -1,5 +1,5 @@
-﻿using System;
-using FastEnumUtility;
+﻿using FastEnumUtility;
+using System;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {

@@ -1,6 +1,6 @@
+using ChainingAssertion;
 using System;
 using System.Collections.Generic;
-using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
 
@@ -135,14 +135,14 @@ namespace SharpSourceFinderCoreTests
 			var b = new NameSpace(a);
 			var c = new NameSpace(b);
 
-			yield return (c, new[] {b, a});
+			yield return (c, new[] { b, a });
 		}
 
 		protected override IEnumerable<(NameSpace sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateChildrenSample()
 		{
 			var sample = new NameSpace(new PhysicalStorage(PathA));
-			var expected = new[] {new NameSpace(sample), new NameSpace(sample), new NameSpace(sample)};
+			var expected = new[] { new NameSpace(sample), new NameSpace(sample), new NameSpace(sample) };
 
 			yield return (sample, expected);
 		}

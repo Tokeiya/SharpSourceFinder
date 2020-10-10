@@ -1,6 +1,6 @@
+using ChainingAssertion;
 using System;
 using System.Collections.Generic;
-using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -113,7 +113,7 @@ namespace SharpSourceFinderCoreTests
 			var q = new QualifiedElement(ns);
 			var sample = new IdentityElement(q, "Identity");
 
-			yield return (sample, new IDiscriminatedElement[] {q,ns});
+			yield return (sample, new IDiscriminatedElement[] { q, ns });
 		}
 
 		protected override IEnumerable<(IdentityElement sample, IReadOnlyList<IDiscriminatedElement> expected)>

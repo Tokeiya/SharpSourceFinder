@@ -1,8 +1,8 @@
-﻿using System;
+﻿using FastEnumUtility;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using FastEnumUtility;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
@@ -47,7 +47,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public IdentityCategories Category { get; }
 		public string Name { get; }
-		public IQualified From => (IQualified) Parent;
+		public IQualified From => (IQualified)Parent;
 
 		public bool IsEquivalentTo(IIdentity identity) =>
 			(Name == identity.Name && Category == identity.Category && Order == identity.Order);
@@ -88,8 +88,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 			return other switch
 			{
 				IdentityElement elem => IsEquivalentTo(elem) &&
-				                        ((QualifiedElement) Parent).IsLogicallyEquivalentTo(
-					                        ((QualifiedElement) other.Parent), Order),
+										((QualifiedElement)Parent).IsLogicallyEquivalentTo(
+											((QualifiedElement)other.Parent), Order),
 				_ => false
 			};
 		}

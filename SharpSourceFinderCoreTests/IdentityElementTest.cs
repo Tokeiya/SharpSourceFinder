@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
 using ChainingAssertion;
 using FastEnumUtility;
+using System.Collections.Generic;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
 
@@ -54,7 +53,7 @@ namespace SharpSourceFinderCoreTests
 				expectedFrom)> GenerateSample()
 		{
 			var q = new QualifiedElement();
-			var sample = new IdentityElement(q, IdentityCategories.Class,"Hoge");
+			var sample = new IdentityElement(q, IdentityCategories.Class, "Hoge");
 
 			yield return (sample, "Hoge", IdentityCategories.Class, q);
 

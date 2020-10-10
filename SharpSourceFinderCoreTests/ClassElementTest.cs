@@ -1,8 +1,6 @@
+using ChainingAssertion;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using ChainingAssertion;
-using FastEnumUtility;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
 
@@ -34,96 +32,7 @@ namespace SharpSourceFinderCoreTests
 			return ret;
 		}
 
-		protected override IEnumerable<(ClassElement x, ClassElement y)> GenerateLogicallyInEquivalentSample()
-		{
-			var boolAry = new[] {true, false};
 
-			var seq = from isAbstract in boolAry
-				from isSealed in boolAry
-				from isUnsafe in boolAry
-				from isPartial in boolAry
-				from isStatic in boolAry
-				from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
-				select (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope);
-
-			foreach (var (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope) in seq)
-			{
-				if (isAbstract && (isSealed || isStatic)) continue;
-				if (isSealed && isStatic) continue;
-
-
-				var x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
-					"ClassA");
-				var y = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
-					"ClassN");
-				yield return (x, y);
-
-				x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
-				y = Generate(PathA, NameSpaceB, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
-				yield return (x, y);
-			}
-
-			yield return (Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
-				Generate(PathB, NameSpaceA, ScopeCategories.Private, false, false, true, true, true, "Hoge"));
-
-			yield return (Generate(PathA, NameSpaceB, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
-				Generate(PathA, NameSpaceB, ScopeCategories.Public, false, false, false, true, true, "Hoge"));
-
-			yield return (Generate(PathB, NameSpaceB, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
-				Generate(PathB, NameSpaceB, ScopeCategories.Public, false, false, true, false, true, "Hoge"));
-
-			yield return (Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
-				Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, false, "Hoge"));
-		}
-
-
-		protected override IEnumerable<(ClassElement x, ClassElement y)> GeneratePhysicallyInEqualitySample()
-		{
-			var boolAry = new[] {true, false};
-
-			var seq = from isAbstract in boolAry
-				from isSealed in boolAry
-				from isUnsafe in boolAry
-				from isPartial in boolAry
-				from isStatic in boolAry
-				from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
-				select (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope);
-
-			foreach (var (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope) in seq)
-			{
-				if (isAbstract && (isSealed || isStatic)) continue;
-				if (isSealed && isStatic) continue;
-
-				var x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
-					"ClassA");
-				var y = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
-					"ClassN");
-				yield return (x, y);
-
-				x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
-				y = Generate(PathA, NameSpaceB, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
-				yield return (x, y);
-
-				x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
-				y = Generate(PathB, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class");
-				yield return (x, y);
-			}
-
-			yield return (Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
-				Generate(PathB, NameSpaceA, ScopeCategories.Private, false, false, true, true, true, "Hoge"));
-
-			yield return (Generate(PathA, NameSpaceB, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
-				Generate(PathA, NameSpaceB, ScopeCategories.Public, false, false, false, true, true, "Hoge"));
-
-			yield return (Generate(PathB, NameSpaceB, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
-				Generate(PathB, NameSpaceB, ScopeCategories.Public, false, false, true, false, true, "Hoge"));
-
-			yield return (Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, true, "Hoge"),
-				Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, false, "Hoge"));
-
-			yield return (Generate(PathA, NameSpaceA, ScopeCategories.Public, true, false, true, true, false, "Hoge"),
-				Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, false, "Hoge"));
-		}
 
 		protected override IEnumerable<(ClassElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
@@ -169,7 +78,7 @@ namespace SharpSourceFinderCoreTests
 			q = new QualifiedElement(sample);
 			_ = new IdentityElement(q, "Hoge");
 
-			yield return (sample, new[] {ns});
+			yield return (sample, new[] { ns });
 		}
 
 		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
@@ -184,7 +93,7 @@ namespace SharpSourceFinderCoreTests
 			q = new QualifiedElement(sample);
 			_ = new IdentityElement(q, "Hoge");
 
-			yield return (sample, new[] {q});
+			yield return (sample, new[] { q });
 		}
 
 		protected override IEnumerable<(ClassElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
@@ -199,7 +108,7 @@ namespace SharpSourceFinderCoreTests
 			q = new QualifiedElement(sample);
 			var i = new IdentityElement(q, "Hoge");
 
-			yield return (sample, new IDiscriminatedElement[] {q, i});
+			yield return (sample, new IDiscriminatedElement[] { q, i });
 		}
 
 		protected override IEnumerable<(ClassElement sample, IQualified expected)> GenerateQualifiedNameSample()
@@ -300,6 +209,18 @@ namespace SharpSourceFinderCoreTests
 				ClassElement sample
 				) generated)
 		{
+			if (isAbstract && (isStatic || isSealed))
+			{
+				generated = default;
+				return false;
+			}
+
+			if (isStatic && isSealed)
+			{
+				generated = default;
+				return false;
+			}
+
 			var storage = new PhysicalStorage(path);
 			var ns = new NameSpace(storage);
 			var q = new QualifiedElement(ns);

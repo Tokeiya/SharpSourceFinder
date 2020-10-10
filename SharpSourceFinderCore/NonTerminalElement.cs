@@ -17,7 +17,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public IReadOnlyList<T> TypedChildren => _children;
 
-		public override IEnumerable<IDiscriminatedElement> Children() => (IEnumerable<IDiscriminatedElement>) _children;
+		public override IEnumerable<IDiscriminatedElement> Children() => (IEnumerable<IDiscriminatedElement>)_children;
 
 		public override void RegisterChild(IDiscriminatedElement child)
 		{
@@ -27,7 +27,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			if (!ReferenceEquals(this, child.Parent))
 				throw new ArgumentException($"{nameof(child)}'s parent is another.");
 
-			_children.Add((T) child);
+			_children.Add((T)child);
 		}
 	}
 }

@@ -1,6 +1,6 @@
+using ChainingAssertion;
 using System;
 using System.Collections.Generic;
-using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -43,14 +43,14 @@ namespace SharpSourceFinderCoreTests
 			var storage = new PhysicalStorage(PathA);
 			var ns = new NameSpace(storage);
 			sample = new QualifiedElement(ns);
-			expected = new[] {new IdentityElement(sample, "Foo"), new IdentityElement(sample, "Bar")};
+			expected = new[] { new IdentityElement(sample, "Foo"), new IdentityElement(sample, "Bar") };
 
 			yield return (sample, expected);
 
 
 			ns = new NameSpace(ns);
 			sample = new QualifiedElement(ns);
-			expected = new[] {new IdentityElement(sample, "System"), new IdentityElement(sample, "Collections")};
+			expected = new[] { new IdentityElement(sample, "System"), new IdentityElement(sample, "Collections") };
 
 			yield return (sample, expected);
 		}

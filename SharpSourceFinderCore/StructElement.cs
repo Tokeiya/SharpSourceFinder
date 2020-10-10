@@ -12,6 +12,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override QualifiedElement GetQualifiedName()
 		{
+
 #warning GetQualifiedName_Is_NotImpl
 			throw new NotImplementedException("GetQualifiedName is not implemented");
 		}

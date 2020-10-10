@@ -1,6 +1,6 @@
+using ChainingAssertion;
 using System.Collections.Generic;
 using System.Linq;
-using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
