@@ -43,11 +43,11 @@ namespace SharpSourceFinderCoreTests
 
 		protected override IEnumerable<(T x, T y, T z)> GenerateLogicallyTransitiveSample()
 		{
-			foreach (var param in Combination)
+			foreach (var (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope) in Combination)
 			{
-				if (TryGenerate(PathA, NameSpaceA, param.scope, param.isAbstract, param.isSealed, param.isUnsafe, param.isPartial, param.isStatic, "Identity", out var x) &&
-					TryGenerate(PathB, NameSpaceA, param.scope, param.isAbstract, param.isSealed, param.isUnsafe, param.isPartial, param.isStatic, "Identity", out var y) &&
-					TryGenerate(PathA, NameSpaceA, param.scope, param.isAbstract, param.isSealed, param.isUnsafe, param.isPartial, param.isStatic, "Identity", out var z))
+				if (TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Identity", out var x) &&
+					TryGenerate(PathB, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Identity", out var y) &&
+					TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Identity", out var z))
 				{
 					yield return (x.sample, y.sample, z.sample);
 				}
@@ -56,11 +56,11 @@ namespace SharpSourceFinderCoreTests
 
 		protected override IEnumerable<(T x, T y, T z)> GeneratePhysicallyTransitiveSample()
 		{
-			foreach (var param in Combination)
+			foreach (var (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope) in Combination)
 			{
-				if (TryGenerate(PathA, NameSpaceA, param.scope, param.isAbstract, param.isSealed, param.isUnsafe, param.isPartial, param.isStatic, "Identity", out var x) &&
-					TryGenerate(PathA, NameSpaceA, param.scope, param.isAbstract, param.isSealed, param.isUnsafe, param.isPartial, param.isStatic, "Identity", out var y) &&
-					TryGenerate(PathA, NameSpaceA, param.scope, param.isAbstract, param.isSealed, param.isUnsafe, param.isPartial, param.isStatic, "Identity", out var z))
+				if (TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Identity", out var x) &&
+					TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Identity", out var y) &&
+					TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Identity", out var z))
 				{
 					yield return (x.sample, y.sample, z.sample);
 				}

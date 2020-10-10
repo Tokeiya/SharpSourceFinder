@@ -19,20 +19,6 @@ namespace SharpSourceFinderCoreTests
 			actual.IsSameReferenceAs(expected);
 
 
-		static ClassElement Generate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
-			bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, string identity)
-		{
-			var ns = new NameSpace(new PhysicalStorage(path));
-			var q = new QualifiedElement(ns);
-			_ = new IdentityElement(q, nameSpace);
-
-			var ret = new ClassElement(ns, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic);
-			q = new QualifiedElement(ret);
-			_ = new IdentityElement(q, identity);
-			return ret;
-		}
-
-
 
 		protected override IEnumerable<(ClassElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
