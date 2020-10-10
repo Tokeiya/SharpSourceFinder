@@ -1,7 +1,9 @@
 using ChainingAssertion;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Tokeiya3.SharpSourceFinderCore;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
@@ -17,6 +19,51 @@ namespace SharpSourceFinderCoreTests
 
 		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) =>
 			actual.IsSameReferenceAs(expected);
+
+
+		static QualifiedElement AttachName(IDiscriminatedElement target, params string[] names)
+		{
+			var ret = new QualifiedElement(target);
+
+			foreach (var name in names)
+			{
+				_ = new IdentityElement(ret, name);
+
+			}
+
+			return ret;
+		}
+
+		[Trait("TestLayer", nameof(ClassElement))]
+		[Fact]
+		public void GetQualifiedTest()
+		{
+			static void areEquivalent(IIdentity actual, IdentityCategories expectedCategory, string expectedName,
+				IQualified expectedQualified, int expectedOrder)
+			{
+				actual.Category.Is(expectedCategory);
+				actual.Name.Is(expectedName);
+				actual.From.IsSameReferenceAs(expectedQualified);
+				actual.Order.Is(expectedOrder);
+
+			}
+			IDiscriminatedElement parent = new NameSpace(new PhysicalStorage(PathA));
+			AttachName(parent, "Hoge", "Piyo");
+
+			parent = new ClassElement(parent, ScopeCategories.Public, false, false, false, false, false);
+			AttachName(parent, "Foo");
+
+			var sample = new ClassElement(parent, ScopeCategories.Public, false, false, false, false, false);
+			AttachName(sample, "Bar");
+			var actual = sample.GetQualifiedName();
+
+			actual.Identities.Count.Is(4);
+
+			areEquivalent(actual.Identities[0], IdentityCategories.Namespace,"Hoge",actual,1);
+			areEquivalent(actual.Identities[1],IdentityCategories.Namespace,"Piyo",actual,2);
+			areEquivalent(actual.Identities[2], IdentityCategories.Class, "Foo", actual, 3);
+			areEquivalent(actual.Identities[3], IdentityCategories.Class, "Bar", actual,4);
+		}
 
 
 
