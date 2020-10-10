@@ -20,34 +20,6 @@ namespace SharpSourceFinderCoreTests
 		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) =>
 			actual.IsSameReferenceAs(expected);
 
-		protected override IEnumerable<(ClassElement x, ClassElement y, ClassElement z)>
-			GenerateLogicallyTransitiveSample()
-		{
-			var boolAry = new[] {true, false};
-
-			var seq = from isAbstract in boolAry
-				from isSealed in boolAry
-				from isUnsafe in boolAry
-				from isPartial in boolAry
-				from isStatic in boolAry
-				from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
-				select (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope);
-
-			foreach (var (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope) in seq)
-			{
-				if (isAbstract && (isSealed || isStatic)) continue;
-				if (isSealed && isStatic) continue;
-
-				var x = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
-					"Class");
-				var y = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
-					"Class");
-				var z = Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
-					"Class");
-
-				yield return (x, y, z);
-			}
-		}
 
 		static ClassElement Generate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
 			bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, string identity)
@@ -104,30 +76,6 @@ namespace SharpSourceFinderCoreTests
 				Generate(PathB, NameSpaceA, ScopeCategories.Public, false, false, true, true, false, "Hoge"));
 		}
 
-		protected override IEnumerable<(ClassElement x, ClassElement y, ClassElement z)>
-			GeneratePhysicallyTransitiveSample()
-		{
-			var boolAry = new[] {true, false};
-
-			var seq = from isAbstract in boolAry
-				from isSealed in boolAry
-				from isUnsafe in boolAry
-				from isPartial in boolAry
-				from isStatic in boolAry
-				from scope in FastEnum.GetMembers<ScopeCategories>().Select(x => x.Value)
-				select (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope);
-
-			foreach (var (isAbstract, isSealed, isUnsafe, isPartial, isStatic, scope) in seq)
-			{
-				if (isAbstract && (isSealed || isStatic)) continue;
-				if (isSealed && isStatic) continue;
-
-				yield return (
-					Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class"),
-					Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class"),
-					Generate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Class"));
-			}
-		}
 
 		protected override IEnumerable<(ClassElement x, ClassElement y)> GeneratePhysicallyInEqualitySample()
 		{
