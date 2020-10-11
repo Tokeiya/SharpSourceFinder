@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests
 {
-	public class InterfaceElementTests:TypedElementTest<InterfaceElement>
+	public class InterfaceElementTests : TypedElementTest<InterfaceElement>
 	{
-	
 		public InterfaceElementTests(ITestOutputHelper output) : base(output)
 		{
 		}
@@ -18,17 +16,16 @@ namespace SharpSourceFinderCoreTests
 		{
 			var q = new QualifiedElement(element);
 
-			foreach (var name in names)
-			{
-				_ = new IdentityElement(q, name);
-			}
+			foreach (var name in names) _ = new IdentityElement(q, name);
 
 			return q;
 		}
 
-		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) => actual.IsSameReferenceAs(expected);
+		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) =>
+			actual.IsSameReferenceAs(expected);
 
-		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) => actual.IsSameReferenceAs(expected);
+		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) =>
+			actual.IsSameReferenceAs(expected);
 
 
 		protected override IEnumerable<(InterfaceElement sample, IDiscriminatedElement expected)> GenerateParentSample()
@@ -41,10 +38,10 @@ namespace SharpSourceFinderCoreTests
 
 
 			yield return (sample, expected);
-
 		}
 
-		protected override IEnumerable<(InterfaceElement sample, IPhysicalStorage expected)> GeneratePhysicalStorageSample()
+		protected override IEnumerable<(InterfaceElement sample, IPhysicalStorage expected)>
+			GeneratePhysicalStorageSample()
 		{
 			var expected = new PhysicalStorage(PathA);
 			var ns = new NameSpace(expected);
@@ -54,10 +51,10 @@ namespace SharpSourceFinderCoreTests
 			AttachName(sample, "ISome");
 
 			yield return (sample, expected);
-
 		}
 
-		protected override IEnumerable<(InterfaceElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateGetAncestorsSample()
+		protected override IEnumerable<(InterfaceElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateGetAncestorsSample()
 		{
 			var list = new List<IDiscriminatedElement>();
 
@@ -104,10 +101,10 @@ namespace SharpSourceFinderCoreTests
 			list.Add(tmp);
 
 			yield return (sample, list);
-
 		}
 
-		protected override IEnumerable<(InterfaceElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateDescendantsSample()
+		protected override IEnumerable<(InterfaceElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateDescendantsSample()
 		{
 			var list = new List<IDiscriminatedElement>();
 
@@ -119,7 +116,8 @@ namespace SharpSourceFinderCoreTests
 			list.Add(q);
 			list.Add(new IdentityElement(q, "ISample"));
 
-			IDiscriminatedElement child = new ClassElement(sample, ScopeCategories.Public, false, false, false, false, false);
+			IDiscriminatedElement child =
+				new ClassElement(sample, ScopeCategories.Public, false, false, false, false, false);
 			q = new QualifiedElement(child);
 			list.Add(child);
 			list.Add(q);
@@ -163,9 +161,12 @@ namespace SharpSourceFinderCoreTests
 			yield return (sample, expected);
 		}
 
-		protected override void AreEqual(IQualified actual, IQualified expected) => actual.IsEquivalentTo(expected).IsTrue();
+		protected override void AreEqual(IQualified actual, IQualified expected) =>
+			actual.IsEquivalentTo(expected).IsTrue();
 
-		protected override IEnumerable<(InterfaceElement sample, Stack<(IdentityCategories category, string identity)> expected)> GenerateAggregateIdentitiesSample()
+		protected override
+			IEnumerable<(InterfaceElement sample, Stack<(IdentityCategories category, string identity)> expected)>
+			GenerateAggregateIdentitiesSample()
 		{
 			var ns = new NameSpace(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
@@ -177,7 +178,6 @@ namespace SharpSourceFinderCoreTests
 			expected.Push((IdentityCategories.Interface, "ISample"));
 
 			yield return (sample, expected);
-
 		}
 
 		protected override
@@ -198,7 +198,6 @@ namespace SharpSourceFinderCoreTests
 				var child = new InterfaceElement(elem, ScopeCategories.Public, false, false);
 				expected.Add(child);
 				AttachName(child, "Child");
-
 			}
 
 			yield return (sample, expected, act);
@@ -222,12 +221,13 @@ namespace SharpSourceFinderCoreTests
 			AttachName(ns, NameSpaceA);
 
 			yield return new InterfaceElement(ns, ScopeCategories.Public, false, false);
-
 		}
 
-		protected override bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract, bool isSealed, bool isUnsafe,
+		protected override bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
+			bool isSealed, bool isUnsafe,
 			bool isPartial, bool isStatic, string identity,
-			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace, IQualified expectedIdentity, InterfaceElement
+			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace, IQualified expectedIdentity,
+				InterfaceElement
 				sample) generated)
 		{
 			generated = default;
