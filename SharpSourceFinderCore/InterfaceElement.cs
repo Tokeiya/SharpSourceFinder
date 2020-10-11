@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
@@ -13,19 +13,37 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override QualifiedElement GetQualifiedName()
 		{
-			throw new NotImplementedException();
+			var stack = StackPool.Get();
+
+			try
+			{
+				foreach (var elem in AncestorsAndSelf()) elem.AggregateIdentities(stack);
+				var ret = new QualifiedElement();
+
+				while (stack.Count != 0)
+				{
+					var (category, name) = stack.Pop();
+					_ = new IdentityElement(ret, category, name);
+				}
+
+				return ret;
+			}
+			finally
+			{
+				Debug.Assert(stack.Count == 0);
+				StackPool.Return(stack);
+			}
 		}
 
 		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
 		{
-#warning AggregateIdentities_Is_NotImpl
-			throw new NotImplementedException("AggregateIdentities is not implemented");
+			foreach (var elem in Identity.Identities) accumulator.Push((elem.Category, elem.Name));
 		}
 
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
-#warning IsLogicallyEquivalentTo_Is_NotImpl
-			throw new NotImplementedException("IsLogicallyEquivalentTo is not implemented");
+			if (other is InterfaceElement elem) return elem.IsBasementEquivalentTo(this);
+			return true;
 		}
 	}
 }

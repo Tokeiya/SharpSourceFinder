@@ -1,37 +1,62 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Tokeiya3.SharpSourceFinderCore;
 
 namespace Playground
 {
-	public delegate int IntegerBinaryOperation(int x, int y);
 
 
 	class Program
 	{
+		static QualifiedElement AttachName(IDiscriminatedElement element, params string[] names)
+		{
+			var ret = new QualifiedElement(element);
+
+			foreach (var name in names)
+			{
+				_ = new IdentityElement(ret, name);
+
+			}
+
+			return ret;
+		}
 		static void Main(string[] args)
 		{
-			var expected = new List<IDiscriminatedElement>();
+			var ns = new NameSpace(new PhysicalStorage(@"C:\Hoge\Piyo.cs"));
+			AttachName(ns, "NameSpace");
 
-			var sample = new NameSpace(new PhysicalStorage("PathA"));
-			var name = new QualifiedElement(sample);
-			var elem = new IdentityElement(name, "Tokeiya3");
-
-			expected.Add(name);
-			expected.Add(elem);
+			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
+			AttachName(sample, "Sample");
 
 
-			var a = new NameSpace(sample);
-			name = new QualifiedElement(a);
-			elem = new IdentityElement(name, "SharpSourceFinder");
+			IDiscriminatedElement child =
+				new ClassElement(sample, ScopeCategories.Public, false, false, false, false, false);
+			AttachName(child, "ChildClass");
 
-			expected.Add(a);
-			expected.Add(name);
-			expected.Add(elem);
+			child = new StructElement(sample, ScopeCategories.Public, false, false);
+			AttachName(child, "ChildStruct");
+
+			child = new StructElement(child, ScopeCategories.Public, false, false);
+			AttachName(child, "InnerInner");
 
 
-			var hoge = a.Descendants().ToArray();
-			var act = sample.Descendants().ToArray();
+
+			foreach (var elem in sample.Children())
+			{
+				var txt = elem switch
+				{
+					QualifiedElement _=>"QualifiedElement",
+					IdentityElement id=>$"Identity:{id.Name}",
+					ClassElement _=>"Class",
+					StructElement _=>"Struct",
+					NameSpace _=>"NameSpace",
+					_=>"Unknown"
+			};
+
+				Console.WriteLine(txt);
+			}
+
 		}
 	}
 }
