@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ChainingAssertion;
@@ -71,9 +72,15 @@ namespace SharpSourceFinderCoreTests
 
 		protected override IEnumerable<(T x, T y)> GenerateLogicallyInEquivalentSample()
 		{
+
 			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic,
 				ScopeCategories scope) in Combination)
 			{
+				void write()
+				{
+					Output.WriteLine($"{isAbstract},{isSealed},{isUnsafe},{isPartial},{isStatic},{scope}");
+				}
+
 				if (TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
 					    "Identity", out var x) &&
 				    TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic, "Hoge",
@@ -98,27 +105,47 @@ namespace SharpSourceFinderCoreTests
 					    "Identity", out x) &&
 				    TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
 					    "Identity", out y))
+				{
+					write();
 					yield return (x.sample, y.sample);
+				}
+
 
 				if (TryGenerate(PathA, NameSpaceA, scope, isAbstract, !isSealed, isUnsafe, isPartial, isStatic,
 					"Identity", out x) && TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe,
 					isPartial, isStatic, "Identity", out y))
+				{
+					write();
 					yield return (x.sample, y.sample);
+				}
 
 				if (TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, !isUnsafe, isPartial, isStatic,
 					"Identity", out x) && TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe,
 					isPartial, isStatic, "Identity", out y))
+				{
+
+					write();
 					yield return (x.sample, y.sample);
+				}
 
 				if (TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, !isPartial, isStatic,
 					"Identity", out x) && TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe,
 					isPartial, isStatic, "Identity", out y))
+				{
+
+					write();
+					
 					yield return (x.sample, y.sample);
+				}
 
 				if (TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, !isStatic,
 					"Identity", out x) && TryGenerate(PathA, NameSpaceA, scope, isAbstract, isSealed, isUnsafe,
 					isPartial, isStatic, "Identity", out y))
+				{
+					write();
+
 					yield return (x.sample, y.sample);
+				}
 			}
 		}
 
@@ -133,6 +160,24 @@ namespace SharpSourceFinderCoreTests
 				    TryGenerate(PathB, NameSpaceA, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic,
 					    "Identity", out var y))
 					yield return (x.sample, y.sample);
+		}
+
+		[Trait("TestLayer", nameof(TypeElement))]
+		[Fact]
+		public void AddNameSpaceAsAChildTest()
+		{
+			var flg = false;
+
+			foreach ((bool isAbstract, bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, ScopeCategories scope)  in Combination)
+			{
+				if(TryGenerate(PathA,NameSpaceA,scope,isAbstract,isSealed,isUnsafe,isPartial,isStatic,"Identity",out var gen))
+				{
+					flg = true;
+					Assert.Throws<ArgumentException>(() => new NameSpace(gen.sample));
+				}
+			}
+
+			flg.IsTrue();
 		}
 
 

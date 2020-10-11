@@ -30,6 +30,20 @@ namespace SharpSourceFinderCoreTests
 
 		[Trait("TestLayer", nameof(StructElement))]
 		[Fact]
+		public void InvalidChildTest()
+		{
+			var ns = new NameSpace(new PhysicalStorage(PathA));
+			AttachName(ns, NameSpaceA);
+
+			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
+			AttachName(sample, "Hoge");
+
+			Assert.Throws<ArgumentException>(() => new NameSpace(sample));
+		}
+
+
+		[Trait("TestLayer", nameof(StructElement))]
+		[Fact]
 		public void GetQualifiedTest()
 		{
 			static void areEquivalent(IIdentity actual, IdentityCategories expectedCategory, string expectedName,

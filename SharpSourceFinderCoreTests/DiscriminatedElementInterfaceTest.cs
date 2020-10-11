@@ -94,7 +94,7 @@ namespace SharpSourceFinderCoreTests
 		public void LogicallyInEquivalentTest()
 		{
 			GenerateLogicallyInEquivalentSample().Any().IsTrue();
-
+			
 			foreach (var (x, y) in GenerateLogicallyInEquivalentSample())
 			{
 				x.IsLogicallyEquivalentTo(y).IsFalse();

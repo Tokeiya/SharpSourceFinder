@@ -13,9 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OnGoing", "OnGoing", "{4AB6
 	ProjectSection(SolutionItems) = preProject
 		SharpSourceFinderCore\DelegateElement.cs = SharpSourceFinderCore\DelegateElement.cs
 		SharpSourceFinderCore\EnumElement.cs = SharpSourceFinderCore\EnumElement.cs
-		SharpSourceFinderCore\InterfaceElement.cs = SharpSourceFinderCore\InterfaceElement.cs
-		SharpSourceFinderCore\StructElement.cs = SharpSourceFinderCore\StructElement.cs
-		SharpSourceFinderCore\TypeElement.cs = SharpSourceFinderCore\TypeElement.cs
 	EndProjectSection
 EndProject
 Global
