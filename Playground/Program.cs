@@ -1,6 +1,10 @@
 ﻿
 namespace Playground
 {
+	public enum Hoge
+	{
+
+	}
 	class Program
 	{
 

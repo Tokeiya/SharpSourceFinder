@@ -5,7 +5,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public abstract class TypeElement : NonTerminalElement<IDiscriminatedElement>
 	{
-		private IQualified? _identity;
+		protected IQualified? _identity;
 
 
 		protected TypeElement(IDiscriminatedElement parent, ScopeCategories scope, bool isAbstract, bool isSealed,

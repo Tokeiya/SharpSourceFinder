@@ -42,7 +42,7 @@ namespace SharpSourceFinderCoreTests
 
 		[Trait("TestLayer", nameof(NonTerminalElement<T>))]
 		[Fact]
-		public void ErrorRegisterChildTest()
+		public virtual void ErrorRegisterChildTest()
 		{
 			GenerateErrSample().IsNotEmpty();
 
