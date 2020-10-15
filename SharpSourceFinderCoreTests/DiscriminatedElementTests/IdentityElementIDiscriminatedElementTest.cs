@@ -5,7 +5,7 @@ using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace SharpSourceFinderCoreTests
+namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 {
 	public class IdentityElementIDiscriminatedElementTest : DiscriminatedElementInterfaceTest<IdentityElement>
 	{

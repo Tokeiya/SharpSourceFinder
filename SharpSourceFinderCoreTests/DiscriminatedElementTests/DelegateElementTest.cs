@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace SharpSourceFinderCoreTests
+namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 {
 	public class DelegateElementTest:TypedElementTest<DelegateElement>
 	{

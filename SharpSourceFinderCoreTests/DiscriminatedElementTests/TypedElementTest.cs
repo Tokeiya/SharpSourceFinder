@@ -7,7 +7,7 @@ using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace SharpSourceFinderCoreTests
+namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 {
 	public abstract class TypedElementTest<T> : NonTerminalElementTest<T, IDiscriminatedElement> where T : TypeElement
 	{

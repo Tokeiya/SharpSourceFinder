@@ -5,7 +5,7 @@ using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace SharpSourceFinderCoreTests
+namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 {
 	public abstract class DiscriminatedElementInterfaceTest<T> where T : IDiscriminatedElement
 	{
@@ -94,7 +94,7 @@ namespace SharpSourceFinderCoreTests
 		public void LogicallyInEquivalentTest()
 		{
 			GenerateLogicallyInEquivalentSample().Any().IsTrue();
-			
+
 			foreach (var (x, y) in GenerateLogicallyInEquivalentSample())
 			{
 				x.IsLogicallyEquivalentTo(y).IsFalse();

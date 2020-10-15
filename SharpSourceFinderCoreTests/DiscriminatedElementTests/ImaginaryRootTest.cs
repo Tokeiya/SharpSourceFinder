@@ -7,7 +7,7 @@ using Xunit;
 using Xunit.Abstractions;
 using static Xunit.Assert;
 
-namespace SharpSourceFinderCoreTests
+namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 {
 	public class ImaginaryRootTest
 	{

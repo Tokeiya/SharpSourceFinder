@@ -4,7 +4,7 @@ using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit.Abstractions;
 
-namespace SharpSourceFinderCoreTests
+namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 {
 	public class InterfaceElementTests : TypedElementTest<InterfaceElement>
 	{

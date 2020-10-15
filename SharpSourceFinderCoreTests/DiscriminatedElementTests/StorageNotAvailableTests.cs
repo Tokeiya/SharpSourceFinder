@@ -3,7 +3,7 @@ using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 
-namespace SharpSourceFinderCoreTests
+namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 {
 	public class StorageNotAvailableTests
 	{
