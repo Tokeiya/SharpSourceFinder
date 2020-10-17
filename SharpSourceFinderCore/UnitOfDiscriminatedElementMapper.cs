@@ -18,7 +18,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			};
 
 
-		private static (ScopeCategories scope, bool isUnsafe, bool isPartial, bool isStatic, bool isAbstract) ParseModifiers(
+		private static (ScopeCategories scope, bool isUnsafe, bool isPartial, bool isStatic, bool isAbstract,bool isSealed) ParseModifiers(
 			SyntaxTokenList list)
 		{
 			bool isPublic = false;
@@ -30,7 +30,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			bool isPartial = false;
 			bool isStatic = false;
 			bool isAbstract = false;
-
+			bool isSealed = false;
 
 
 			foreach (var elem in list)
@@ -43,6 +43,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 				else if (elem.Text == "partial") isPartial = true;
 				else if (elem.Text == "static") isStatic = true;
 				else if (elem.Text == "abstract") isAbstract = true;
+				else if (elem.Text == "sealed") isSealed = true;
 			}
 
 			ScopeCategories scope;
@@ -50,17 +51,15 @@ namespace Tokeiya3.SharpSourceFinderCore
 			if (isPublic) scope = ScopeCategories.Public;
 			else if (isInternal)
 			{
-				if (isProtected) scope = ScopeCategories.ProtectedInternal;
-				else scope = ScopeCategories.Internal;
+				scope = isProtected ? ScopeCategories.ProtectedInternal : ScopeCategories.Internal;
 			}
 			else if (isProtected)
 			{
-				if (isPrivate) scope = ScopeCategories.PrivateProtected;
-				else scope = ScopeCategories.Protected;
+				scope = isPrivate ? ScopeCategories.PrivateProtected : ScopeCategories.Protected;
 			}
 			else scope = ScopeCategories.Private;
 
-			return (scope, isUnsafe, isPartial, isStatic, isAbstract);
+			return (scope, isUnsafe, isPartial, isStatic, isAbstract,isSealed);
 
 		}
 
@@ -71,27 +70,32 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public static EnumElement Map(IDiscriminatedElement parent, EnumDeclarationSyntax syntax)
 		{
-			var (scope,_,_,_,_) = ParseModifiers(syntax.Modifiers);
+			var (scope,_,_,_,_,_) = ParseModifiers(syntax.Modifiers);
 			return new EnumElement(parent, scope);
 		}
 
 		public static StructElement Map(IDiscriminatedElement parent, StructDeclarationSyntax syntax)
 		{
-			var (scope, isUnsafe, isPartial, _, _) = ParseModifiers(syntax.Modifiers);
+			var (scope, isUnsafe, isPartial, _, _,_) = ParseModifiers(syntax.Modifiers);
 			return new StructElement(parent, scope, isUnsafe, isPartial);
 		}
 
 		public static DelegateElement Map(IDiscriminatedElement parent, DelegateDeclarationSyntax syntax)
 		{
-			var (scope, isUnsafe, _, _, _) = ParseModifiers(syntax.Modifiers);
+			var (scope, isUnsafe, _, _, _,_) = ParseModifiers(syntax.Modifiers);
 			return new DelegateElement(parent, scope, isUnsafe);
 		}
 
 		public static InterfaceElement Map(IDiscriminatedElement parent, InterfaceDeclarationSyntax syntax)
 		{
-			var (scope, isUnsafe, isPartial, _, _) = ParseModifiers(syntax.Modifiers);
+			var (scope, isUnsafe, isPartial, _, _,_) = ParseModifiers(syntax.Modifiers);
 			return new InterfaceElement(parent, scope, isUnsafe, isPartial);
+		}
 
+		public static ClassElement Map(IDiscriminatedElement parent, ClassDeclarationSyntax syntax)
+		{
+#warning Map_Is_NotImpl
+			throw new NotImplementedException("Map is not implemented");
 		}
 	}
 }
