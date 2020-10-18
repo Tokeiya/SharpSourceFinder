@@ -1,16 +1,17 @@
-﻿using System;
-using System.Linq;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
 	public static class UnitOfDiscriminatedElementMapper
 	{
+#pragma warning disable IDE0060 // 未使用のパラメーターを削除します
+
 		public static IdentityElement Map(QualifiedElement parent, IdentifierNameSyntax syntax) =>
 			new IdentityElement(parent, syntax.Identifier.Text);
 
 		public static QualifiedElement Map(IDiscriminatedElement parent, QualifiedNameSyntax syntax) =>
+#pragma warning restore IDE0060 // 未使用のパラメーターを削除します
 			parent switch
 			{
 				QualifiedElement q => q,
@@ -62,10 +63,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 			return (scope, isUnsafe, isPartial, isStatic, isAbstract,isSealed);
 
 		}
-
+#pragma warning disable IDE0060 // 未使用のパラメーターを削除します
 		public static NameSpace Map(NameSpace parent, NamespaceDeclarationSyntax syntax) => new NameSpace(parent);
 
 		public static NameSpace Map(IPhysicalStorage storage, NamespaceDeclarationSyntax syntax) =>
+#pragma warning restore IDE0060 // 未使用のパラメーターを削除します
 			new NameSpace(storage);
 
 		public static EnumElement Map(IDiscriminatedElement parent, EnumDeclarationSyntax syntax)
@@ -94,8 +96,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public static ClassElement Map(IDiscriminatedElement parent, ClassDeclarationSyntax syntax)
 		{
-#warning Map_Is_NotImpl
-			throw new NotImplementedException("Map is not implemented");
+			var (scope, isUnsafe, isPartial, isStatic, isAbstract, isSealed) = ParseModifiers(syntax.Modifiers);
+
+			return new ClassElement(parent, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic);
+
 		}
 	}
 }

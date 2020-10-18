@@ -85,22 +85,21 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 		[Fact]
 		public void MapEnumTest()
 		{
-			void areEqual(EnumElement actual, ScopeCategories expectedCategory, IDiscriminatedElement expectedParent)
+			static void areEqual(EnumElement element, ScopeCategories expectedCategory, IDiscriminatedElement expectedParent)
 			{
-				actual.IsAbstract.IsFalse();
-				actual.IsPartial.IsFalse();
-				actual.IsSealed.IsTrue();
-				actual.IsStatic.IsFalse();
-				actual.IsUnsafe.IsFalse();
+				element.IsAbstract.IsFalse();
+				element.IsPartial.IsFalse();
+				element.IsSealed.IsTrue();
+				element.IsStatic.IsFalse();
+				element.IsUnsafe.IsFalse();
 
-				actual.Scope.Is(expectedCategory);
-				actual.Parent.IsSameReferenceAs(expectedParent);
+				element.Scope.Is(expectedCategory);
+				element.Parent.IsSameReferenceAs(expectedParent);
 			}
 
 			var root = Parse("EnumSamples.cs");
 			using var samples = root.DescendantNodes().OfType<EnumDeclarationSyntax>().Memoize();
 
-			var storage = new PhysicalStorage("Path");
 			var ns = new NameSpace(new PhysicalStorage("Path"));
 
 			var sample = samples.First(x => x.Identifier.Text == "PublicEnum");
@@ -255,6 +254,52 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			areEqual("IPrivateProtected", ScopeCategories.PrivateProtected);
 			areEqual("IPrivate", ScopeCategories.Private);
 		}
+
+		[Trait("TestLayer", nameof(UnitOfDiscriminatedElementMapper))]
+		[Fact]
+		public void MapClassTest()
+		{
+			var root = Parse("ClassSamples.cs");
+			using var samples = root.DescendantNodes().OfType<ClassDeclarationSyntax>().Memoize();
+
+			IDiscriminatedElement parent = new NameSpace(new PhysicalStorage("Path"));
+
+
+			void areEqual(string name, ScopeCategories scope, bool isAbstract = false, bool isSealed = false,
+				bool isUnsafe = false, bool isPartial = false, bool isStatic = false)
+			{
+				var syntax = samples.First(x => x.Identifier.Text == name);
+				var actual = UnitOfDiscriminatedElementMapper.Map(parent, syntax);
+
+				actual.IsSealed.Is(isSealed);
+				actual.IsAbstract.Is(isAbstract);
+				actual.IsPartial.Is(isPartial);
+				actual.IsStatic.Is(isStatic);
+				actual.IsUnsafe.Is(isUnsafe);
+
+				actual.Scope.Is(scope);
+
+				actual.Parent.IsSameReferenceAs(parent);
+			}
+
+			areEqual("Public", ScopeCategories.Public);
+			areEqual("Internal", ScopeCategories.Internal);
+			areEqual("Unsafe", ScopeCategories.Public, isUnsafe: true);
+			areEqual("Partial", ScopeCategories.Public, isPartial: true);
+			areEqual("Abstract", ScopeCategories.Public, isAbstract: true);
+			areEqual("Sealed", ScopeCategories.Public, isSealed: true);
+			areEqual("UnsafePartialSealed", ScopeCategories.Public, false, true, true, true);
+
+			parent = new ClassElement(parent, ScopeCategories.Public, false, false, false, false, false);
+
+			areEqual("Private", ScopeCategories.Private);
+			areEqual("ProtectedInternal", ScopeCategories.ProtectedInternal);
+			areEqual("PrivateProtected", ScopeCategories.PrivateProtected);
+			areEqual("Protected", ScopeCategories.Protected);
+
+
+		}
+
 
 	}
 }
