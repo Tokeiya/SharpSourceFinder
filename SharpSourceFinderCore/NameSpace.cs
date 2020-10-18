@@ -17,7 +17,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public NameSpace(IDiscriminatedElement parent) : base(parent) => _storage = StorageNotAvailable.NotAvailable;
 
-		IQualified Identity => _identity ?? throw new IdentityNotFoundException();
+		public IQualified Identity => _identity ?? throw new IdentityNotFoundException();
 
 		public override IPhysicalStorage Storage
 		{

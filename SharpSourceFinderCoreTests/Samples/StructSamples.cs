@@ -2,7 +2,16 @@
 {
 	public struct Public
 	{
+		public public (int value)
+		{}
 
+		public int Field;
+		public int Prop { get; set; }
+
+		public override string ToString()
+		{
+			return "Hello world";
+		}
 	}
 
 	public unsafe struct Unsafe

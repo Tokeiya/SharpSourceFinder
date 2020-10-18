@@ -10,6 +10,12 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public static IdentityElement Map(QualifiedElement parent, IdentifierNameSyntax syntax) =>
 			new IdentityElement(parent, syntax.Identifier.Text);
 
+		public static IdentityElement Map(TypeElement parent, IdentifierNameSyntax syntax)
+		{
+			var q = new QualifiedElement(parent);
+			return Map(q, syntax);
+		}
+
 		public static QualifiedElement Map(IDiscriminatedElement parent, QualifiedNameSyntax syntax) =>
 #pragma warning restore IDE0060 // 未使用のパラメーターを削除します
 			parent switch
@@ -66,9 +72,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 #pragma warning disable IDE0060 // 未使用のパラメーターを削除します
 		public static NameSpace Map(NameSpace parent, NamespaceDeclarationSyntax syntax) => new NameSpace(parent);
 
-		public static NameSpace Map(IPhysicalStorage storage, NamespaceDeclarationSyntax syntax) =>
 #pragma warning restore IDE0060 // 未使用のパラメーターを削除します
-			new NameSpace(storage);
 
 		public static EnumElement Map(IDiscriminatedElement parent, EnumDeclarationSyntax syntax)
 		{

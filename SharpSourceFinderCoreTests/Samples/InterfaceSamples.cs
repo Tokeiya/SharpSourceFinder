@@ -1,6 +1,10 @@
 ﻿namespace NameSpace
 {
-	public interface IPublic{}
+	public interface IPublic
+	{
+		int Prop { get; set; }
+		int Method();
+	}
 	internal interface IInternal{}
 
 	public unsafe interface IUnsafe

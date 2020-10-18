@@ -13,58 +13,41 @@ namespace Playground
 
 	class Program
 	{
-		static void Main()
+		static IReadOnlyList<string> GetName(NameSyntax syntax)
 		{
-			var stack = new Stack<string>();
-			stack.Push("C:\\");
-			stack.Push("D:\\");
-			stack.Push("G:\\");
-			stack.Push("H:\\");
-			stack.Push("I:\\");
-
-			var wtr = new StreamWriter("Output.tsv");
-
-			var cnt = 0;
-
-			while (stack.Count!=0)
+			static void recursion(QualifiedNameSyntax qualified, List<string> accum)
 			{
-				try
+				if (qualified.Left is QualifiedNameSyntax q)
 				{
-					var current = stack.Pop();
-
-					foreach (var dir in Directory.EnumerateDirectories(current))
-					{
-						stack.Push(dir);
-					}
-
-					++cnt;
-					wtr.WriteLine($"dir\t{current}");
-
-					foreach (var file in Directory.EnumerateFiles(current))
-					{
-						++cnt;
-
-						if(file.Contains('\uDC6D')) continue;
-						wtr.WriteLine($"file\t{file}");
-
-						if ((cnt & 65535) == 0) Console.WriteLine($"{cnt}:{stack.Count}:{file}");
-					}
+					recursion(q, accum);
 				}
-				catch (UnauthorizedAccessException ex)
+				else if (qualified.Left is IdentifierNameSyntax id)
 				{
-					Console.WriteLine(ex.Message);
-					continue;
+					accum.Add(id.Identifier.Text);
 				}
-				catch (EncoderFallbackException ex)
-				{
-					Console.WriteLine(ex.Message);
-					wtr.Close();
-					wtr = new StreamWriter(new FileStream("Output.tsv", FileMode.Append));
-				}
+				accum.Add(qualified.Right.Identifier.Text);
 			}
 
-			wtr.Close();
-		}
+			var accumulator = new List<string>();
 
+			if (syntax is IdentifierNameSyntax id)
+			{
+				accumulator.Add(id.Identifier.Text);
+			}
+			else if (syntax is QualifiedNameSyntax qualified)
+			{
+				recursion(qualified, accumulator);
+			}
+
+			return accumulator;
+		}
+		static void Main()
+		{
+			var hoge = new [] { "Hello", "World" };
+			var piyo = new[] { "Hello", "World","Foo" };
+
+			Console.WriteLine(hoge.SequenceEqual(piyo));
+
+		}
 	}
 }

@@ -1,9 +1,12 @@
 ﻿
 namespace EnumSamples
 {
-	public enum PublicEnum
+	public enum PublicEnum:int
 	{
-
+		Hoge=10,
+		Piyo,
+		Foo,
+		Bar
 	}
 
 	internal enum InternalEnum

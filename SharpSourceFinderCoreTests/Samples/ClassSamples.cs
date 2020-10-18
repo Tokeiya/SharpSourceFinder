@@ -6,6 +6,12 @@ namespace NameSpace
 {
 	public class Public
 	{
+		public public (int value){}
+		public int Value { get; set; }
+
+		public int Method()
+		{
+		}
 
 	}
 
@@ -43,7 +49,7 @@ namespace NameSpace
 	{
 		private class Private
 		{
-
+			
 		}
 
 		protected internal class ProtectedInternal
@@ -54,7 +60,7 @@ namespace NameSpace
 
 		protected class Protected
 		{
-
+			
 		}
 	}
 }
