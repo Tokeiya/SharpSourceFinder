@@ -24,6 +24,11 @@
 
 	}
 
+	public partial struct Partial
+	{
+
+	}
+
 	internal struct Internal
 	{
 

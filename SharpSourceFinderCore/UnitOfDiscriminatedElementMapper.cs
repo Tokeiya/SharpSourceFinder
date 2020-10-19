@@ -1,30 +1,11 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
 	public static class UnitOfDiscriminatedElementMapper
 	{
-#pragma warning disable IDE0060 // 未使用のパラメーターを削除します
-
-		public static IdentityElement Map(QualifiedElement parent, IdentifierNameSyntax syntax) =>
-			new IdentityElement(parent, syntax.Identifier.Text);
-
-		public static IdentityElement Map(TypeElement parent, IdentifierNameSyntax syntax)
-		{
-			var q = new QualifiedElement(parent);
-			return Map(q, syntax);
-		}
-
-		public static QualifiedElement Map(IDiscriminatedElement parent, QualifiedNameSyntax syntax) =>
-#pragma warning restore IDE0060 // 未使用のパラメーターを削除します
-			parent switch
-			{
-				QualifiedElement q => q,
-				_ => new QualifiedElement(parent)
-			};
-
-
 		private static (ScopeCategories scope, bool isUnsafe, bool isPartial, bool isStatic, bool isAbstract,bool isSealed) ParseModifiers(
 			SyntaxTokenList list)
 		{
@@ -69,41 +50,81 @@ namespace Tokeiya3.SharpSourceFinderCore
 			return (scope, isUnsafe, isPartial, isStatic, isAbstract,isSealed);
 
 		}
-#pragma warning disable IDE0060 // 未使用のパラメーターを削除します
-		public static NameSpace Map(NameSpace parent, NamespaceDeclarationSyntax syntax) => new NameSpace(parent);
 
-#pragma warning restore IDE0060 // 未使用のパラメーターを削除します
+		private static void AttachName(IDiscriminatedElement target, NameSyntax syntax)
+		{
+			var qualified = new QualifiedElement(target);
 
+			static void rec(QualifiedElement q, QualifiedNameSyntax name)
+			{
+				if (name.Left is QualifiedNameSyntax qs) rec(q, qs);
+				else if (name.Left is SimpleNameSyntax sn) _ = new IdentityElement(q, sn.Identifier.Text);
+				else throw new InvalidOperationException($"{name.Left.GetType().Name} is unexpected");
+
+				_ = new IdentityElement(q, name.Right.Identifier.Text);
+			}
+
+			if (syntax is QualifiedNameSyntax qualifiedSyntax) rec(qualified, qualifiedSyntax);
+			else if (syntax is SimpleNameSyntax simple) _ = new IdentityElement(qualified, simple.Identifier.Text);
+			else throw new InvalidOperationException($"{syntax.GetType().Name} is unexpected.");
+		}
+
+		private static void AttachName(IDiscriminatedElement target, SyntaxToken identifier)
+		{
+			var q = new QualifiedElement(target);
+			_ = new IdentityElement(q, identifier.Text);
+		}
+
+		public static NameSpace Map(NameSpace parent, NamespaceDeclarationSyntax syntax)
+		{
+			var ns = new NameSpace(parent);
+			AttachName(ns, syntax.Name);
+
+			return ns;
+		}
 		public static EnumElement Map(IDiscriminatedElement parent, EnumDeclarationSyntax syntax)
 		{
 			var (scope,_,_,_,_,_) = ParseModifiers(syntax.Modifiers);
-			return new EnumElement(parent, scope);
+			var ret =new  EnumElement(parent, scope);
+			AttachName(ret, syntax.Identifier);
+
+			return ret;
 		}
 
 		public static StructElement Map(IDiscriminatedElement parent, StructDeclarationSyntax syntax)
 		{
 			var (scope, isUnsafe, isPartial, _, _,_) = ParseModifiers(syntax.Modifiers);
-			return new StructElement(parent, scope, isUnsafe, isPartial);
+			var ret= new StructElement(parent, scope, isUnsafe, isPartial);
+			AttachName(ret, syntax.Identifier);
+
+			return ret;
 		}
 
 		public static DelegateElement Map(IDiscriminatedElement parent, DelegateDeclarationSyntax syntax)
 		{
 			var (scope, isUnsafe, _, _, _,_) = ParseModifiers(syntax.Modifiers);
-			return new DelegateElement(parent, scope, isUnsafe);
+			var ret = new DelegateElement(parent, scope, isUnsafe);
+			AttachName(ret, syntax.Identifier);
+
+			return ret;
 		}
 
 		public static InterfaceElement Map(IDiscriminatedElement parent, InterfaceDeclarationSyntax syntax)
 		{
 			var (scope, isUnsafe, isPartial, _, _,_) = ParseModifiers(syntax.Modifiers);
-			return new InterfaceElement(parent, scope, isUnsafe, isPartial);
+			var ret = new InterfaceElement(parent, scope, isUnsafe, isPartial);
+			AttachName(ret, syntax.Identifier);
+
+			return ret;
 		}
 
 		public static ClassElement Map(IDiscriminatedElement parent, ClassDeclarationSyntax syntax)
 		{
 			var (scope, isUnsafe, isPartial, isStatic, isAbstract, isSealed) = ParseModifiers(syntax.Modifiers);
+			var ret = new ClassElement(parent, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic);
+			AttachName(ret, syntax.Identifier);
 
-			return new ClassElement(parent, scope, isAbstract, isSealed, isUnsafe, isPartial, isStatic);
-
+			return ret;
 		}
 	}
 }

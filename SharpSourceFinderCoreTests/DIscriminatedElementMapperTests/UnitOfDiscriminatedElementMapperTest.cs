@@ -21,7 +21,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 		public UnitOfDiscriminatedElementMapperTest(ITestOutputHelper output) => _output = output;
 
 		static CompilationUnitSyntax Parse(string path) =>
-			CSharpSyntaxTree.ParseText(File.ReadAllText($"Sample\\{path}")).GetCompilationUnitRoot();
+			CSharpSyntaxTree.ParseText(File.ReadAllText($"Samples/{path}")).GetCompilationUnitRoot();
 
 		static T Extract<T>(CompilationUnitSyntax syntax, string name) where T : BaseTypeDeclarationSyntax
 			=> syntax.DescendantNodes().OfType<T>().First(x => x.Identifier.Text == name);
@@ -32,12 +32,13 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			{
 				if (qualified.Left is QualifiedNameSyntax q)
 				{
-					recursion(q,accum);
+					recursion(q, accum);
 				}
-				else if(qualified.Left is IdentifierNameSyntax id)
+				else if (qualified.Left is IdentifierNameSyntax id)
 				{
 					accum.Add(id.Identifier.Text);
 				}
+
 				accum.Add(qualified.Right.Identifier.Text);
 			}
 
@@ -47,16 +48,17 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			{
 				accumulator.Add(id.Identifier.Text);
 			}
-			else if(syntax is QualifiedNameSyntax qualified)
+			else if (syntax is QualifiedNameSyntax qualified)
 			{
-				recursion(qualified,accumulator);
+				recursion(qualified, accumulator);
 			}
 
 			return accumulator;
 		}
 
-		static NamespaceDeclarationSyntax ExtractNameSpace(CompilationUnitSyntax syntax, params string[] name) => syntax.DescendantNodes().OfType<NamespaceDeclarationSyntax>()
-				.First(x => GetName(x.Name).SequenceEqual(name));
+		static NamespaceDeclarationSyntax ExtractNameSpace(CompilationUnitSyntax syntax, params string[] name) => syntax
+			.DescendantNodes().OfType<NamespaceDeclarationSyntax>()
+			.First(x => GetName(x.Name).SequenceEqual(name));
 
 		static DelegateDeclarationSyntax ExtractDelegate(CompilationUnitSyntax syntax, string name) => syntax
 			.DescendantNodes().OfType<DelegateDeclarationSyntax>()
@@ -72,9 +74,10 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 
 		[Trait("TestLayer", nameof(UnitOfDiscriminatedElementMapper))]
 		[Fact]
-		public void SimpleNameSpaceTest()
+		public void MapToSimpleNameSpace()
 		{
-			using var samples = Parse("NameSpaceOnly.cs").DescendantNodes().OfType<NamespaceDeclarationSyntax>().Memoize();
+			using var samples = Parse("NameSpaceOnly.cs").DescendantNodes().OfType<NamespaceDeclarationSyntax>()
+				.Memoize();
 			samples.Count().Is(1);
 
 			var parent = new NameSpace(new PhysicalStorage("NameSpaceOnly.cs"));
@@ -97,7 +100,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 
 		[Trait("TestLayer", nameof(UnitOfDiscriminatedElementMapper))]
 		[Fact]
-		public void NestedNameSpaceTest()
+		public void MapToNestedNameSpace()
 		{
 			var root = Parse("NestedNameSpace.cs");
 			var syntax = ExtractNameSpace(root, "Outer");
@@ -117,14 +120,14 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 
 		[Trait("TestLayer", nameof(UnitOfDiscriminatedElementMapper))]
 		[Fact]
-		public void DelegateTest()
+		public void MapToDelegate()
 		{
 			var root = Parse("DelegateSamples.cs");
 			var parent = GenerateRoot("DelegateSamples.cs");
 
-			void areEqual(string name, ScopeCategories scope,bool isUnsafe=false)
+			void areEqual(string name, ScopeCategories scope, bool isUnsafe = false)
 			{
-				var syntax = ExtractDelegate(root, "Public");
+				var syntax = ExtractDelegate(root, name);
 				var actual = UnitOfDiscriminatedElementMapper.Map(parent, syntax);
 
 				actual.Identity.Identities.Count.Is(1);
@@ -151,10 +154,10 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 
 		[Trait("TestLayer", nameof(UnitOfDiscriminatedElementMapper))]
 		[Fact]
-		public void EnumTest()
+		public void MapToEnum()
 		{
-			var root = Parse("EnumSample.cs");
-			var parent = GenerateRoot("EnumSamples.cs");
+			var root = Parse("EnumSamples.cs");
+			var parent = GenerateRoot("EnumSampleS.cs");
 
 			void areEqual(string name, ScopeCategories scope)
 			{
@@ -177,6 +180,110 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			areEqual("ProtectedInternalEnum", ScopeCategories.ProtectedInternal);
 			areEqual("PrivateProtectedEnum", ScopeCategories.PrivateProtected);
 		}
+
+		[Trait("TestLayer", nameof(UnitOfDiscriminatedElementMapper))]
+		[Fact]
+		public void MapToInterface()
+		{
+			var root = Parse("InterfaceSamples.cs");
+			var parent = GenerateRoot("InterfaceSamples.cs");
+
+			void areEqual(string name, ScopeCategories scope, bool isUnsafe = false, bool isPartial = false)
+			{
+				var syntax = Extract<InterfaceDeclarationSyntax>(root, name);
+				var actual = UnitOfDiscriminatedElementMapper.Map(parent, syntax);
+
+				actual.Scope.Is(scope);
+
+				actual.IsUnsafe.Is(isUnsafe);
+				actual.IsPartial.Is(isPartial);
+
+				actual.IsAbstract.IsTrue();
+				actual.IsSealed.IsFalse();
+				actual.IsStatic.IsFalse();
+				actual.IsSealed.IsFalse();
+
+			}
+
+			areEqual("IPublic", ScopeCategories.Public);
+			areEqual("IInternal", ScopeCategories.Internal);
+			areEqual("IUnsafe", ScopeCategories.Public, isUnsafe: true);
+			areEqual("IProtected", ScopeCategories.Protected);
+			areEqual("IPrivateProtected", ScopeCategories.PrivateProtected);
+			areEqual("IProtectedInternal", ScopeCategories.ProtectedInternal);
+			areEqual("IPrivate", ScopeCategories.Private);
+
+		}
+
+		[Trait("TestLayer", nameof(UnitOfDiscriminatedElementMapper))]
+		[Fact]
+		public void MapToStruct()
+		{
+			var root = Parse("StructSamples.cs");
+			var parent = GenerateRoot("StructSamples.cs");
+
+			void areEqual(string name, ScopeCategories scope, bool isUnsafe = false, bool isPartial = false)
+			{
+				var syntax = Extract<StructDeclarationSyntax>(root, name);
+				var actual = UnitOfDiscriminatedElementMapper.Map(parent, syntax);
+
+				actual.Scope.Is(scope);
+
+				actual.IsUnsafe.Is(isUnsafe);
+				actual.IsPartial.Is(isPartial);
+
+				actual.IsAbstract.IsFalse();
+				actual.IsStatic.IsFalse();
+				actual.IsSealed.IsTrue();
+			}
+
+			areEqual("Public", ScopeCategories.Public);
+			areEqual("Unsafe", ScopeCategories.Public, true);
+			areEqual("UnsafePartial", ScopeCategories.Public, true, true);
+			areEqual("Partial", ScopeCategories.Public, isPartial: true);
+			areEqual("Internal", ScopeCategories.Internal);
+			areEqual("Private", ScopeCategories.Private);
+			areEqual("Protected", ScopeCategories.Protected);
+			areEqual("ProtectedInternal", ScopeCategories.ProtectedInternal);
+			areEqual("PrivateProtected", ScopeCategories.PrivateProtected);
+
+		}
+
+		[Trait("TestLayer", nameof(UnitOfDiscriminatedElementMapper))]
+		[Fact]
+		public void MapToClass()
+		{
+			var root = Parse("ClassSamples.cs");
+			var parent = GenerateRoot("ClassSamples.cs");
+
+			void areEqual(string name, ScopeCategories scope, bool isUnsafe = false, bool isPartial = false,
+				bool isSealed = false, bool isAbstract = false)
+			{
+				var syntax = Extract<ClassDeclarationSyntax>(root, name);
+				var actual = UnitOfDiscriminatedElementMapper.Map(parent, syntax);
+
+				actual.Scope.Is(scope);
+				actual.IsUnsafe.Is(isUnsafe);
+				actual.IsPartial.Is(isPartial);
+				actual.IsSealed.Is(isSealed);
+				actual.IsAbstract.Is(isAbstract);
+
+			}
+
+			areEqual("Public", ScopeCategories.Public);
+			areEqual("Internal", ScopeCategories.Internal);
+			areEqual("Unsafe", ScopeCategories.Public, isUnsafe: true);
+			areEqual("Partial", ScopeCategories.Public, isPartial: true);
+			areEqual("Abstract", ScopeCategories.Public, isAbstract: true);
+			areEqual("Sealed", ScopeCategories.Public, isSealed: true);
+			areEqual("UnsafePartialSealed", ScopeCategories.Public, isUnsafe: true, isPartial: true, isSealed: true);
+
+			areEqual("Private", ScopeCategories.Private);
+			areEqual("PrivateProtected", ScopeCategories.PrivateProtected);
+			areEqual("ProtectedInternal", ScopeCategories.ProtectedInternal);
+			areEqual("Protected", ScopeCategories.Protected);
+		}
+
 
 	}
 }
