@@ -93,5 +93,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 				_ => false
 			};
 		}
+
+		public override string ToString() => Name;
 	}
 }

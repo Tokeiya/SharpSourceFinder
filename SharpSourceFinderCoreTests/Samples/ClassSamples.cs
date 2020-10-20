@@ -6,7 +6,7 @@ namespace NameSpace
 {
 	public class Public
 	{
-		public public (int value){}
+		public Public (int value){}
 		public int Value { get; set; }
 
 		public int Method()

@@ -2,15 +2,15 @@
 {
 	public struct Public
 	{
-		public public (int value)
-		{}
+		public Public(int value) : this()
+		{ }
 
 		public int Field;
 		public int Prop { get; set; }
 
 		public override string ToString()
 		{
-			return "Hello world";
+			return ""Hello world"";
 		}
 	}
 
@@ -38,12 +38,12 @@
 	{
 		private struct Private
 		{
-			
+
 		}
 
 		protected struct Protected
 		{
-			
+
 		}
 
 		protected internal struct ProtectedInternal
@@ -53,7 +53,7 @@
 
 		private protected struct PrivateProtected
 		{
-			
+
 		}
 	}
 }

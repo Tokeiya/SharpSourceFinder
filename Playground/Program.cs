@@ -6,47 +6,118 @@ using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Tokeiya3.SharpSourceFinderCore;
 using Console = System.Console;
 
 namespace Playground
 {
+	class Sample : CSharpSyntaxWalker
+	{
+		private int cnt = 0;
 
+		void WriteLine(string value)
+		{
+			Console.WriteLine(new string(' ',cnt*2)+value);
+		}
+
+		public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
+		{
+			++cnt;
+			WriteLine("EnterNameSpace");
+			base.VisitNamespaceDeclaration(node);
+			WriteLine("ExitNameSpace");
+			--cnt;
+		}
+
+		public override void VisitStructDeclaration(StructDeclarationSyntax node)
+		{
+			++cnt;
+			WriteLine("EnterStruct");
+			base.VisitStructDeclaration(node);
+			WriteLine("ExitStruct");
+			--cnt;
+		}
+
+		public override void VisitClassDeclaration(ClassDeclarationSyntax node)
+		{
+			++cnt;
+			WriteLine("EnterClass");
+			base.VisitClassDeclaration(node);
+			WriteLine("ExitClass");
+			--cnt;
+		}
+	}
 	class Program
 	{
-		static IReadOnlyList<string> GetName(NameSyntax syntax)
-		{
-			static void recursion(QualifiedNameSyntax qualified, List<string> accum)
-			{
-				if (qualified.Left is QualifiedNameSyntax q)
-				{
-					recursion(q, accum);
-				}
-				else if (qualified.Left is IdentifierNameSyntax id)
-				{
-					accum.Add(id.Identifier.Text);
-				}
-				accum.Add(qualified.Right.Identifier.Text);
-			}
-
-			var accumulator = new List<string>();
-
-			if (syntax is IdentifierNameSyntax id)
-			{
-				accumulator.Add(id.Identifier.Text);
-			}
-			else if (syntax is QualifiedNameSyntax qualified)
-			{
-				recursion(qualified, accumulator);
-			}
-
-			return accumulator;
-		}
 		static void Main()
 		{
-			var hoge = new [] { "Hello", "World" };
-			var piyo = new[] { "Hello", "World","Foo" };
+			var root = CSharpSyntaxTree.ParseText(@"
+namespace NameSpace
+{
+	public struct Public
+	{
+		public Public(int value) : this()
+		{ }
 
-			Console.WriteLine(hoge.SequenceEqual(piyo));
+		public int Field;
+		public int Prop { get; set; }
+
+		public override string ToString()
+		{
+			return ""Hello world"";
+		}
+	}
+
+	public unsafe struct Unsafe
+	{
+
+	}
+
+	public unsafe partial struct UnsafePartial
+	{
+
+	}
+
+	public partial struct Partial
+	{
+
+	}
+
+	internal struct Internal
+	{
+
+	}
+
+	public class Envelope
+	{
+		private struct Private
+		{
+
+		}
+
+		protected struct Protected
+		{
+
+		}
+
+		protected internal struct ProtectedInternal
+		{
+
+		}
+
+		private protected struct PrivateProtected
+		{
+
+		}
+	}
+}
+
+
+
+").GetCompilationUnitRoot();
+
+			var walker = new Sample();
+			walker.Visit(root);
 
 		}
 	}

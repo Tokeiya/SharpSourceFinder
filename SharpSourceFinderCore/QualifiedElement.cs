@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
+using Tokeiya3.StringManipulator;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
@@ -116,6 +118,20 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 			base.RegisterChild(child);
 			((IdentityElement) child).Order = TypedChildren.Count;
+		}
+
+		public override string ToString()
+		{
+			var bld = new StringBuilder();
+
+			foreach (var elem in Identities.Select(x => x.Name))
+			{
+				bld.Append("elem");
+				bld.Append('.');
+			}
+
+			bld.Extract(..^1);
+			return bld.ToString();
 		}
 	}
 }

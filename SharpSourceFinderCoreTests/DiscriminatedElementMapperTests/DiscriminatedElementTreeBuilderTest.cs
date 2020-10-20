@@ -1,11 +1,15 @@
+using System;
 using System.IO;
 using Microsoft.CodeAnalysis.CSharp;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
 using ChainingAssertion;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json.Serialization;
 
 namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 {
@@ -15,60 +19,295 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 
 		public DiscriminatedElementTreeBuilderTest(ITestOutputHelper output) => _output = output;
 
-		[Trait("TestLayer", nameof(DiscriminatedElementTreeBuilder))]
-		[Fact]
-		public void NameSpaceOnlyTest()
+		(CompilationUnitSyntax root, PhysicalStorage storage) BuildSyntaxTree(string fileName)
 		{
-			var root = CSharpSyntaxTree.ParseText(File.ReadAllText("Samples\\NameSpaceOnly.cs")).GetCompilationUnitRoot();
-			var builder = new DiscriminatedElementTreeBuilder();
-			var storage = new PhysicalStorage("Samples\\NameSpaceOnly.cs");
+			var storage = new PhysicalStorage($"Samples/{fileName}");
+			var root = CSharpSyntaxTree.ParseText(File.ReadAllText(storage.Path)).GetCompilationUnitRoot();
 
+			return (root, storage);
+		}
 
-			var sample = builder.Build(root, storage);
+		static void Verify(NameSpace actual)
+		{
+			ImaginaryRoot.IsImaginaryRoot(actual.Parent).IsTrue();
+			actual.Identity.Identities.IsEmpty();
+		}
 
-			sample.Storage.IsSameReferenceAs(storage);
-			ImaginaryRoot.IsImaginaryRoot(sample.Parent).IsTrue();
-			sample.Identity.Identities.Count.Is(0);
+		static void Verify(IIdentity actual, string name, IdentityCategories category, IQualified from, int order)
+		{
+			actual.Name.Is(name);
+			actual.Category.Is(category);
+			actual.From.Is(from);
+			actual.Order.Is(order);
+		}
 
-			var children = sample.Children().ToArray();
-			children.Length.Is(2);
+		static void Verify(NameSpace actual, IDiscriminatedElement parent, params string[] names)
+		{
+			actual.Parent.IsSameReferenceAs(parent);
+			var id = actual.Identity;
+			id.Identities.Count.Is(names.Length);
 
-			sample = (NameSpace)children[1];
-			var actual = sample.GetQualifiedName();
+			for (int i = 0; i < names.Length; i++)
+			{
+				Verify(id.Identities[i], names[i], IdentityCategories.Namespace, id, i + 1);
 
-			actual.Identities.Count.Is(3);
+			}
 
-			actual.Identities[0].Name.Is("NameSpace");
-			actual.Identities[1].Name.Is("Hoge");
-			actual.Identities[2].Name.Is("Moge");
+		}
+
+		static T Extract<T>(NameSpace tree, string name) where T : TypeElement
+		{
+			var seq = tree.DescendantsAndSelf().OfType<T>().Where(x => x.Identity.Identities[0].Name == name);
+			seq.Count().Is(1);
+			return seq.First();
+		}
+
+		static NameSpace ExtractNameSpace(NameSpace tree, params string[] names)
+		{
+			bool pred(NameSpace ns)
+			{
+				var tmp = ns.Identity.Identities.Select(x => x.Name);
+				return tmp.SequenceEqual(names);
+			}
+
+			var seq = tree.DescendantsAndSelf().OfType<NameSpace>().Where(x => pred(x));
+			seq.Count().Is(1);
+			return seq.First();
+
 		}
 
 
 		[Trait("TestLayer", nameof(DiscriminatedElementTreeBuilder))]
 		[Fact]
-		public void ClassBuildTest()
+		public void NamespaceOnly()
 		{
-			var root = CSharpSyntaxTree.ParseText(File.ReadAllText("Samples\\CLassSamples.cs")).GetCompilationUnitRoot();
-			var builder = new DiscriminatedElementTreeBuilder();
-			var storage = new PhysicalStorage("Samples\\ClassSamples.cs");
+			var mapper = new DiscriminatedElementTreeBuilder();
+			var (root, storage) = BuildSyntaxTree("NameSpaceOnly.cs");
 
-			var sample = builder.Build(root, storage);
+			var actual = mapper.Build(root, storage);
+			Verify(actual);
 
-			sample.DescendantsAndSelf().OfType<NameSpace>().Count().Is(2);
+			var ns = actual.Descendants().OfType<NameSpace>();
+			ns.Count().Is(1);
 
-			var result = sample.DescendantsAndSelf().OfType<ClassElement>().ToArray();
-			result.Length.Is(11);
+			var name = ns.First().Identity;
+			name.Identities.Count.Is(3);
 
-			var envelope = result.First(elem => elem.Identity.Identities[0].Name == "Envelope");
-			envelope.Children().Count().Is(4);
-
-			var nested = envelope.Children().OfType<ClassElement>()
-				.First(c => c.Identity.Identities[0].Name == "Protected");
-
-			nested.Scope.Is(ScopeCategories.Protected);
-
+			foreach (var (nme, idx) in new[] {"NameSpace", "Hoge", "Moge"}.Select((s, i) => (s, i)))
+			{
+				Verify(name.Identities[idx], nme, IdentityCategories.Namespace, name, idx+1);
+			}
+		}
 
 
+
+		void Verify(EnumElement actual, IDiscriminatedElement parent, string name)
+		{
+			actual.Parent.IsSameReferenceAs(parent);
+			actual.Identity.Identities.First().Name.Is(name);
+		}
+
+		[Trait("TestLayer", nameof(DiscriminatedElementTreeBuilder))]
+		[Fact]
+		public void NestedNameSpace()
+		{
+			var mapper = new DiscriminatedElementTreeBuilder();
+			var (root, storage) = BuildSyntaxTree("NestedNameSpace.cs");
+
+			var tree = mapper.Build(root, storage);
+			Verify(tree);
+
+			var ns = tree.Descendants().OfType<NameSpace>();
+			ns.Count().Is(2);
+
+			var actual = ns.First();
+			Verify(actual, tree, "Outer");
+
+			var parent = actual;
+			actual = ns.Skip(1).First();
+			Verify(actual, parent, "Inner");
+		}
+
+		[Trait("TestLayer", nameof(DiscriminatedElementTreeBuilder))]
+		[Fact]
+		public void MultiNamespace()
+		{
+			var mapper = new DiscriminatedElementTreeBuilder();
+			var (root, storage) = BuildSyntaxTree("MultiNameSpace.cs");
+
+			var tree = mapper.Build(root, storage);
+			Verify(tree);
+
+			tree.Children().Count().Is(3);
+
+			var actual = (NameSpace)tree.Children().Skip(1).First();
+			Verify(actual, tree, "OuterA");
+			Verify((NameSpace)tree.Children().Skip(2).First(), tree, "OuterB");
+
+			var parent= (NameSpace)tree.Children().Skip(1).First();
+			parent.Children().Count().Is(2);
+			Verify(ExtractNameSpace(tree, "InnerA"), parent, "InnerA");
+
+			parent = (NameSpace) tree.Children().Skip(2).First();
+			parent.Children().Count().Is(2);
+			Verify(ExtractNameSpace(tree, "InnerB"), parent, "InnerB");
+
+
+
+		}
+
+
+		[Trait("TestLayer", nameof(DiscriminatedElementTreeBuilder))]
+		[Fact]
+		public void Enum()
+		{
+			var mapper = new DiscriminatedElementTreeBuilder();
+			var (root, storage) = BuildSyntaxTree("EnumSamples.cs");
+
+			var tree = mapper.Build(root, storage);
+			Verify(tree);
+
+			Verify((NameSpace) tree.Children().Skip(1).First(), tree, "EnumSamples");
+
+			var enums = tree.Descendants().OfType<EnumElement>();
+			enums.Count().Is(5);
+
+			IDiscriminatedElement parent = ExtractNameSpace(tree, "EnumSamples");
+			EnumElement actual = Extract<EnumElement>(tree, "PublicEnum");
+			Verify(actual, parent, "PublicEnum");
+
+			Verify(Extract<EnumElement>(tree, "InternalEnum"), parent, "InternalEnum");
+
+			parent = Extract<ClassElement>(tree, "Envelope");
+			Verify(Extract<EnumElement>(tree, "ProtectedEnum"), parent, "ProtectedEnum");
+			Verify(Extract<EnumElement>(tree, "ProtectedInternalEnum"), parent, "ProtectedInternalEnum");
+			Verify(Extract<EnumElement>(tree, "PrivateProtectedEnum"), parent, "PrivateProtectedEnum");
+		}
+
+		[Trait("TestLayer", nameof(DiscriminatedElementTreeBuilder))]
+		[Fact]
+		public void Delegate()
+		{
+			var mapper = new DiscriminatedElementTreeBuilder();
+			var (root, storage) = BuildSyntaxTree("DelegateSamples.cs");
+
+			var tree = mapper.Build(root, storage);
+			Verify(tree);
+
+			IDiscriminatedElement parent = ExtractNameSpace(tree, "SharpSourceFinderCoreTests", "Samples");
+
+			void verify(string name)
+			{
+				var actual = Extract<DelegateElement>(tree, name);
+				actual.Parent.IsSameReferenceAs(parent);
+
+				actual.Identity.Identities.First().Name.Is(name);
+			}
+
+			verify("Public");
+			verify("Internal");
+			verify("Unsafe");
+
+			parent = Extract<ClassElement>(tree, "DelegateSamples");
+			verify("Protected");
+			verify("ProtectedInternal");
+			verify("PrivateProtected");
+			verify("Private");
+		}
+
+		[Trait("TestLayer", nameof(DiscriminatedElementTreeBuilder))]
+		[Fact]
+		public void Interface()
+		{
+			var mapper = new DiscriminatedElementTreeBuilder();
+			var (root, storage) = BuildSyntaxTree("InterfaceSamples.cs");
+
+			var tree = mapper.Build(root, storage);
+			Verify(tree);
+			IDiscriminatedElement parent = tree.Children().Skip(1).First();
+
+			void verify(string name)
+			{
+				var actual = Extract<InterfaceElement>(tree, name);
+				actual.Parent.IsSameReferenceAs(parent);
+
+				actual.Identity.Identities.First().Name.Is(name);
+			}
+
+			verify("IPublic");
+			verify("IInternal");
+			verify("IUnsafe");
+			verify("IPartial");
+
+			parent = Extract<ClassElement>(tree, "Envelope");
+			verify("IProtected");
+			verify("IPrivateProtected");
+			verify("IProtectedInternal");
+			verify("IPrivate");
+
+
+		}
+
+		[Trait("TestLayer", nameof(DiscriminatedElementTreeBuilder))]
+		[Fact]
+		public void Struct()
+		{
+			var mapper = new DiscriminatedElementTreeBuilder();
+			var (root, storage) = BuildSyntaxTree("StructSamples.cs");
+
+			var tree = mapper.Build(root, storage);
+			Verify(tree);
+			IDiscriminatedElement parent = tree.Children().OfType<NameSpace>().First();
+
+			void verify(string name)
+			{
+				var actual = Extract<StructElement>(tree, name);
+				actual.Parent.Is(parent);
+				actual.Identity.Identities.First().Name.Is(name);
+			}
+
+			verify("Public");
+			verify("UnsafePartial");
+			verify("Partial");
+			verify("Internal");
+
+			parent = Extract<ClassElement>(tree,"Envelope");
+			verify("Private");
+			verify("Protected");
+			verify("ProtectedInternal");
+			verify("PrivateProtected");
+		}
+
+		[Trait("TestLayer", nameof(DiscriminatedElementTreeBuilder))]
+		[Fact]
+		public void Class()
+		{
+			var mapper = new DiscriminatedElementTreeBuilder();
+			var (root, storage) = BuildSyntaxTree("ClassSamples.cs");
+			var tree = mapper.Build(root, storage);
+			Verify(tree);
+
+			IDiscriminatedElement parent = tree.Children().Skip(1).First();
+
+			void verify(string name)
+			{
+				var actual = Extract<ClassElement>(tree, name);
+				actual.Parent.Is(parent);
+				actual.Identity.Identities.First().Name.Is(name);
+			}
+
+			verify("Public");
+			verify("Internal");
+			verify("Unsafe");
+			verify("Partial");
+			verify("Abstract");
+			verify("Sealed");
+
+			parent = Extract<ClassElement>(tree, "Envelope");
+			verify("Private");
+			verify("ProtectedInternal");
+			verify("PrivateProtected");
+			verify("Protected");
 
 
 		}

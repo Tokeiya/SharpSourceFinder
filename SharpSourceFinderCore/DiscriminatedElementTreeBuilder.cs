@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -14,48 +15,62 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public NameSpace Build(CompilationUnitSyntax syntax, IPhysicalStorage storage)
 		{
-			var global = new NameSpace(storage);
-			_ = new QualifiedElement(global);
+			try
+			{
+				var global = new NameSpace(storage);
+				_ = new QualifiedElement(global);
 
-			_parentStack.Push(global);
-			Visit(syntax);
-			return (NameSpace)_parentStack.Pop();
+				_parentStack.Push(global);
+				Visit(syntax);
+				Debug.Assert(_parentStack.Count==1);
+				return (NameSpace) _parentStack.Pop();
+			}
+			finally
+			{
+				_parentStack.Clear();
+			}
 		}
 
 		public override void VisitClassDeclaration(ClassDeclarationSyntax node)
 		{
-#warning VisitClassDeclaration_Is_NotImpl
-			throw new NotImplementedException("VisitClassDeclaration is not implemented");
+			_parentStack.Push(UnitOfDiscriminatedElementMapper.Map(_parentStack.Peek(), node));
+			base.VisitClassDeclaration(node);
+			_parentStack.Pop();
 		}
 
 		public override void VisitStructDeclaration(StructDeclarationSyntax node)
 		{
-#warning VisitStructDeclaration_Is_NotImpl
-			throw new NotImplementedException("VisitStructDeclaration is not implemented");
+			_parentStack.Push(UnitOfDiscriminatedElementMapper.Map(_parentStack.Peek(), node));
+			base.VisitStructDeclaration(node);
+			_parentStack.Pop();
 		}
 
 		public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
 		{
-#warning VisitInterfaceDeclaration_Is_NotImpl
-			throw new NotImplementedException("VisitInterfaceDeclaration is not implemented");
+			_parentStack.Push(UnitOfDiscriminatedElementMapper.Map(_parentStack.Peek(), node));
+			base.VisitInterfaceDeclaration(node);
+			_parentStack.Pop();
 		}
 
 		public override void VisitDelegateDeclaration(DelegateDeclarationSyntax node)
 		{
-#warning VisitDelegateDeclaration_Is_NotImpl
-			throw new NotImplementedException("VisitDelegateDeclaration is not implemented");
+			_parentStack.Push(UnitOfDiscriminatedElementMapper.Map(_parentStack.Peek(), node));
+			base.VisitDelegateDeclaration(node);
+			_parentStack.Pop();
 		}
 
 		public override void VisitEnumDeclaration(EnumDeclarationSyntax node)
 		{
-#warning VisitEnumDeclaration_Is_NotImpl
-			throw new NotImplementedException("VisitEnumDeclaration is not implemented");
+			_parentStack.Push(UnitOfDiscriminatedElementMapper.Map(_parentStack.Peek(), node));
+			base.VisitEnumDeclaration(node);
+			_parentStack.Pop();
 		}
 
 		public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
 		{
-#warning VisitNamespaceDeclaration_Is_NotImpl
-			throw new NotImplementedException("VisitNamespaceDeclaration is not implemented");
+			_parentStack.Push(UnitOfDiscriminatedElementMapper.Map((NameSpace)_parentStack.Peek(), node));
+			base.VisitNamespaceDeclaration(node);
+			_parentStack.Pop();
 		}
 
 
