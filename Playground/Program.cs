@@ -7,118 +7,44 @@ using System.Text;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Tokeiya3.SharpSourceFinderCore;
+using Tokeiya3.SharpSourceFinderCore.DataControl;
 using Console = System.Console;
 
 namespace Playground
 {
-	class Sample : CSharpSyntaxWalker
-	{
-		private int cnt = 0;
-
-		void WriteLine(string value)
-		{
-			Console.WriteLine(new string(' ',cnt*2)+value);
-		}
-
-		public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
-		{
-			++cnt;
-			WriteLine("EnterNameSpace");
-			base.VisitNamespaceDeclaration(node);
-			WriteLine("ExitNameSpace");
-			--cnt;
-		}
-
-		public override void VisitStructDeclaration(StructDeclarationSyntax node)
-		{
-			++cnt;
-			WriteLine("EnterStruct");
-			base.VisitStructDeclaration(node);
-			WriteLine("ExitStruct");
-			--cnt;
-		}
-
-		public override void VisitClassDeclaration(ClassDeclarationSyntax node)
-		{
-			++cnt;
-			WriteLine("EnterClass");
-			base.VisitClassDeclaration(node);
-			WriteLine("ExitClass");
-			--cnt;
-		}
-	}
 	class Program
 	{
 		static void Main()
 		{
-			var root = CSharpSyntaxTree.ParseText(@"
-namespace NameSpace
-{
-	public struct Public
-	{
-		public Public(int value) : this()
-		{ }
 
-		public int Field;
-		public int Prop { get; set; }
+			LinkedList<int> list = new LinkedList<int>();
+			var ary = Enumerable.Range(0, 4).Select(i => new OrderControlElement<int> { Value = i }).ToArray();
 
-		public override string ToString()
-		{
-			return ""Hello world"";
-		}
-	}
+			ary[0].MoveToAhead(ary[1]);
+			ary[1].MoveToAhead(ary[2]);
+			ary[2].MoveToAhead(ary[3]);
 
-	public unsafe struct Unsafe
-	{
 
-	}
-
-	public unsafe partial struct UnsafePartial
-	{
-
-	}
-
-	public partial struct Partial
-	{
-
-	}
-
-	internal struct Internal
-	{
-
-	}
-
-	public class Envelope
-	{
-		private struct Private
-		{
 
 		}
 
-		protected struct Protected
+		private static void NewMethod()
 		{
+			var builder = new DiscriminatedElementTreeBuilder();
 
-		}
-
-		protected internal struct ProtectedInternal
-		{
-
-		}
-
-		private protected struct PrivateProtected
-		{
-
-		}
-	}
-}
-
-
-
-").GetCompilationUnitRoot();
-
-			var walker = new Sample();
-			walker.Visit(root);
-
+			foreach (var file in Directory.EnumerateFiles("H:\\DotNEt", "*.cs", SearchOption.AllDirectories))
+			{
+				try
+				{
+					Console.WriteLine(file);
+					var root = CSharpSyntaxTree.ParseText(File.ReadAllText(file)).GetCompilationUnitRoot();
+					var tree = builder.Build(root, new PhysicalStorage(file));
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e);
+				}
+			}
 		}
 	}
 }
