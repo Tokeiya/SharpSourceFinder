@@ -1,8 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tokeiya3.SharpSourceFinderCore.DataControl
+﻿namespace Tokeiya3.SharpSourceFinderCore.DataControl
 {
-
 }

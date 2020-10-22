@@ -7,22 +7,21 @@ using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 {
-	public class DelegateElementTest:TypedElementTest<DelegateElement>
+	public class DelegateElementTest : TypedElementTest<DelegateElement>
 	{
-		static (QualifiedElement,IReadOnlyList<IdentityElement>) AttachName(IDiscriminatedElement element, params string[] names)
+		public DelegateElementTest(ITestOutputHelper output) : base(output)
+		{
+		}
+
+		static (QualifiedElement, IReadOnlyList<IdentityElement>) AttachName(IDiscriminatedElement element,
+			params string[] names)
 		{
 			var list = new List<IdentityElement>();
 			var ret = new QualifiedElement(element);
 
-			foreach (var name in names)
-			{
-				list.Add(new IdentityElement(ret, name));
-			}
+			foreach (var name in names) list.Add(new IdentityElement(ret, name));
 
 			return (ret, list);
-		}
-		public DelegateElementTest(ITestOutputHelper output) : base(output)
-		{
 		}
 
 
@@ -34,18 +33,18 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var sample = new DelegateElement(ns, ScopeCategories.Public, false);
 			AttachName(sample, "BinOp");
 
-			Assert.Throws<ArgumentException>(() => _ = new InterfaceElement(sample, ScopeCategories.Public, false, false));
-			Assert.Throws<ArgumentException>(() => _ = new ClassElement(sample, ScopeCategories.Public, false, false, false, false, false));
-
-
+			Assert.Throws<ArgumentException>(() =>
+				_ = new InterfaceElement(sample, ScopeCategories.Public, false, false));
+			Assert.Throws<ArgumentException>(() =>
+				_ = new ClassElement(sample, ScopeCategories.Public, false, false, false, false, false));
 		}
 
 
+		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) =>
+			actual.IsSameReferenceAs(expected);
 
-
-		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) => actual.IsSameReferenceAs(expected);
-
-		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) => actual.IsSameReferenceAs(expected);
+		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) =>
+			actual.IsSameReferenceAs(expected);
 
 		protected override IEnumerable<(DelegateElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
@@ -56,11 +55,10 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			AttachName(sample, "Hoge");
 
 			yield return (sample, ns);
-
-
 		}
 
-		protected override IEnumerable<(DelegateElement sample, IPhysicalStorage expected)> GeneratePhysicalStorageSample()
+		protected override IEnumerable<(DelegateElement sample, IPhysicalStorage expected)>
+			GeneratePhysicalStorageSample()
 		{
 			var expected = new PhysicalStorage(PathA);
 			var ns = new NameSpace(expected);
@@ -68,10 +66,10 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 			var sample = new DelegateElement(ns, ScopeCategories.Public, false);
 			yield return (sample, expected);
-
 		}
 
-		protected override IEnumerable<(DelegateElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateGetAncestorsSample()
+		protected override IEnumerable<(DelegateElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateGetAncestorsSample()
 		{
 			var list = new List<IDiscriminatedElement>();
 
@@ -94,19 +92,20 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			yield return (sample, list);
 		}
 
-		protected override IEnumerable<(DelegateElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateChildrenSample()
+		protected override IEnumerable<(DelegateElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateChildrenSample()
 		{
 			var ns = new NameSpace(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
 
 			var sample = new DelegateElement(ns, ScopeCategories.Public, false);
-			var (expected,_)= AttachName(sample, "Hoge");
+			var (expected, _) = AttachName(sample, "Hoge");
 
-			yield return (sample, new[] { (IDiscriminatedElement)expected });
-
+			yield return (sample, new[] {(IDiscriminatedElement) expected});
 		}
 
-		protected override IEnumerable<(DelegateElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateDescendantsSample()
+		protected override IEnumerable<(DelegateElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateDescendantsSample()
 		{
 			var ns = new NameSpace(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
@@ -114,7 +113,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var sample = new DelegateElement(ns, ScopeCategories.Public, false);
 			var (expected, id) = AttachName(sample, "Hoge");
 
-			yield return (sample, new[] { (IDiscriminatedElement)expected,(IDiscriminatedElement)id[0] });
+			yield return (sample, new[] {(IDiscriminatedElement) expected, (IDiscriminatedElement) id[0]});
 		}
 
 		protected override IEnumerable<(DelegateElement sample, IQualified expected)> GenerateQualifiedNameSample()
@@ -136,7 +135,9 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override void AreEqual(IQualified actual, IQualified expected) =>
 			actual.IsEquivalentTo(expected).IsTrue();
 
-		protected override IEnumerable<(DelegateElement sample, Stack<(IdentityCategories category, string identity)> expected)> GenerateAggregateIdentitiesSample()
+		protected override
+			IEnumerable<(DelegateElement sample, Stack<(IdentityCategories category, string identity)> expected)>
+			GenerateAggregateIdentitiesSample()
 		{
 			var ns = new NameSpace(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
@@ -150,7 +151,9 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			yield return (sample, expected);
 		}
 
-		protected override IEnumerable<(DelegateElement sample, IReadOnlyList<IDiscriminatedElement> expected, Action<DelegateElement> registerAction)> GenerateRegisterChildSample()
+		protected override
+			IEnumerable<(DelegateElement sample, IReadOnlyList<IDiscriminatedElement> expected, Action<DelegateElement>
+				registerAction)> GenerateRegisterChildSample()
 		{
 			var expected = new List<IDiscriminatedElement>();
 			var ns = new NameSpace(new PhysicalStorage(PathA));
@@ -160,7 +163,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 			void act(DelegateElement elem)
 			{
-				expected.Add(AttachName(elem,"Hoge").Item1);
+				expected.Add(AttachName(elem, "Hoge").Item1);
 			}
 
 			yield return (sample, expected, act);
@@ -186,13 +189,15 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			yield return new DelegateElement(ns, ScopeCategories.Public, false);
 		}
 
-		protected override bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract, bool isSealed, bool isUnsafe,
+		protected override bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
+			bool isSealed, bool isUnsafe,
 			bool isPartial, bool isStatic, string identity,
-			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace, IQualified expectedIdentity, DelegateElement
+			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace, IQualified expectedIdentity,
+				DelegateElement
 				sample) generated)
 		{
 			generated = default;
-			if (isUnsafe || !isSealed || isPartial || isStatic||isAbstract) return false;
+			if (isUnsafe || !isSealed || isPartial || isStatic || isAbstract) return false;
 
 			generated.expectedStorage = new PhysicalStorage(path);
 			generated.expectedNameSpace = new NameSpace(generated.expectedStorage);

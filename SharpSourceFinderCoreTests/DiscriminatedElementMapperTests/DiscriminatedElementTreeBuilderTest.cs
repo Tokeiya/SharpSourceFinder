@@ -1,15 +1,11 @@
-using System;
 using System.IO;
+using System.Linq;
+using ChainingAssertion;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Tokeiya3.SharpSourceFinderCore;
 using Xunit;
 using Xunit.Abstractions;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using ChainingAssertion;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Newtonsoft.Json.Serialization;
 
 namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 {
@@ -48,11 +44,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			id.Identities.Count.Is(names.Length);
 
 			for (int i = 0; i < names.Length; i++)
-			{
 				Verify(id.Identities[i], names[i], IdentityCategories.Namespace, id, i + 1);
-
-			}
-
 		}
 
 		static T Extract<T>(NameSpace tree, string name) where T : TypeElement
@@ -73,7 +65,6 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			var seq = tree.DescendantsAndSelf().OfType<NameSpace>().Where(x => pred(x));
 			seq.Count().Is(1);
 			return seq.First();
-
 		}
 
 
@@ -94,11 +85,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			name.Identities.Count.Is(3);
 
 			foreach (var (nme, idx) in new[] {"NameSpace", "Hoge", "Moge"}.Select((s, i) => (s, i)))
-			{
-				Verify(name.Identities[idx], nme, IdentityCategories.Namespace, name, idx+1);
-			}
+				Verify(name.Identities[idx], nme, IdentityCategories.Namespace, name, idx + 1);
 		}
-
 
 
 		void Verify(EnumElement actual, IDiscriminatedElement parent, string name)
@@ -140,20 +128,17 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 
 			tree.Children().Count().Is(3);
 
-			var actual = (NameSpace)tree.Children().Skip(1).First();
+			var actual = (NameSpace) tree.Children().Skip(1).First();
 			Verify(actual, tree, "OuterA");
-			Verify((NameSpace)tree.Children().Skip(2).First(), tree, "OuterB");
+			Verify((NameSpace) tree.Children().Skip(2).First(), tree, "OuterB");
 
-			var parent= (NameSpace)tree.Children().Skip(1).First();
+			var parent = (NameSpace) tree.Children().Skip(1).First();
 			parent.Children().Count().Is(2);
 			Verify(ExtractNameSpace(tree, "InnerA"), parent, "InnerA");
 
 			parent = (NameSpace) tree.Children().Skip(2).First();
 			parent.Children().Count().Is(2);
 			Verify(ExtractNameSpace(tree, "InnerB"), parent, "InnerB");
-
-
-
 		}
 
 
@@ -244,8 +229,6 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			verify("IPrivateProtected");
 			verify("IProtectedInternal");
 			verify("IPrivate");
-
-
 		}
 
 		[Trait("TestLayer", nameof(DiscriminatedElementTreeBuilder))]
@@ -271,7 +254,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			verify("Partial");
 			verify("Internal");
 
-			parent = Extract<ClassElement>(tree,"Envelope");
+			parent = Extract<ClassElement>(tree, "Envelope");
 			verify("Private");
 			verify("Protected");
 			verify("ProtectedInternal");
@@ -308,10 +291,6 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			verify("ProtectedInternal");
 			verify("PrivateProtected");
 			verify("Protected");
-
-
 		}
-
-
 	}
 }

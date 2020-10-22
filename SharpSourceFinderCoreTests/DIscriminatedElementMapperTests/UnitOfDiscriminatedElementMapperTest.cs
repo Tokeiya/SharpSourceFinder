@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 using ChainingAssertion;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -31,13 +28,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			static void recursion(QualifiedNameSyntax qualified, List<string> accum)
 			{
 				if (qualified.Left is QualifiedNameSyntax q)
-				{
 					recursion(q, accum);
-				}
-				else if (qualified.Left is IdentifierNameSyntax id)
-				{
-					accum.Add(id.Identifier.Text);
-				}
+				else if (qualified.Left is IdentifierNameSyntax id) accum.Add(id.Identifier.Text);
 
 				accum.Add(qualified.Right.Identifier.Text);
 			}
@@ -45,13 +37,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			var accumulator = new List<string>();
 
 			if (syntax is IdentifierNameSyntax id)
-			{
 				accumulator.Add(id.Identifier.Text);
-			}
-			else if (syntax is QualifiedNameSyntax qualified)
-			{
-				recursion(qualified, accumulator);
-			}
+			else if (syntax is QualifiedNameSyntax qualified) recursion(qualified, accumulator);
 
 			return accumulator;
 		}
@@ -94,8 +81,6 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 
 			actual.Parent.IsSameReferenceAs(parent);
 			actual.Children().Count().Is(1);
-
-
 		}
 
 		[Trait("TestLayer", nameof(UnitOfDiscriminatedElementMapper))]
@@ -142,14 +127,13 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 				actual.IsPartial.IsFalse();
 			}
 
-			areEqual("Public", ScopeCategories.Public, false);
-			areEqual("Internal", ScopeCategories.Internal, false);
+			areEqual("Public", ScopeCategories.Public);
+			areEqual("Internal", ScopeCategories.Internal);
 			areEqual("Unsafe", ScopeCategories.Public, true);
-			areEqual("Protected", ScopeCategories.Protected, false);
-			areEqual("ProtectedInternal", ScopeCategories.ProtectedInternal, false);
+			areEqual("Protected", ScopeCategories.Protected);
+			areEqual("ProtectedInternal", ScopeCategories.ProtectedInternal);
 			areEqual("PrivateProtected", ScopeCategories.PrivateProtected);
 			areEqual("Private", ScopeCategories.Private);
-
 		}
 
 		[Trait("TestLayer", nameof(UnitOfDiscriminatedElementMapper))]
@@ -171,7 +155,6 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 				actual.IsSealed.IsTrue();
 				actual.IsStatic.IsFalse();
 				actual.IsUnsafe.IsFalse();
-
 			}
 
 			areEqual("PublicEnum", ScopeCategories.Public);
@@ -202,17 +185,15 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 				actual.IsSealed.IsFalse();
 				actual.IsStatic.IsFalse();
 				actual.IsSealed.IsFalse();
-
 			}
 
 			areEqual("IPublic", ScopeCategories.Public);
 			areEqual("IInternal", ScopeCategories.Internal);
-			areEqual("IUnsafe", ScopeCategories.Public, isUnsafe: true);
+			areEqual("IUnsafe", ScopeCategories.Public, true);
 			areEqual("IProtected", ScopeCategories.Protected);
 			areEqual("IPrivateProtected", ScopeCategories.PrivateProtected);
 			areEqual("IProtectedInternal", ScopeCategories.ProtectedInternal);
 			areEqual("IPrivate", ScopeCategories.Private);
-
 		}
 
 		[Trait("TestLayer", nameof(UnitOfDiscriminatedElementMapper))]
@@ -246,7 +227,6 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			areEqual("Protected", ScopeCategories.Protected);
 			areEqual("ProtectedInternal", ScopeCategories.ProtectedInternal);
 			areEqual("PrivateProtected", ScopeCategories.PrivateProtected);
-
 		}
 
 		[Trait("TestLayer", nameof(UnitOfDiscriminatedElementMapper))]
@@ -267,23 +247,20 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 				actual.IsPartial.Is(isPartial);
 				actual.IsSealed.Is(isSealed);
 				actual.IsAbstract.Is(isAbstract);
-
 			}
 
 			areEqual("Public", ScopeCategories.Public);
 			areEqual("Internal", ScopeCategories.Internal);
-			areEqual("Unsafe", ScopeCategories.Public, isUnsafe: true);
+			areEqual("Unsafe", ScopeCategories.Public, true);
 			areEqual("Partial", ScopeCategories.Public, isPartial: true);
 			areEqual("Abstract", ScopeCategories.Public, isAbstract: true);
 			areEqual("Sealed", ScopeCategories.Public, isSealed: true);
-			areEqual("UnsafePartialSealed", ScopeCategories.Public, isUnsafe: true, isPartial: true, isSealed: true);
+			areEqual("UnsafePartialSealed", ScopeCategories.Public, true, true, true);
 
 			areEqual("Private", ScopeCategories.Private);
 			areEqual("PrivateProtected", ScopeCategories.PrivateProtected);
 			areEqual("ProtectedInternal", ScopeCategories.ProtectedInternal);
 			areEqual("Protected", ScopeCategories.Protected);
 		}
-
-
 	}
 }

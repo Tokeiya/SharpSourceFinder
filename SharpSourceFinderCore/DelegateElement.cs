@@ -51,10 +51,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{
-			if (other is DelegateElement elem)
-			{
-				return IsBasementEquivalentTo(elem);
-			}
+			if (other is DelegateElement elem) return IsBasementEquivalentTo(elem);
 
 			return false;
 		}

@@ -8,33 +8,33 @@ using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 {
-	public class EnumElementTest:TypedElementTest<EnumElement>
+	public class EnumElementTest : TypedElementTest<EnumElement>
 	{
-
-		public EnumElementTest(ITestOutputHelper output):base(output )
+		public EnumElementTest(ITestOutputHelper output) : base(output)
 		{
 		}
 
-		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) => actual.IsSameReferenceAs(expected);
+		protected override void AreEqual(IDiscriminatedElement actual, IDiscriminatedElement expected) =>
+			actual.IsSameReferenceAs(expected);
 
 		protected override void AreEqual(IPhysicalStorage actual, IPhysicalStorage expected) =>
 			actual.IsSameReferenceAs(expected);
 
-		static (QualifiedElement,IReadOnlyList<IdentityElement>) AttachName(IDiscriminatedElement element, params string[] names)
+		static (QualifiedElement, IReadOnlyList<IdentityElement>) AttachName(IDiscriminatedElement element,
+			params string[] names)
 		{
 			var q = new QualifiedElement(element);
 			var id = names.Select(n => new IdentityElement(q, n)).ToArray();
 			return (q, id);
-
 		}
+
 		protected override IEnumerable<(EnumElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
 			var ns = new NameSpace(new PhysicalStorage(PathA));
-			
+
 			var sample = new EnumElement(ns, ScopeCategories.Public);
 
 			yield return (sample, ns);
-
 		}
 
 		protected override IEnumerable<(EnumElement sample, IPhysicalStorage expected)> GeneratePhysicalStorageSample()
@@ -45,7 +45,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			yield return (sample, expected);
 		}
 
-		protected override IEnumerable<(EnumElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateGetAncestorsSample()
+		protected override IEnumerable<(EnumElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateGetAncestorsSample()
 		{
 			var list = new List<IDiscriminatedElement>();
 			IDiscriminatedElement parent = new NameSpace(new PhysicalStorage(PathA));
@@ -62,7 +63,6 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			list.Reverse();
 
 			yield return (sample, list);
-
 		}
 
 		[Trait("TestLayer", nameof(EnumElement))]
@@ -75,9 +75,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var sample = new EnumElement(ns, ScopeCategories.Public);
 
 			Assert.Throws<ArgumentException>(() => _ = new EnumElement(sample, ScopeCategories.Public));
-
 		}
-
 
 
 		protected override IEnumerable<(EnumElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
@@ -92,7 +90,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			yield return (sample, Array.Empty<IDiscriminatedElement>());
 		}
 
-		protected override IEnumerable<(EnumElement sample, IReadOnlyList<IDiscriminatedElement> expected)> GenerateDescendantsSample()
+		protected override IEnumerable<(EnumElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
+			GenerateDescendantsSample()
 		{
 			var ns = new NameSpace(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
@@ -108,20 +107,23 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var ns = new NameSpace(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
 
-			var sample = new EnumElement(ns, ScopeCategories.Public); 
+			var sample = new EnumElement(ns, ScopeCategories.Public);
 			AttachName(sample, "Sample");
 
 			var expected = new QualifiedElement();
-			_ = new IdentityElement(expected,IdentityCategories.Namespace, NameSpaceA);
+			_ = new IdentityElement(expected, IdentityCategories.Namespace, NameSpaceA);
 			_ = new IdentityElement(expected, IdentityCategories.Enum, "Sample");
 
 			yield return (sample, expected);
 		}
 
-		protected override void AreEqual(IQualified actual, IQualified expected) => actual.IsEquivalentTo(expected).IsTrue();
+		protected override void AreEqual(IQualified actual, IQualified expected) =>
+			actual.IsEquivalentTo(expected).IsTrue();
 
 
-		protected override IEnumerable<(EnumElement sample, Stack<(IdentityCategories category, string identity)> expected)> GenerateAggregateIdentitiesSample()
+		protected override
+			IEnumerable<(EnumElement sample, Stack<(IdentityCategories category, string identity)> expected)>
+			GenerateAggregateIdentitiesSample()
 		{
 			var ns = new NameSpace(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
@@ -135,7 +137,9 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			yield return (sample, stack);
 		}
 
-		protected override IEnumerable<(EnumElement sample, IReadOnlyList<IDiscriminatedElement> expected, Action<EnumElement> registerAction)> GenerateRegisterChildSample()
+		protected override
+			IEnumerable<(EnumElement sample, IReadOnlyList<IDiscriminatedElement> expected, Action<EnumElement>
+				registerAction)> GenerateRegisterChildSample()
 		{
 			var ns = new NameSpace(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
@@ -143,7 +147,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var sample = new EnumElement(ns, ScopeCategories.Public);
 			AttachName(sample, "Sample");
 
-			yield return (sample, Array.Empty<IDiscriminatedElement>(), (dmy) => { });
+			yield return (sample, Array.Empty<IDiscriminatedElement>(), dmy => { });
 		}
 
 		protected override IEnumerable<(EnumElement sample, IDiscriminatedElement errSample)> GenerateErrSample()
@@ -165,9 +169,11 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			yield return new EnumElement(ns, ScopeCategories.Public);
 		}
 
-		protected override bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract, bool isSealed, bool isUnsafe,
+		protected override bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
+			bool isSealed, bool isUnsafe,
 			bool isPartial, bool isStatic, string identity,
-			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace, IQualified expectedIdentity, EnumElement sample)
+			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace, IQualified expectedIdentity, EnumElement
+				sample)
 				generated)
 		{
 			generated = default;
@@ -179,7 +185,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			AttachName(ns, nameSpace);
 
 			var sample = new EnumElement(ns, scope);
-			var (q,_)=AttachName(sample, identity);
+			var (q, _) = AttachName(sample, identity);
 
 
 			generated.sample = sample;

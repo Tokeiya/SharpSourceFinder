@@ -7,44 +7,53 @@ namespace Tokeiya3.SharpSourceFinderCore.DataControl
 		public OrderControlElement<T>? AheadElement { get; private set; }
 		public OrderControlElement<T>? BehindElement { get; private set; }
 
+		public T Value { get; set; }
+
+
+		public void AddToAhead(OrderControlElement<T> pivot)
+		{
+			pivot.AheadElement = this;
+			pivot.BehindElement = BehindElement;
+			BehindElement = pivot;
+		}
+
 		public void MoveToAhead(OrderControlElement<T> pivot)
 		{
-			if (pivot.AheadElement is null&&pivot.BehindElement is null)
-			{
-				pivot.AheadElement = this;
-				pivot.BehindElement = BehindElement;
-				BehindElement = pivot;
-			}
-			else
-			{
-				var tmp = pivot.AheadElement;
-				pivot.AheadElement = this;
-				BehindElement = pivot;
+			var tmpAhead = pivot.AheadElement;
+			var tmpBehind = BehindElement;
 
-				AheadElement = tmp;
-				if (!(tmp is null)) tmp.BehindElement = this;
-			}
+			pivot.AheadElement = this;
+			pivot.BehindElement = BehindElement;
+
+			BehindElement = pivot;
+			AheadElement = tmpAhead;
+
+			if (!(tmpAhead is null)) tmpAhead.BehindElement = this;
+			if (!(tmpBehind is null)) tmpBehind.AheadElement = pivot;
+
+
+		}
+
+		public void AddToBehind(OrderControlElement<T> pivot)
+		{
+			pivot.BehindElement = this;
+			pivot.AheadElement = AheadElement;
+			AheadElement = pivot;
 		}
 
 		public void MoveToBehind(OrderControlElement<T> pivot)
 		{
-			if (pivot.AheadElement is null && pivot.BehindElement is null)
-			{
-				pivot.BehindElement = this;
-				pivot.AheadElement = AheadElement;
-				AheadElement = pivot;
-			}
-			else
-			{
-				var tmp = pivot.BehindElement;
-				pivot.BehindElement = this;
-				AheadElement = pivot;
+			var tmpAhead = AheadElement;
+			var tmpBehind = pivot.BehindElement;
 
-				BehindElement = tmp;
-				if (!(tmp is null)) tmp.AheadElement = this;
-			}
+			pivot.AheadElement = AheadElement;
+			pivot.BehindElement = this;
+
+			AheadElement = pivot;
+			BehindElement = tmpBehind;
+
+			if (!(tmpAhead is null)) tmpAhead.BehindElement = pivot;
+			if (!(tmpBehind is null)) tmpBehind.AheadElement = this;
 		}
-
-		public T Value { get; set; }
 	}
 }

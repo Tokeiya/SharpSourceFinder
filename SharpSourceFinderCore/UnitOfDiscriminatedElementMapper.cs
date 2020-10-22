@@ -6,8 +6,9 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public static class UnitOfDiscriminatedElementMapper
 	{
-		private static (ScopeCategories scope, bool isUnsafe, bool isPartial, bool isStatic, bool isAbstract,bool isSealed) ParseModifiers(
-			SyntaxTokenList list)
+		private static (ScopeCategories scope, bool isUnsafe, bool isPartial, bool isStatic, bool isAbstract, bool
+			isSealed) ParseModifiers(
+				SyntaxTokenList list)
 		{
 			bool isPublic = false;
 			bool isInternal = false;
@@ -22,7 +23,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 
 			foreach (var elem in list)
-			{
 				if (elem.Text == "public") isPublic = true;
 				else if (elem.Text == "private") isPrivate = true;
 				else if (elem.Text == "internal") isInternal = true;
@@ -32,23 +32,17 @@ namespace Tokeiya3.SharpSourceFinderCore
 				else if (elem.Text == "static") isStatic = true;
 				else if (elem.Text == "abstract") isAbstract = true;
 				else if (elem.Text == "sealed") isSealed = true;
-			}
 
 			ScopeCategories scope;
 
 			if (isPublic) scope = ScopeCategories.Public;
 			else if (isInternal)
-			{
 				scope = isProtected ? ScopeCategories.ProtectedInternal : ScopeCategories.Internal;
-			}
 			else if (isProtected)
-			{
 				scope = isPrivate ? ScopeCategories.PrivateProtected : ScopeCategories.Protected;
-			}
 			else scope = ScopeCategories.Private;
 
-			return (scope, isUnsafe, isPartial, isStatic, isAbstract,isSealed);
-
+			return (scope, isUnsafe, isPartial, isStatic, isAbstract, isSealed);
 		}
 
 		private static void AttachName(IDiscriminatedElement target, NameSyntax syntax)
@@ -82,10 +76,11 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 			return ns;
 		}
+
 		public static EnumElement Map(IDiscriminatedElement parent, EnumDeclarationSyntax syntax)
 		{
-			var (scope,_,_,_,_,_) = ParseModifiers(syntax.Modifiers);
-			var ret =new  EnumElement(parent, scope);
+			var (scope, _, _, _, _, _) = ParseModifiers(syntax.Modifiers);
+			var ret = new EnumElement(parent, scope);
 			AttachName(ret, syntax.Identifier);
 
 			return ret;
@@ -93,8 +88,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public static StructElement Map(IDiscriminatedElement parent, StructDeclarationSyntax syntax)
 		{
-			var (scope, isUnsafe, isPartial, _, _,_) = ParseModifiers(syntax.Modifiers);
-			var ret= new StructElement(parent, scope, isUnsafe, isPartial);
+			var (scope, isUnsafe, isPartial, _, _, _) = ParseModifiers(syntax.Modifiers);
+			var ret = new StructElement(parent, scope, isUnsafe, isPartial);
 			AttachName(ret, syntax.Identifier);
 
 			return ret;
@@ -102,7 +97,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public static DelegateElement Map(IDiscriminatedElement parent, DelegateDeclarationSyntax syntax)
 		{
-			var (scope, isUnsafe, _, _, _,_) = ParseModifiers(syntax.Modifiers);
+			var (scope, isUnsafe, _, _, _, _) = ParseModifiers(syntax.Modifiers);
 			var ret = new DelegateElement(parent, scope, isUnsafe);
 			AttachName(ret, syntax.Identifier);
 
@@ -111,7 +106,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public static InterfaceElement Map(IDiscriminatedElement parent, InterfaceDeclarationSyntax syntax)
 		{
-			var (scope, isUnsafe, isPartial, _, _,_) = ParseModifiers(syntax.Modifiers);
+			var (scope, isUnsafe, isPartial, _, _, _) = ParseModifiers(syntax.Modifiers);
 			var ret = new InterfaceElement(parent, scope, isUnsafe, isPartial);
 			AttachName(ret, syntax.Identifier);
 

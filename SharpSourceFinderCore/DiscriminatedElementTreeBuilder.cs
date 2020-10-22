@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -22,7 +20,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 				_parentStack.Push(global);
 				Visit(syntax);
-				Debug.Assert(_parentStack.Count==1);
+				Debug.Assert(_parentStack.Count == 1);
 				return (NameSpace) _parentStack.Pop();
 			}
 			finally
@@ -68,12 +66,9 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
 		{
-			_parentStack.Push(UnitOfDiscriminatedElementMapper.Map((NameSpace)_parentStack.Peek(), node));
+			_parentStack.Push(UnitOfDiscriminatedElementMapper.Map((NameSpace) _parentStack.Peek(), node));
 			base.VisitNamespaceDeclaration(node);
 			_parentStack.Pop();
 		}
-
-
-
 	}
 }

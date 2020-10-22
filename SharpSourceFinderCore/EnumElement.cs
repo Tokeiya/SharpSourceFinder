@@ -6,7 +6,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class EnumElement : TypeElement
 	{
-		public EnumElement(IDiscriminatedElement parent, ScopeCategories scope) : base(parent, scope, false, true, false, false, false)
+		public EnumElement(IDiscriminatedElement parent, ScopeCategories scope) : base(parent, scope, false, true,
+			false, false, false)
 		{
 		}
 
@@ -20,7 +21,10 @@ namespace Tokeiya3.SharpSourceFinderCore
 				if (!(_identity is null)) throw new IdentityDuplicatedException();
 				_identity = id;
 			}
-			else throw new ArgumentException($"{nameof(EnumElement)} can't register any child.");
+			else
+			{
+				throw new ArgumentException($"{nameof(EnumElement)} can't register any child.");
+			}
 		}
 
 		public override QualifiedElement GetQualifiedName()
