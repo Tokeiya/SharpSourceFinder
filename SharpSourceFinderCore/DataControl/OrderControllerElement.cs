@@ -1,59 +1,32 @@
-﻿using System;
-
-namespace Tokeiya3.SharpSourceFinderCore.DataControl
+﻿namespace Tokeiya3.SharpSourceFinderCore.DataControl
 {
-	internal class OrderControlElement<T>
+	internal class OrderControlElement<T> where T:class
 	{
 		public OrderControlElement<T>? AheadElement { get; private set; }
 		public OrderControlElement<T>? BehindElement { get; private set; }
 
-		public T Value { get; set; }
+		public T? Value { get; set; }
 
 
-		public void AddToAhead(OrderControlElement<T> pivot)
-		{
-			pivot.AheadElement = this;
-			pivot.BehindElement = BehindElement;
-			BehindElement = pivot;
-		}
 
 		public void MoveToAhead(OrderControlElement<T> pivot)
 		{
-			var tmpAhead = pivot.AheadElement;
-			var tmpBehind = BehindElement;
+			//Remove
+			AheadElement!.BehindElement = BehindElement;
+			if (!(BehindElement is null)) BehindElement.AheadElement = AheadElement;
 
-			pivot.AheadElement = this;
-			pivot.BehindElement = BehindElement;
-
+			//Insert
+			if (!(pivot.AheadElement is null)) pivot.AheadElement.BehindElement = this;
+			AheadElement = pivot.AheadElement;
 			BehindElement = pivot;
-			AheadElement = tmpAhead;
-
-			if (!(tmpAhead is null)) tmpAhead.BehindElement = this;
-			if (!(tmpBehind is null)) tmpBehind.AheadElement = pivot;
-
+			pivot.AheadElement = this;
 
 		}
 
 		public void AddToBehind(OrderControlElement<T> pivot)
 		{
 			pivot.BehindElement = this;
-			pivot.AheadElement = AheadElement;
 			AheadElement = pivot;
-		}
-
-		public void MoveToBehind(OrderControlElement<T> pivot)
-		{
-			var tmpAhead = AheadElement;
-			var tmpBehind = pivot.BehindElement;
-
-			pivot.AheadElement = AheadElement;
-			pivot.BehindElement = this;
-
-			AheadElement = pivot;
-			BehindElement = tmpBehind;
-
-			if (!(tmpAhead is null)) tmpAhead.BehindElement = pivot;
-			if (!(tmpBehind is null)) tmpBehind.AheadElement = this;
 		}
 	}
 }

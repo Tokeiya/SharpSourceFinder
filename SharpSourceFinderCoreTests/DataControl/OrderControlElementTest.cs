@@ -10,10 +10,6 @@ namespace SharpSourceFinderCoreTests.DataControl
 	{
 		private const string TraitName = "OrderControlElement";
 
-		private readonly ITestOutputHelper _output;
-
-		public OrderControlElementTest(ITestOutputHelper output) => _output = output;
-
 		[Trait("TestLayer", TraitName)]
 		[Fact]
 		public void InitialState()
@@ -43,47 +39,51 @@ namespace SharpSourceFinderCoreTests.DataControl
 			}
 
 			{
-				var actual = new OrderControlElement<int>();
-				actual.Value.Is(default(int));
+				var actual = new OrderControlElement<string>();
+				actual.Value.IsNull();
 
-				actual.Value = 42;
-				actual.Value.Is(42);
+				actual.Value = "42";
+				actual.Value.Is("42");
 
-				actual.Value = 114514;
-				actual.Value.Is(114514);
+				actual.Value = "114514";
+				actual.Value.Is("114514");
 			}
 		}
 
-		private static OrderControlElement<int>[] GenerateSample(int size = 4)
+		private static OrderControlElement<string>[] GenerateSample()
 		{
-			var ret = Enumerable.Range(0, 4).Select(i => new OrderControlElement<int> { Value = i }).ToArray();
+			var ret = Enumerable.Range(0, 4).Select(i => new OrderControlElement<string> {Value = i.ToString()}).ToArray();
 
-			for (int i = 0; i < ret.Length-1; i++)
+			var piv = ret[0];
+
+
+			for (int i = 1; i < ret.Length; i++)
 			{
-				ret[i].AddToAhead(ret[i + 1]);
+				ret[i].AddToBehind(piv);
+				piv = ret[i];
 			}
 
-			for (int i = 1; i < ret.Length - 1; i++)
+			void verify(int ahead, int behind)
 			{
-				ret[i].AheadElement.Is(ret[i - 1]);
-				ret[i].BehindElement.Is(ret[i + 1]);
+				ret[ahead].BehindElement.IsSameReferenceAs(ret[behind]);
+				ret[behind].AheadElement.IsSameReferenceAs(ret[ahead]);
 			}
-			
+
 			ret[0].AheadElement.IsNull();
-			ret[0].BehindElement.IsSameReferenceAs(ret[1]);
-
-			ret[^1].AheadElement.IsSameReferenceAs(ret[2]);
-			ret[^1].BehindElement.IsNull();
+			verify(0, 1);
+			verify(1, 2);
+			verify(2, 3);
+			ret[3].BehindElement.IsNull();
+			
 
 
 			return ret;
 		}
 
-		static void Verify<T>(OrderControlElement<T> ahead, OrderControlElement<T> behind)
+		static void Verify<T>(OrderControlElement<T> ahead, OrderControlElement<T> behind) where T:class
 		{
 			ahead.BehindElement.IsSameReferenceAs(behind);
 			behind.AheadElement.IsSameReferenceAs(ahead);
-
 		}
 
 		[Trait("TestLayer", TraitName)]
@@ -93,27 +93,6 @@ namespace SharpSourceFinderCoreTests.DataControl
 			var samples = GenerateSample();
 
 			samples[2].MoveToAhead(samples[1]);
-			Verify(samples[2],samples[1]);
-			Verify(samples[0],samples[2]);
-			Verify(samples[1],samples[3]);
-
-			samples = GenerateSample();
-			samples[1].MoveToAhead(samples[0]);
-
-			Verify(samples[1],samples[0]);
-			samples[1].AheadElement.IsNull();
-			
-			Verify(samples[0],samples[2]);
-
-		}
-
-		[Trait("TestLayer", TraitName)]
-		[Fact]
-		public void MoveToBehind()
-		{
-			var samples = GenerateSample();
-
-			samples[1].MoveToBehind(samples[2]);
 			Verify(samples[2], samples[1]);
 			Verify(samples[0], samples[2]);
 			Verify(samples[1], samples[3]);
@@ -126,40 +105,13 @@ namespace SharpSourceFinderCoreTests.DataControl
 
 			Verify(samples[0], samples[2]);
 
-		}
+			samples = GenerateSample();
+			samples[3].MoveToAhead(samples[0]);
 
+			samples[3].AheadElement.IsNull();
+			Verify(samples[3],samples[0]);
+			Verify(samples[0], samples[1]);
 
-
-		[Trait("TestLayer", TraitName)]
-		[Fact]
-		public void AddToAhead()
-		{
-			var actual = new OrderControlElement<int> {Value = 42};
-			var pivot = new OrderControlElement<int> {Value = 114514};
-
-			actual.AddToAhead(pivot);
-			pivot.AheadElement.IsSameReferenceAs(actual);
-			pivot.BehindElement.IsNull();
-
-			actual.BehindElement.IsSameReferenceAs(pivot);
-			actual.AheadElement.IsNull();
-
-			var ary = Enumerable.Range(1, 4).Select(i => new OrderControlElement<int> {Value = i}).ToArray();
-
-			for (int i = 0; i < ary.Length - 1; i++) ary[i].AddToAhead(ary[i + 1]);
-
-
-			for (int i = 1; i < ary.Length - 1; i++)
-			{
-				ary[i].AheadElement.Is(ary[i - 1]);
-				ary[i].BehindElement.Is(ary[i + 1]);
-			}
-
-			ary[0].AheadElement.IsNull();
-			ary[0].BehindElement.IsSameReferenceAs(ary[1]);
-
-			ary[3].AheadElement.IsSameReferenceAs(ary[2]);
-			ary[3].BehindElement.IsNull();
 		}
 
 
@@ -170,8 +122,8 @@ namespace SharpSourceFinderCoreTests.DataControl
 		[Fact]
 		public void AddToBehind()
 		{
-			var actual = new OrderControlElement<int> {Value = 42};
-			var pivot = new OrderControlElement<int> {Value = 114514};
+			var actual = new OrderControlElement<string> {Value = "42"};
+			var pivot = new OrderControlElement<string> {Value = "114514"};
 
 			actual.AddToBehind(pivot);
 
@@ -181,7 +133,7 @@ namespace SharpSourceFinderCoreTests.DataControl
 			actual.BehindElement.IsNull();
 			actual.AheadElement.IsSameReferenceAs(pivot);
 
-			var ary = Enumerable.Range(1, 4).Select(i => new OrderControlElement<int> {Value = i}).ToArray();
+			var ary = Enumerable.Range(1, 4).Select(i => new OrderControlElement<string> {Value = i.ToString()}).ToArray();
 
 			for (int i = 0; i < ary.Length - 1; i++) ary[i].AddToBehind(ary[i + 1]);
 
@@ -197,6 +149,5 @@ namespace SharpSourceFinderCoreTests.DataControl
 			ary[3].AheadElement.IsNull();
 			ary[3].BehindElement.IsSameReferenceAs(ary[2]);
 		}
-
 	}
 }
