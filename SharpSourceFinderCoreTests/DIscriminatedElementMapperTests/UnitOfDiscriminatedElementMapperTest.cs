@@ -51,9 +51,9 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			.DescendantNodes().OfType<DelegateDeclarationSyntax>()
 			.First(x => x.Identifier.Text == name);
 
-		static NameSpace GenerateRoot(string path)
+		static NameSpaceElement GenerateRoot(string path)
 		{
-			var ns = new NameSpace(new PhysicalStorage(path));
+			var ns = new NameSpaceElement(new PhysicalStorage(path));
 			_ = new QualifiedElement();
 			return ns;
 		}
@@ -67,7 +67,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 				.Memoize();
 			samples.Count().Is(1);
 
-			var parent = new NameSpace(new PhysicalStorage("NameSpaceOnly.cs"));
+			var parent = new NameSpaceElement(new PhysicalStorage("NameSpaceOnly.cs"));
 			_ = new QualifiedElement(parent);
 
 			var actual = UnitOfDiscriminatedElementMapper.Map(parent, samples.First());
