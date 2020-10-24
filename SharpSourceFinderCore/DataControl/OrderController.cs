@@ -44,15 +44,18 @@ namespace Tokeiya3.SharpSourceFinderCore.DataControl
 
 		public void GotoAhead(OrderControlElement<T> element)
 		{
-#warning Selected_Is_NotImpl
-			throw new NotImplementedException("Selected is not implemented");
+			if (element.AheadElement is null) return;
+
+			element.MoveToAhead(_head);
+			_head = element;
 		}
 
 		public void BubbleUp(OrderControlElement<T> element)
 		{
-#warning NotImplemented.
-			throw new NotImplementedException();
+			if(element.AheadElement is null) return;
 
+			element.MoveToAhead(element.AheadElement);
+			if (element.AheadElement is null) _head = element;
 		}
 	}
 }

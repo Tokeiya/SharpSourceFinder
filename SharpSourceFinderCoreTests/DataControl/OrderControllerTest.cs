@@ -77,42 +77,58 @@ namespace SharpSourceFinderCoreTests.DataControl
 		[Fact]
 		public void GotoAhead()
 		{
+
 			var target = new OrderController<string>(4);
 			var samples = Enumerable.Range(0, 4)
 				.Select(i => target.Register((3 - i).ToString()).added).Reverse().ToArray();
+
+
+			void verify(int idx, int ahead, int behind)
+			{
+				samples[idx].Value.Is(idx.ToString());
+
+				if (ahead == -1) samples[idx].AheadElement.IsNull();
+				else samples[idx].AheadElement.IsSameReferenceAs(samples[ahead]);
+
+				if (behind == -1) samples[idx].BehindElement.IsNull();
+				else samples[idx].BehindElement.IsSameReferenceAs(samples[behind]);
+				
+			}
+
 
 			//h-0-1-2-3-t
 			target.GotoAhead(samples[1]);
 			//h-1-0-2-3-t
 
-			var piv = samples[1]!;
-			piv.AheadElement.IsNull();
-			piv.Value.Is("1");
 
-			piv = piv.BehindElement!;
-			piv.Value.Is("0");
-			piv.AheadElement.IsSameReferenceAs(samples[1]);
-
-			piv = piv.BehindElement!;
-			piv.Value.Is("2");
-			piv.AheadElement.IsSameReferenceAs(samples[0]);
-
-			piv = piv.BehindElement!;
-			piv.Value.Is("3");
-			piv.AheadElement.IsSameReferenceAs(samples[2]);
-			piv.BehindElement.IsNull();
-
-			target = new OrderController<string>(2); 
-			samples = Enumerable.Range(0, 2)
-				.Select(i => target.Register((2 - i).ToString()).added).Reverse().ToArray();
+			verify(1, -1, 0);
+			verify(0, 1, 2);
+			verify(2, 0, 3);
+			verify(3, 2, -1);
 
 			target.GotoAhead(samples[1]);
 
-			samples[1].AheadElement.IsNull();
-			samples[1].BehindElement.IsSameReferenceAs(samples[0]);
+			verify(1, -1, 0);
+			verify(0, 1, 2);
+			verify(2, 0, 3);
+			verify(3, 2, -1);
 
-			samples[0].AheadElement.IsSameReferenceAs(samples[1]);
-			samples[0].BehindElement.IsNull();
+
+			target = new OrderController<string>(2); 
+
+			//h-0-1-t
+			samples = Enumerable.Range(0, 2)
+				.Select(i => target.Register((1 - i).ToString()).added).Reverse().ToArray();
+
+			target.GotoAhead(samples[1]);
+			//h-1-0-t
+
+			verify(1, -1, 0);
+			verify(0, 1, -1);
+
+			target.GotoAhead(samples[1]);
+			verify(1, -1, 0);
+			verify(0, 1, -1);
 
 		}
 
@@ -125,10 +141,10 @@ namespace SharpSourceFinderCoreTests.DataControl
 			var samples = Enumerable.Range(0, 4)
 				.Select(i => target.Register((3 - i).ToString()).added).Reverse().ToArray();
 
-			void verify(int idx, string value, int ahead,int behind)
+			void verify(int idx, int ahead,int behind)
 			{
 				var actual = samples[idx];
-				actual.Value.Is(value);
+				actual.Value.Is(idx.ToString());
 
 				if (ahead == -1) actual.AheadElement.IsNull();
 				else actual.AheadElement.IsSameReferenceAs(samples[ahead]);
@@ -141,24 +157,36 @@ namespace SharpSourceFinderCoreTests.DataControl
 			target.BubbleUp(samples[2]);
 			//h-0-2-1-3-h
 
-			verify(0, "0", -1, 2);
-			verify(2, "2", 0, 1);
-			verify(1, "1", 2, 3);
-			verify(3, "3", 2, -1);
+			verify(0,  -1, 2);
+			verify(2,  0, 1);
+			verify(1, 2, 3);
+			verify(3, 1, -1);
+
+			target.BubbleUp(samples[0]);
+
+			verify(0, -1, 2);
+			verify(2, 0, 1);
+			verify(1, 2, 3);
+			verify(3, 1, -1);
+
 
 
 			target = new OrderController<string>(2);
 			samples = Enumerable.Range(0, 2)
-				.Select(i => target.Register((3 - i).ToString()).added).Reverse().ToArray();
+				.Select(i => target.Register((1 - i).ToString()).added).Reverse().ToArray();
 
 			target.BubbleUp(samples[1]);
 
-			verify(1, "1", -1, 0);
-			verify(0, "0", 1, -1);
+			verify(1,  -1, 0);
+			verify(0,  1, -1);
+
+			target.BubbleUp(samples[1]);
+
+			verify(1, -1, 0);
+			verify(0, 1, -1);
+
 
 		}
-
-
 
 
 
