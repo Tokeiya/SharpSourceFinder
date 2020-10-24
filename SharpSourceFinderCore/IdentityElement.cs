@@ -24,7 +24,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 			{
 				cat = piv switch
 				{
-					NameSpace _ => IdentityCategories.Namespace,
+					NameSpaceElement _ => IdentityCategories.Namespace,
 					ClassElement _ => IdentityCategories.Class,
 					StructElement _ => IdentityCategories.Struct,
 					InterfaceElement _ => IdentityCategories.Interface,

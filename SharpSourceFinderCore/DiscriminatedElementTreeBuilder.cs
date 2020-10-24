@@ -11,17 +11,17 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		internal int InternalStackCount => _parentStack.Count;
 
-		public NameSpace Build(CompilationUnitSyntax syntax, IPhysicalStorage storage)
+		public NameSpaceElement Build(CompilationUnitSyntax syntax, IPhysicalStorage storage)
 		{
 			try
 			{
-				var global = new NameSpace(storage);
+				var global = new NameSpaceElement(storage);
 				_ = new QualifiedElement(global);
 
 				_parentStack.Push(global);
 				Visit(syntax);
 				Debug.Assert(_parentStack.Count == 1);
-				return (NameSpace) _parentStack.Pop();
+				return (NameSpaceElement) _parentStack.Pop();
 			}
 			finally
 			{
@@ -66,7 +66,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
 		{
-			_parentStack.Push(UnitOfDiscriminatedElementMapper.Map((NameSpace) _parentStack.Peek(), node));
+			_parentStack.Push(UnitOfDiscriminatedElementMapper.Map((NameSpaceElement) _parentStack.Peek(), node));
 			base.VisitNamespaceDeclaration(node);
 			_parentStack.Pop();
 		}

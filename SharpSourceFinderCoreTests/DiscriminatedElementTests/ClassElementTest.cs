@@ -42,7 +42,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 				actual.Order.Is(expectedOrder);
 			}
 
-			IDiscriminatedElement parent = new NameSpace(new PhysicalStorage(PathA));
+			IDiscriminatedElement parent = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(parent, "Hoge", "Piyo");
 
 			parent = new ClassElement(parent, ScopeCategories.Public, false, false, false, false, false);
@@ -63,7 +63,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 		protected override IEnumerable<(ClassElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
-			IDiscriminatedElement expected = new NameSpace(new PhysicalStorage(PathA));
+			IDiscriminatedElement expected = new NameSpaceElement(new PhysicalStorage(PathA));
 			var q = new QualifiedElement(expected);
 			_ = new IdentityElement(q, "Foo");
 
@@ -82,7 +82,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override IEnumerable<(ClassElement sample, IPhysicalStorage expected)> GeneratePhysicalStorageSample()
 		{
 			var expected = new PhysicalStorage(PathA);
-			var ns = new NameSpace(expected);
+			var ns = new NameSpaceElement(expected);
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
@@ -97,7 +97,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			GenerateGetAncestorsSample()
 		{
 			var storage = new PhysicalStorage(PathA);
-			var ns = new NameSpace(storage);
+			var ns = new NameSpaceElement(storage);
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
@@ -112,7 +112,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			GenerateChildrenSample()
 		{
 			var storage = new PhysicalStorage(PathA);
-			var ns = new NameSpace(storage);
+			var ns = new NameSpaceElement(storage);
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
@@ -127,7 +127,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			GenerateDescendantsSample()
 		{
 			var storage = new PhysicalStorage(PathA);
-			var ns = new NameSpace(storage);
+			var ns = new NameSpaceElement(storage);
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
@@ -141,7 +141,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override IEnumerable<(ClassElement sample, IQualified expected)> GenerateQualifiedNameSample()
 		{
 			var storage = new PhysicalStorage(PathA);
-			var ns = new NameSpace(storage);
+			var ns = new NameSpaceElement(storage);
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
@@ -165,7 +165,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			GenerateAggregateIdentitiesSample()
 		{
 			var storage = new PhysicalStorage(PathA);
-			var ns = new NameSpace(storage);
+			var ns = new NameSpaceElement(storage);
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
@@ -184,7 +184,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 				registerAction)> GenerateRegisterChildSample()
 		{
 			var storage = new PhysicalStorage(PathA);
-			var ns = new NameSpace(storage);
+			var ns = new NameSpaceElement(storage);
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
@@ -205,7 +205,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override IEnumerable<(ClassElement sample, IDiscriminatedElement errSample)> GenerateErrSample()
 		{
 			var storage = new PhysicalStorage(PathA);
-			var ns = new NameSpace(storage);
+			var ns = new NameSpaceElement(storage);
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
@@ -220,7 +220,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override IEnumerable<ClassElement> GenerateIdentityErrorGetterSample()
 		{
 			var storage = new PhysicalStorage(PathA);
-			var ns = new NameSpace(storage);
+			var ns = new NameSpaceElement(storage);
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
@@ -232,7 +232,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
 			bool isSealed, bool isUnsafe,
 			bool isPartial, bool isStatic, string identity,
-			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace, IQualified expectedIdentity,
+			out (IPhysicalStorage expectedStorage, NameSpaceElement expectedNameSpace, IQualified expectedIdentity,
 				ClassElement sample
 				) generated)
 		{
@@ -249,7 +249,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			}
 
 			var storage = new PhysicalStorage(path);
-			var ns = new NameSpace(storage);
+			var ns = new NameSpaceElement(storage);
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, nameSpace);
 

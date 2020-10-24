@@ -23,7 +23,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			return (root, storage);
 		}
 
-		static void Verify(NameSpace actual)
+		static void Verify(NameSpaceElement actual)
 		{
 			ImaginaryRoot.IsImaginaryRoot(actual.Parent).IsTrue();
 			actual.Identity.Identities.IsEmpty();
@@ -37,7 +37,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			actual.Order.Is(order);
 		}
 
-		static void Verify(NameSpace actual, IDiscriminatedElement parent, params string[] names)
+		static void Verify(NameSpaceElement actual, IDiscriminatedElement parent, params string[] names)
 		{
 			actual.Parent.IsSameReferenceAs(parent);
 			var id = actual.Identity;
@@ -47,22 +47,22 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 				Verify(id.Identities[i], names[i], IdentityCategories.Namespace, id, i + 1);
 		}
 
-		static T Extract<T>(NameSpace tree, string name) where T : TypeElement
+		static T Extract<T>(NameSpaceElement tree, string name) where T : TypeElement
 		{
 			var seq = tree.DescendantsAndSelf().OfType<T>().Where(x => x.Identity.Identities[0].Name == name);
 			seq.Count().Is(1);
 			return seq.First();
 		}
 
-		static NameSpace ExtractNameSpace(NameSpace tree, params string[] names)
+		static NameSpaceElement ExtractNameSpace(NameSpaceElement tree, params string[] names)
 		{
-			bool pred(NameSpace ns)
+			bool pred(NameSpaceElement ns)
 			{
 				var tmp = ns.Identity.Identities.Select(x => x.Name);
 				return tmp.SequenceEqual(names);
 			}
 
-			var seq = tree.DescendantsAndSelf().OfType<NameSpace>().Where(x => pred(x));
+			var seq = tree.DescendantsAndSelf().OfType<NameSpaceElement>().Where(x => pred(x));
 			seq.Count().Is(1);
 			return seq.First();
 		}
@@ -78,7 +78,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			var actual = mapper.Build(root, storage);
 			Verify(actual);
 
-			var ns = actual.Descendants().OfType<NameSpace>();
+			var ns = actual.Descendants().OfType<NameSpaceElement>();
 			ns.Count().Is(1);
 
 			var name = ns.First().Identity;
@@ -105,7 +105,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			var tree = mapper.Build(root, storage);
 			Verify(tree);
 
-			var ns = tree.Descendants().OfType<NameSpace>();
+			var ns = tree.Descendants().OfType<NameSpaceElement>();
 			ns.Count().Is(2);
 
 			var actual = ns.First();
@@ -128,15 +128,15 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 
 			tree.Children().Count().Is(3);
 
-			var actual = (NameSpace) tree.Children().Skip(1).First();
+			var actual = (NameSpaceElement) tree.Children().Skip(1).First();
 			Verify(actual, tree, "OuterA");
-			Verify((NameSpace) tree.Children().Skip(2).First(), tree, "OuterB");
+			Verify((NameSpaceElement) tree.Children().Skip(2).First(), tree, "OuterB");
 
-			var parent = (NameSpace) tree.Children().Skip(1).First();
+			var parent = (NameSpaceElement) tree.Children().Skip(1).First();
 			parent.Children().Count().Is(2);
 			Verify(ExtractNameSpace(tree, "InnerA"), parent, "InnerA");
 
-			parent = (NameSpace) tree.Children().Skip(2).First();
+			parent = (NameSpaceElement) tree.Children().Skip(2).First();
 			parent.Children().Count().Is(2);
 			Verify(ExtractNameSpace(tree, "InnerB"), parent, "InnerB");
 		}
@@ -152,7 +152,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 			var tree = mapper.Build(root, storage);
 			Verify(tree);
 
-			Verify((NameSpace) tree.Children().Skip(1).First(), tree, "EnumSamples");
+			Verify((NameSpaceElement) tree.Children().Skip(1).First(), tree, "EnumSamples");
 
 			var enums = tree.Descendants().OfType<EnumElement>();
 			enums.Count().Is(5);
@@ -240,7 +240,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementMapperTests
 
 			var tree = mapper.Build(root, storage);
 			Verify(tree);
-			IDiscriminatedElement parent = tree.Children().OfType<NameSpace>().First();
+			IDiscriminatedElement parent = tree.Children().OfType<NameSpaceElement>().First();
 
 			void verify(string name)
 			{

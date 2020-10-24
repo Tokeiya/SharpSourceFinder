@@ -69,9 +69,9 @@ namespace Tokeiya3.SharpSourceFinderCore
 			_ = new IdentityElement(q, identifier.Text);
 		}
 
-		public static NameSpace Map(NameSpace parent, NamespaceDeclarationSyntax syntax)
+		public static NameSpaceElement Map(NameSpaceElement parent, NamespaceDeclarationSyntax syntax)
 		{
-			var ns = new NameSpace(parent);
+			var ns = new NameSpaceElement(parent);
 			AttachName(ns, syntax.Name);
 
 			return ns;

@@ -4,18 +4,18 @@ using System.Linq;
 
 namespace Tokeiya3.SharpSourceFinderCore
 {
-	public sealed class NameSpace : NonTerminalElement<IDiscriminatedElement>
+	public sealed class NameSpaceElement : NonTerminalElement<IDiscriminatedElement>
 	{
 		private readonly IPhysicalStorage _storage;
 
 		//ここに参照持たせる
 		private IQualified? _identity;
 
-		public NameSpace() => _storage = StorageNotAvailable.NotAvailable;
+		public NameSpaceElement() => _storage = StorageNotAvailable.NotAvailable;
 
-		public NameSpace(IPhysicalStorage physicalStorage) => _storage = physicalStorage;
+		public NameSpaceElement(IPhysicalStorage physicalStorage) => _storage = physicalStorage;
 
-		public NameSpace(IDiscriminatedElement parent) : base(parent) => _storage = StorageNotAvailable.NotAvailable;
+		public NameSpaceElement(IDiscriminatedElement parent) : base(parent) => _storage = StorageNotAvailable.NotAvailable;
 
 		public IQualified Identity => _identity ?? throw new IdentityNotFoundException();
 
@@ -75,7 +75,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		{
 			var ret = other switch
 			{
-				NameSpace ns => Identity.IsEquivalentTo(ns.Identity),
+				NameSpaceElement ns => Identity.IsEquivalentTo(ns.Identity),
 				_ => false
 			};
 

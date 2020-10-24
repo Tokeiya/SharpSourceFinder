@@ -36,9 +36,9 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 			yield return (x, y, z);
 
-			x = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
-			y = new QualifiedElement(new NameSpace(new PhysicalStorage(PathB)));
-			z = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+			x = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathA)));
+			y = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathB)));
+			z = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathA)));
 
 			_ = new IdentityElement(x, "Foo");
 			_ = new IdentityElement(y, "Foo");
@@ -64,21 +64,21 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			yield return (x, y);
 
 
-			x = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
-			y = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+			x = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathA)));
+			y = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathA)));
 
 			_ = new IdentityElement(x, "Hoge");
 			_ = new IdentityElement(y, "Piyo");
 			yield return (x, y);
 
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Foo");
 
-			x = new QualifiedElement(new NameSpace(ns));
+			x = new QualifiedElement(new NameSpaceElement(ns));
 			_ = new IdentityElement(x, "Bar");
 
-			y = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+			y = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathA)));
 			_ = new IdentityElement(y, "Bar");
 
 			yield return (x, y);
@@ -97,9 +97,9 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 			yield return (x, y, z);
 
-			x = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
-			y = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
-			z = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+			x = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathA)));
+			y = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathA)));
+			z = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathA)));
 
 			_ = new IdentityElement(x, "Foo");
 			_ = new IdentityElement(y, "Foo");
@@ -110,14 +110,14 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 		protected override IEnumerable<(QualifiedElement x, QualifiedElement y)> GeneratePhysicallyInEqualitySample()
 		{
-			var x = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
-			var y = new QualifiedElement(new NameSpace(new PhysicalStorage(PathB)));
+			var x = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathA)));
+			var y = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathB)));
 			yield return (x, y);
 		}
 
 		protected override IEnumerable<(QualifiedElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
-			var expected = new NameSpace(new PhysicalStorage(PathA));
+			var expected = new NameSpaceElement(new PhysicalStorage(PathA));
 			var sample = new QualifiedElement(expected);
 
 			yield return (sample, expected);
@@ -127,12 +127,12 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			GeneratePhysicalStorageSample()
 		{
 			var expected = new PhysicalStorage(PathA);
-			var ns = new NameSpace(expected);
+			var ns = new NameSpaceElement(expected);
 			var qa = new QualifiedElement(ns);
 
 			yield return (qa, expected);
 
-			ns = new NameSpace(ns);
+			ns = new NameSpaceElement(ns);
 			qa = new QualifiedElement(ns);
 
 			yield return (qa, expected);
@@ -141,12 +141,12 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override IEnumerable<(QualifiedElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateGetAncestorsSample()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			var sample = new QualifiedElement(ns);
 
 			yield return (sample, new[] {ns});
 
-			var nsa = new NameSpace(ns);
+			var nsa = new NameSpaceElement(ns);
 			sample = new QualifiedElement(nsa);
 
 			yield return (sample, new[] {nsa, ns});
@@ -176,11 +176,11 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 			yield return (sample, sample);
 
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			var q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Upper");
 
-			ns = new NameSpace(ns);
+			ns = new NameSpaceElement(ns);
 			q = new QualifiedElement(ns);
 			_ = new IdentityElement(q, "Bottom");
 
@@ -222,7 +222,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 			expected.Clear();
 
-			sample = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+			sample = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathA)));
 			_ = new IdentityElement(sample, "No1");
 			_ = new IdentityElement(sample, "No2");
 
@@ -256,7 +256,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 				new IdentityElement(new QualifiedElement(), IdentityCategories.Namespace, "Err");
 			yield return (sample, err);
 
-			err = new NameSpace(new PhysicalStorage(PathA));
+			err = new NameSpaceElement(new PhysicalStorage(PathA));
 			yield return (sample, err);
 		}
 	}

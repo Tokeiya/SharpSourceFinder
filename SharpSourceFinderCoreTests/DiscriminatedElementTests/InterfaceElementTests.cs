@@ -30,7 +30,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 		protected override IEnumerable<(InterfaceElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
-			var expected = new NameSpace(new PhysicalStorage(PathA));
+			var expected = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(expected, NameSpaceA);
 
 			var sample = new InterfaceElement(expected, ScopeCategories.Public, false, false);
@@ -44,7 +44,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			GeneratePhysicalStorageSample()
 		{
 			var expected = new PhysicalStorage(PathA);
-			var ns = new NameSpace(expected);
+			var ns = new NameSpaceElement(expected);
 			AttachName(ns, NameSpaceA);
 
 			var sample = new InterfaceElement(ns, ScopeCategories.Public, false, false);
@@ -58,11 +58,11 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		{
 			var list = new List<IDiscriminatedElement>();
 
-			IDiscriminatedElement parent = new NameSpace(new PhysicalStorage(PathA));
+			IDiscriminatedElement parent = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(parent, "Outer");
 			list.Add(parent);
 
-			parent = new NameSpace(parent);
+			parent = new NameSpaceElement(parent);
 			AttachName(parent, "Inner");
 			list.Add(parent);
 
@@ -82,7 +82,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		{
 			var list = new List<IDiscriminatedElement>();
 
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
 
 			var sample = new InterfaceElement(ns, ScopeCategories.Public, false, false);
@@ -108,7 +108,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		{
 			var list = new List<IDiscriminatedElement>();
 
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
 
 			var sample = new InterfaceElement(ns, ScopeCategories.Public, false, false);
@@ -143,7 +143,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 		protected override IEnumerable<(InterfaceElement sample, IQualified expected)> GenerateQualifiedNameSample()
 		{
-			IDiscriminatedElement parent = new NameSpace(new PhysicalStorage(PathA));
+			IDiscriminatedElement parent = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(parent, "NameSpace");
 
 			parent = new ClassElement(parent, ScopeCategories.Public, false, false, false, false, false);
@@ -168,7 +168,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			IEnumerable<(InterfaceElement sample, Stack<(IdentityCategories category, string identity)> expected)>
 			GenerateAggregateIdentitiesSample()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
 
 			var sample = new InterfaceElement(ns, ScopeCategories.Public, false, false);
@@ -186,7 +186,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		{
 			var expected = new List<IDiscriminatedElement>();
 
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
 
 			var sample = new InterfaceElement(ns, ScopeCategories.Public, false, false);
@@ -205,7 +205,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 		protected override IEnumerable<(InterfaceElement sample, IDiscriminatedElement errSample)> GenerateErrSample()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			var q = AttachName(ns, NameSpaceA);
 			var errSample = new IdentityElement(q, "Err");
 
@@ -217,7 +217,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 		protected override IEnumerable<InterfaceElement> GenerateIdentityErrorGetterSample()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
 
 			yield return new InterfaceElement(ns, ScopeCategories.Public, false, false);
@@ -226,7 +226,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
 			bool isSealed, bool isUnsafe,
 			bool isPartial, bool isStatic, string identity,
-			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace, IQualified expectedIdentity,
+			out (IPhysicalStorage expectedStorage, NameSpaceElement expectedNameSpace, IQualified expectedIdentity,
 				InterfaceElement
 				sample) generated)
 		{
@@ -234,7 +234,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			if (!isAbstract || isSealed || isStatic) return false;
 
 			var storage = new PhysicalStorage(path);
-			var ns = new NameSpace(storage);
+			var ns = new NameSpaceElement(storage);
 			AttachName(ns, nameSpace);
 
 			var sample = new InterfaceElement(ns, scope, isUnsafe, isPartial);

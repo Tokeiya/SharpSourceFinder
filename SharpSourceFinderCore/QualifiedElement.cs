@@ -56,7 +56,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 				var piv = Parent switch
 				{
-					NameSpace ns => ns.Parent,
+					NameSpaceElement ns => ns.Parent,
 					_ => Parent
 				};
 

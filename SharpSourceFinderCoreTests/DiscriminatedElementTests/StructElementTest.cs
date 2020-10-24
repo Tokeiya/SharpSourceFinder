@@ -32,13 +32,13 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		[Fact]
 		public void InvalidChildTest()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
 
 			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
 			AttachName(sample, "Hoge");
 
-			Assert.Throws<ArgumentException>(() => new NameSpace(sample));
+			Assert.Throws<ArgumentException>(() => new NameSpaceElement(sample));
 		}
 
 
@@ -55,7 +55,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 				actual.Order.Is(expectedOrder);
 			}
 
-			IDiscriminatedElement parent = new NameSpace(new PhysicalStorage(PathA));
+			IDiscriminatedElement parent = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(parent, "Hoge", "Piyo");
 
 			parent = new ClassElement(parent, ScopeCategories.Public, false, false, false, false, false);
@@ -75,7 +75,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 		protected override IEnumerable<(StructElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(ns, "Hoge", "Piyo");
 
 			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
@@ -86,7 +86,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			GeneratePhysicalStorageSample()
 		{
 			var storage = new PhysicalStorage(PathB);
-			var ns = new NameSpace(storage);
+			var ns = new NameSpaceElement(storage);
 			AttachName(ns, "Hoge");
 
 			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
@@ -96,7 +96,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override IEnumerable<(StructElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateGetAncestorsSample()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			var upper = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
 			AttachName(upper, "Upper");
 
@@ -108,7 +108,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override IEnumerable<(StructElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateChildrenSample()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
 			var q = AttachName(sample, "Hoge");
 
@@ -118,7 +118,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override IEnumerable<(StructElement sample, IReadOnlyList<IDiscriminatedElement> expected)>
 			GenerateDescendantsSample()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
 			var q = AttachName(sample, "Foo");
 
@@ -127,7 +127,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 		protected override IEnumerable<(StructElement sample, IQualified expected)> GenerateQualifiedNameSample()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(ns, "Hoge");
 
 			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
@@ -148,10 +148,10 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			IEnumerable<(StructElement sample, Stack<(IdentityCategories category, string identity)> expected)>
 			GenerateAggregateIdentitiesSample()
 		{
-			IDiscriminatedElement ns = new NameSpace(new PhysicalStorage(PathA));
+			IDiscriminatedElement ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(ns, "Upper");
 
-			ns = new NameSpace(ns);
+			ns = new NameSpaceElement(ns);
 			AttachName(ns, "Foo", "Bar");
 
 			ns = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
@@ -172,7 +172,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			IEnumerable<(StructElement sample, IReadOnlyList<IDiscriminatedElement> expected, Action<StructElement>
 				registerAction)> GenerateRegisterChildSample()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
 
 			var expected = new List<IDiscriminatedElement>();
@@ -188,7 +188,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 		protected override IEnumerable<(StructElement sample, IDiscriminatedElement errSample)> GenerateErrSample()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
 
 			var another = new StructElement(ns, ScopeCategories.Public, false, false);
@@ -198,7 +198,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 		protected override IEnumerable<StructElement> GenerateIdentityErrorGetterSample()
 		{
-			var ns = new NameSpace(new PhysicalStorage(PathA));
+			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(ns, "Hoge");
 
 			var sample = new StructElement(ns, ScopeCategories.Public, false, false);
@@ -209,7 +209,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
 			bool isSealed, bool isUnsafe,
 			bool isPartial, bool isStatic, string identity,
-			out (IPhysicalStorage expectedStorage, NameSpace expectedNameSpace, IQualified expectedIdentity,
+			out (IPhysicalStorage expectedStorage, NameSpaceElement expectedNameSpace, IQualified expectedIdentity,
 				StructElement
 				sample) generated)
 		{
@@ -220,7 +220,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			}
 
 			var storage = new PhysicalStorage(path);
-			var ns = new NameSpace(storage);
+			var ns = new NameSpaceElement(storage);
 			AttachName(ns, nameSpace);
 
 			var sample = new StructElement(ns, scope, isUnsafe, isPartial);

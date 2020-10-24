@@ -28,7 +28,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		[Fact]
 		public void RegisterChildTest()
 		{
-			var sample = new NameSpace(new PhysicalStorage("hoge"));
+			var sample = new NameSpaceElement(new PhysicalStorage("hoge"));
 			Throws<NotSupportedException>(() => ImaginaryRoot.Root.RegisterChild(sample));
 		}
 
@@ -97,7 +97,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			x.IsLogicallyEquivalentTo(x).IsTrue();
 
 			//Inequivalent
-			var a = new NameSpace();
+			var a = new NameSpaceElement();
 			x.IsLogicallyEquivalentTo(a).IsFalse();
 			x.IsPhysicallyEquivalentTo(a).IsFalse();
 
@@ -133,7 +133,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			x.IsPhysicallyEquivalentTo(x).IsTrue();
 
 			//Inequivalent
-			var a = new NameSpace();
+			var a = new NameSpaceElement();
 			x.IsLogicallyEquivalentTo(a).IsFalse();
 			a.IsLogicallyEquivalentTo(x).IsFalse();
 		}
@@ -145,7 +145,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			IDiscriminatedElement sample = ImaginaryRoot.Root;
 			ImaginaryRoot.IsImaginaryRoot(sample).IsTrue();
 
-			sample = new NameSpace();
+			sample = new NameSpaceElement();
 			ImaginaryRoot.IsImaginaryRoot(sample).IsFalse();
 		}
 	}

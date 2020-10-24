@@ -41,14 +41,14 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			yield return (sample, expected);
 
 			var storage = new PhysicalStorage(PathA);
-			var ns = new NameSpace(storage);
+			var ns = new NameSpaceElement(storage);
 			sample = new QualifiedElement(ns);
 			expected = new[] {new IdentityElement(sample, "Foo"), new IdentityElement(sample, "Bar")};
 
 			yield return (sample, expected);
 
 
-			ns = new NameSpace(ns);
+			ns = new NameSpaceElement(ns);
 			sample = new QualifiedElement(ns);
 			expected = new[] {new IdentityElement(sample, "System"), new IdentityElement(sample, "Collections")};
 
@@ -67,9 +67,9 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 			yield return (x, y, z);
 
-			x = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
-			y = new QualifiedElement(new NameSpace(new PhysicalStorage(PathB)));
-			z = new QualifiedElement(new NameSpace(new PhysicalStorage(PathA)));
+			x = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathA)));
+			y = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathB)));
+			z = new QualifiedElement(new NameSpaceElement(new PhysicalStorage(PathA)));
 
 			_ = new IdentityElement(x, "Hoge");
 			_ = new IdentityElement(y, "Hoge");
