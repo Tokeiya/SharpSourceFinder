@@ -46,7 +46,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override void RegisterChild(IDiscriminatedElement child)
 		{
-			if (child is NameSpaceElement) throw new ArgumentException($"{nameof(child)} can't accept NameSpaceElement");
+			if (child is NameSpaceElement)
+				throw new ArgumentException($"{nameof(child)} can't accept NameSpaceElement");
 
 			if (child is IQualified id)
 			{

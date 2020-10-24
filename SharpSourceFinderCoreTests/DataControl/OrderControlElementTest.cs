@@ -2,7 +2,6 @@ using System.Linq;
 using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore.DataControl;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace SharpSourceFinderCoreTests.DataControl
 {
@@ -52,7 +51,8 @@ namespace SharpSourceFinderCoreTests.DataControl
 
 		private static OrderControlElement<string>[] GenerateSample()
 		{
-			var ret = Enumerable.Range(0, 4).Select(i => new OrderControlElement<string> {Value = i.ToString()}).ToArray();
+			var ret = Enumerable.Range(0, 4).Select(i => new OrderControlElement<string> {Value = i.ToString()})
+				.ToArray();
 
 			var piv = ret[0];
 
@@ -74,13 +74,12 @@ namespace SharpSourceFinderCoreTests.DataControl
 			verify(1, 2);
 			verify(2, 3);
 			ret[3].BehindElement.IsNull();
-			
 
 
 			return ret;
 		}
 
-		static void Verify<T>(OrderControlElement<T> ahead, OrderControlElement<T> behind) where T:class
+		static void Verify<T>(OrderControlElement<T> ahead, OrderControlElement<T> behind) where T : class
 		{
 			ahead.BehindElement.IsSameReferenceAs(behind);
 			behind.AheadElement.IsSameReferenceAs(ahead);
@@ -109,13 +108,9 @@ namespace SharpSourceFinderCoreTests.DataControl
 			samples[3].MoveToAhead(samples[0]);
 
 			samples[3].AheadElement.IsNull();
-			Verify(samples[3],samples[0]);
+			Verify(samples[3], samples[0]);
 			Verify(samples[0], samples[1]);
-
 		}
-
-
-
 
 
 		[Trait("TestLayer", TraitName)]
@@ -133,7 +128,8 @@ namespace SharpSourceFinderCoreTests.DataControl
 			actual.BehindElement.IsNull();
 			actual.AheadElement.IsSameReferenceAs(pivot);
 
-			var ary = Enumerable.Range(1, 4).Select(i => new OrderControlElement<string> {Value = i.ToString()}).ToArray();
+			var ary = Enumerable.Range(1, 4).Select(i => new OrderControlElement<string> {Value = i.ToString()})
+				.ToArray();
 
 			for (int i = 0; i < ary.Length - 1; i++) ary[i].AddToBehind(ary[i + 1]);
 

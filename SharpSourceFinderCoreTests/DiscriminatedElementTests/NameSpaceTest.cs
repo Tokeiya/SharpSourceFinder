@@ -142,7 +142,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			GenerateChildrenSample()
 		{
 			var sample = new NameSpaceElement(new PhysicalStorage(PathA));
-			var expected = new[] {new NameSpaceElement(sample), new NameSpaceElement(sample), new NameSpaceElement(sample)};
+			var expected = new[]
+				{new NameSpaceElement(sample), new NameSpaceElement(sample), new NameSpaceElement(sample)};
 
 			yield return (sample, expected);
 		}

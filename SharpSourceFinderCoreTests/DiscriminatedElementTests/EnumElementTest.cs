@@ -172,7 +172,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
 			bool isSealed, bool isUnsafe,
 			bool isPartial, bool isStatic, string identity,
-			out (IPhysicalStorage expectedStorage, NameSpaceElement expectedNameSpace, IQualified expectedIdentity, EnumElement
+			out (IPhysicalStorage expectedStorage, NameSpaceElement expectedNameSpace, IQualified expectedIdentity,
+				EnumElement
 				sample)
 				generated)
 		{

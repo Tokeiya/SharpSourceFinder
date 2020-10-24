@@ -36,7 +36,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 		protected abstract bool TryGenerate(string path, string nameSpace, ScopeCategories scope, bool isAbstract,
 			bool isSealed, bool isUnsafe, bool isPartial, bool isStatic, string identity,
-			out (IPhysicalStorage expectedStorage, NameSpaceElement expectedNameSpace, IQualified expectedIdentity, T sample)
+			out (IPhysicalStorage expectedStorage, NameSpaceElement expectedNameSpace, IQualified expectedIdentity, T
+				sample)
 				generated);
 
 
