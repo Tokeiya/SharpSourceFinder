@@ -68,8 +68,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 				while (accum.Count != 0)
 				{
-					var (cat, nme) = accum.Pop();
-					_ = new IdentityElement(ret, cat, nme);
+					var (scope,cat, nme) = accum.Pop();
+					_ = new IdentityElement(ret,scope, cat, nme);
 				}
 
 				return ret;
@@ -81,9 +81,9 @@ namespace Tokeiya3.SharpSourceFinderCore
 			}
 		}
 
-		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
+		public override void AggregateIdentities(Stack<(ScopeCategories scope, IdentityCategories category, string identity)> accumulator)
 		{
-			foreach (var elem in TypedChildren.Reverse()) accumulator.Push((elem.Category, elem.Name));
+			foreach (var elem in TypedChildren.Reverse()) accumulator.Push((ScopeCategories.Public, elem.Category, elem.Name));
 		}
 
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)

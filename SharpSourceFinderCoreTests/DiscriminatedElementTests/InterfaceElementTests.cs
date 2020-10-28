@@ -153,9 +153,9 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			AttachName(sample, "ISample");
 
 			var expected = new QualifiedElement();
-			_ = new IdentityElement(expected, IdentityCategories.Namespace, "NameSpace");
-			_ = new IdentityElement(expected, IdentityCategories.Class, "Class");
-			_ = new IdentityElement(expected, IdentityCategories.Interface, "ISample");
+			_ = new IdentityElement(expected,ScopeCategories.Public, IdentityCategories.Namespace, "NameSpace");
+			_ = new IdentityElement(expected, ScopeCategories.Public,IdentityCategories.Class, "Class");
+			_ = new IdentityElement(expected,ScopeCategories.Public, IdentityCategories.Interface, "ISample");
 
 
 			yield return (sample, expected);
@@ -165,17 +165,17 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			actual.IsEquivalentTo(expected).IsTrue();
 
 		protected override
-			IEnumerable<(InterfaceElement sample, Stack<(IdentityCategories category, string identity)> expected)>
+			IEnumerable<(InterfaceElement sample, Stack<(ScopeCategories scope,IdentityCategories category, string identity)> expected)>
 			GenerateAggregateIdentitiesSample()
 		{
 			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			AttachName(ns, NameSpaceA);
 
-			var sample = new InterfaceElement(ns, ScopeCategories.Public, false, false);
+			var sample = new InterfaceElement(ns, ScopeCategories.Internal, false, false);
 			AttachName(sample, "ISample");
 
-			var expected = new Stack<(IdentityCategories, string)>();
-			expected.Push((IdentityCategories.Interface, "ISample"));
+			var expected = new Stack<(ScopeCategories scope,IdentityCategories, string)>();
+			expected.Push((ScopeCategories.Internal, IdentityCategories.Interface, "ISample"));
 
 			yield return (sample, expected);
 		}

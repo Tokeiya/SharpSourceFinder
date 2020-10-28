@@ -221,21 +221,21 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 
 		protected override
-			IEnumerable<(NameSpaceElement sample, Stack<(IdentityCategories category, string identity)> expected)>
+			IEnumerable<(NameSpaceElement sample, Stack<(ScopeCategories scope,IdentityCategories category, string identity)> expected)>
 			GenerateAggregateIdentitiesSample()
 		{
 			var sample = new NameSpaceElement();
 			var nme = new QualifiedElement(sample);
 
-			var expected = new Stack<(IdentityCategories category, string identity)>();
+			var expected = new Stack<(ScopeCategories,IdentityCategories category, string identity)>();
 
 			yield return (sample, expected);
 
 			_ = new IdentityElement(nme, "Hoge");
 			_ = new IdentityElement(nme, "Piyo");
 
-			expected.Push((IdentityCategories.Namespace, "Piyo"));
-			expected.Push((IdentityCategories.Namespace, "Hoge"));
+			expected.Push((ScopeCategories.Public,IdentityCategories.Namespace, "Piyo"));
+			expected.Push((ScopeCategories.Public,IdentityCategories.Namespace, "Hoge"));
 
 			yield return (sample, expected);
 
@@ -247,8 +247,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 			expected.Count.Is(0);
 
-			expected.Push((IdentityCategories.Namespace, "Bar"));
-			expected.Push((IdentityCategories.Namespace, "Foo"));
+			expected.Push((ScopeCategories.Public,IdentityCategories.Namespace, "Bar"));
+			expected.Push((ScopeCategories.Public, IdentityCategories.Namespace, "Foo"));
 
 			yield return (sample, expected);
 		}

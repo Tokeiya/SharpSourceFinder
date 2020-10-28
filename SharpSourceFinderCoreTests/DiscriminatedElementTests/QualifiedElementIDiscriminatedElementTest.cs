@@ -30,9 +30,9 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var y = new QualifiedElement();
 			var z = new QualifiedElement();
 
-			_ = new IdentityElement(x, IdentityCategories.Namespace, "Hoge");
-			_ = new IdentityElement(y, IdentityCategories.Namespace, "Hoge");
-			_ = new IdentityElement(z, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(x,ScopeCategories.Public, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(y, ScopeCategories.Public,IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(z, ScopeCategories.Public,IdentityCategories.Namespace, "Hoge");
 
 			yield return (x, y, z);
 
@@ -52,15 +52,15 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var x = new QualifiedElement();
 			var y = new QualifiedElement();
 
-			_ = new IdentityElement(x, IdentityCategories.Namespace, "Hoge");
-			_ = new IdentityElement(y, IdentityCategories.Class, "Hoge");
+			_ = new IdentityElement(x,ScopeCategories.Public, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(y, ScopeCategories.Public, IdentityCategories.Class, "Hoge");
 			yield return (x, y);
 
 			x = new QualifiedElement();
 			y = new QualifiedElement();
 
-			_ = new IdentityElement(x, IdentityCategories.Namespace, "Hoge");
-			_ = new IdentityElement(y, IdentityCategories.Namespace, "hoge");
+			_ = new IdentityElement(x,ScopeCategories.Public, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(y,ScopeCategories.Public, IdentityCategories.Namespace, "hoge");
 			yield return (x, y);
 
 
@@ -91,9 +91,9 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var y = new QualifiedElement();
 			var z = new QualifiedElement();
 
-			_ = new IdentityElement(x, IdentityCategories.Namespace, "Hoge");
-			_ = new IdentityElement(y, IdentityCategories.Namespace, "Hoge");
-			_ = new IdentityElement(z, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(x,ScopeCategories.Public, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(y,ScopeCategories.Public, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(z,ScopeCategories.Public, IdentityCategories.Namespace, "Hoge");
 
 			yield return (x, y, z);
 
@@ -158,8 +158,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var sample = new QualifiedElement();
 			var expected = new[]
 			{
-				new IdentityElement(sample, IdentityCategories.Namespace, "Foo"),
-				new IdentityElement(sample, IdentityCategories.Namespace, "Bar")
+				new IdentityElement(sample,ScopeCategories.Public, IdentityCategories.Namespace, "Foo"),
+				new IdentityElement(sample,ScopeCategories.Public, IdentityCategories.Namespace, "Bar")
 			};
 
 			yield return (sample, expected);
@@ -171,8 +171,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override IEnumerable<(QualifiedElement sample, IQualified expected)> GenerateQualifiedNameSample()
 		{
 			var sample = new QualifiedElement();
-			_ = new IdentityElement(sample, IdentityCategories.Namespace, "Foo");
-			_ = new IdentityElement(sample, IdentityCategories.Namespace, "Bar");
+			_ = new IdentityElement(sample,ScopeCategories.Public, IdentityCategories.Namespace, "Foo");
+			_ = new IdentityElement(sample,ScopeCategories.Public, IdentityCategories.Namespace, "Bar");
 
 			yield return (sample, sample);
 
@@ -185,8 +185,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			_ = new IdentityElement(q, "Bottom");
 
 			var expected = new QualifiedElement();
-			_ = new IdentityElement(expected, IdentityCategories.Namespace, "Upper");
-			_ = new IdentityElement(expected, IdentityCategories.Namespace, "Bottom");
+			_ = new IdentityElement(expected,ScopeCategories.Public, IdentityCategories.Namespace, "Upper");
+			_ = new IdentityElement(expected,ScopeCategories.Public, IdentityCategories.Namespace, "Bottom");
 
 			yield return (q, expected);
 		}
@@ -207,16 +207,16 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		}
 
 		protected override
-			IEnumerable<(QualifiedElement sample, Stack<(IdentityCategories category, string identity)> expected)>
+			IEnumerable<(QualifiedElement sample, Stack<(ScopeCategories scope, IdentityCategories category, string identity)> expected)>
 			GenerateAggregateIdentitiesSample()
 		{
 			var sample = new QualifiedElement();
-			_ = new IdentityElement(sample, IdentityCategories.Namespace, "NameSpace");
-			_ = new IdentityElement(sample, IdentityCategories.Class, "Class");
+			_ = new IdentityElement(sample,ScopeCategories.Public, IdentityCategories.Namespace, "NameSpace");
+			_ = new IdentityElement(sample,ScopeCategories.Internal, IdentityCategories.Class, "Class");
 
-			var expected = new Stack<(IdentityCategories, string)>();
-			expected.Push((IdentityCategories.Class, "Class"));
-			expected.Push((IdentityCategories.Namespace, "NameSpace"));
+			var expected = new Stack<(ScopeCategories,IdentityCategories, string)>();
+			expected.Push((ScopeCategories.Internal,IdentityCategories.Class, "Class"));
+			expected.Push((ScopeCategories.Public,IdentityCategories.Namespace, "NameSpace"));
 
 			yield return (sample, expected);
 
@@ -227,8 +227,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			_ = new IdentityElement(sample, "No2");
 
 
-			expected.Push((IdentityCategories.Namespace, "No2"));
-			expected.Push((IdentityCategories.Namespace, "No1"));
+			expected.Push((ScopeCategories.Public,IdentityCategories.Namespace, "No2"));
+			expected.Push((ScopeCategories.Public,IdentityCategories.Namespace, "No1"));
 
 			yield return (sample, expected);
 		}
@@ -242,8 +242,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 			void act(QualifiedElement parent)
 			{
-				expected.Add(new IdentityElement(parent, IdentityCategories.Namespace, "Ns"));
-				expected.Add(new IdentityElement(parent, IdentityCategories.Class, "Cls"));
+				expected.Add(new IdentityElement(parent,ScopeCategories.Public, IdentityCategories.Namespace, "Ns"));
+				expected.Add(new IdentityElement(parent, ScopeCategories.Public,IdentityCategories.Class, "Cls"));
 			}
 
 			yield return (sample, expected, act);
@@ -253,7 +253,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		{
 			var sample = new QualifiedElement();
 			IDiscriminatedElement err =
-				new IdentityElement(new QualifiedElement(), IdentityCategories.Namespace, "Err");
+				new IdentityElement(new QualifiedElement(),ScopeCategories.Public, IdentityCategories.Namespace, "Err");
 			yield return (sample, err);
 
 			err = new NameSpaceElement(new PhysicalStorage(PathA));

@@ -8,7 +8,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 {
 	public sealed class IdentityElement : TerminalElement, IIdentity
 	{
-		public IdentityElement(QualifiedElement from, IdentityCategories category, string name) : base(from)
+		public IdentityElement(QualifiedElement from,ScopeCategories scope, IdentityCategories category, string name) : base(from)
 		{
 			if (!category.IsDefined()) throw new ArgumentException($"{nameof(category)} is unexpected value");
 			Category = category;
@@ -46,6 +46,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public int Order { get; internal set; }
 
 		public IdentityCategories Category { get; }
+
+		public ScopeCategories Scope { get; }
 		public string Name { get; }
 		public IQualified From => (IQualified) Parent;
 
@@ -65,8 +67,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 				while (accum.Count != 0)
 				{
-					var (category, name) = accum.Pop();
-					_ = new IdentityElement(ret, category, name);
+					var (scope,category, name) = accum.Pop();
+					_ = new IdentityElement(ret,scope, category, name);
 				}
 
 				return ret;
@@ -78,8 +80,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 			}
 		}
 
-		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator) =>
-			accumulator.Push((Category, Name));
+		public override void AggregateIdentities(Stack<(ScopeCategories scope,IdentityCategories category, string identity)> accumulator) =>
+			accumulator.Push((Scope,Category, Name));
 
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)
 		{

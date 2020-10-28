@@ -21,10 +21,12 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override IEnumerable<(IIdentity x, IIdentity y, IIdentity z)> GenerateTransitiveSample()
 		{
 			foreach (var elem in FastEnum.GetValues<IdentityCategories>())
+			foreach (var scope in FastEnum.GetValues<ScopeCategories>())
 			{
-				var x = new IdentityElement(new QualifiedElement(), elem, elem.ToString());
-				var y = new IdentityElement(new QualifiedElement(), elem, elem.ToString());
-				var z = new IdentityElement(new QualifiedElement(), elem, elem.ToString());
+
+				var x = new IdentityElement(new QualifiedElement(), scope, elem, scope.ToString() + elem.ToString());
+				var y = new IdentityElement(new QualifiedElement(), scope, elem, scope.ToString() + elem.ToString());
+				var z = new IdentityElement(new QualifiedElement(), scope, elem, scope.ToString() + elem.ToString());
 
 				yield return (x, y, z);
 			}
@@ -33,29 +35,34 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override IEnumerable<(IIdentity x, IIdentity y)> GenerateInEquivalentSample()
 		{
 			var q = new QualifiedElement();
-			var x = new IdentityElement(q, IdentityCategories.Namespace, "Hoge");
-			var y = new IdentityElement(q, IdentityCategories.Namespace, "Hoge");
+			var x = new IdentityElement(q, ScopeCategories.Public,IdentityCategories.Namespace, "Hoge");
+			var y = new IdentityElement(q, ScopeCategories.Public,IdentityCategories.Namespace, "Hoge");
 			yield return (x, y);
 
-			x = new IdentityElement(new QualifiedElement(), IdentityCategories.Namespace, "Hoge");
-			y = new IdentityElement(new QualifiedElement(), IdentityCategories.Class, "Hoge");
+			x = new IdentityElement(new QualifiedElement(), ScopeCategories.Public,IdentityCategories.Namespace, "Hoge");
+			y = new IdentityElement(new QualifiedElement(), ScopeCategories.Public,IdentityCategories.Class, "Hoge");
 
 			yield return (x, y);
 
-			x = new IdentityElement(new QualifiedElement(), IdentityCategories.Class, "Foo");
-			y = new IdentityElement(new QualifiedElement(), IdentityCategories.Class, "Bar");
+			x = new IdentityElement(new QualifiedElement(), ScopeCategories.Public,IdentityCategories.Class, "Foo");
+			y = new IdentityElement(new QualifiedElement(),ScopeCategories.Public, IdentityCategories.Class, "Bar");
 			yield return (x, y);
+
+			x = new IdentityElement(new QualifiedElement(), ScopeCategories.Internal, IdentityCategories.Class, "Foo");
+			y = new IdentityElement(new QualifiedElement(), ScopeCategories.Public, IdentityCategories.Class, "Foo");
+			yield return (x, y);
+
 		}
 
 
 		protected override
-			IEnumerable<(IIdentity sample, string expectedName, IdentityCategories expectedCategory, IQualified
+			IEnumerable<(IIdentity sample, string expectedName,ScopeCategories expectedScope, IdentityCategories expectedCategory, IQualified
 				expectedFrom)> GenerateSample()
 		{
 			var q = new QualifiedElement();
-			var sample = new IdentityElement(q, IdentityCategories.Class, "Hoge");
+			var sample = new IdentityElement(q, ScopeCategories.Public,IdentityCategories.Class, "Hoge");
 
-			yield return (sample, "Hoge", IdentityCategories.Class, q);
+			yield return (sample, "Hoge", ScopeCategories.Public,IdentityCategories.Class, q);
 		}
 
 		protected override IEnumerable<(IIdentity sample, int expected)> GenerateOrderSample()
@@ -63,10 +70,10 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var q = new QualifiedElement();
 			return new (IIdentity sample, int expected)[]
 			{
-				(new IdentityElement(q, IdentityCategories.Class, "Foo"), 1),
-				(new IdentityElement(q, IdentityCategories.Class, "Bar"), 2),
-				(new IdentityElement(q, IdentityCategories.Struct, "Hoge"), 3),
-				(new IdentityElement(new QualifiedElement(), IdentityCategories.Namespace, "Hoge"), 1)
+				(new IdentityElement(q, ScopeCategories.Public,IdentityCategories.Class, "Foo"), 1),
+				(new IdentityElement(q, ScopeCategories.Public,IdentityCategories.Class, "Bar"), 2),
+				(new IdentityElement(q, ScopeCategories.Public,IdentityCategories.Struct, "Hoge"), 3),
+				(new IdentityElement(new QualifiedElement(), ScopeCategories.Public,IdentityCategories.Namespace, "Hoge"), 1)
 			};
 		}
 	}

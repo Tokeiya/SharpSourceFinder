@@ -15,6 +15,6 @@ namespace Tokeiya3.SharpSourceFinderCore
 		IEnumerable<IDiscriminatedElement> Descendants();
 		IEnumerable<IDiscriminatedElement> DescendantsAndSelf();
 		QualifiedElement GetQualifiedName();
-		void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator);
+		void AggregateIdentities(Stack<(ScopeCategories scope, IdentityCategories category, string identity)> accumulator);
 	}
 }

@@ -99,7 +99,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 
 		protected abstract
-			IEnumerable<(IIdentity sample, string expectedName, IdentityCategories expectedCategory, IQualified
+			IEnumerable<(IIdentity sample, string expectedName,ScopeCategories expectedScope, IdentityCategories expectedCategory, IQualified
 				expectedFrom)> GenerateSample();
 
 
@@ -109,7 +109,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		{
 			GenerateSample().Any().IsTrue();
 
-			foreach (var (sample, expected, _, _) in GenerateSample()) sample.Name.Is(expected);
+			foreach (var (sample, expected,_, _, _) in GenerateSample()) sample.Name.Is(expected);
 		}
 
 		[Trait("TestLayer", nameof(IIdentity))]
@@ -118,7 +118,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		{
 			GenerateSample().Any().IsTrue();
 
-			foreach (var (sample, _, expected, _) in GenerateSample()) sample.Category.Is(expected);
+			foreach (var (sample, _, _,expected, _) in GenerateSample()) sample.Category.Is(expected);
 		}
 
 		[Trait("TestLayer", nameof(IIdentity))]
@@ -127,8 +127,19 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		{
 			GenerateSample().IsNotEmpty();
 
-			foreach (var (sample, _, _, expected) in GenerateSample()) AreEqual(sample.From, expected);
+			foreach (var (sample, _, _,_, expected) in GenerateSample()) AreEqual(sample.From, expected);
 		}
+
+		[Trait("TestLayer", nameof(IIdentity))]
+		[Fact]
+		public void ScopeGetterTest()
+		{
+			GenerateSample().IsNotEmpty();
+
+			foreach (var (sample, _, expectedScope, _, _) in GenerateSample()) sample.Scope.Is(expectedScope);
+
+		}
+
 
 		protected abstract IEnumerable<(IIdentity sample, int expected)> GenerateOrderSample();
 

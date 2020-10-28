@@ -8,6 +8,8 @@
 		string Name { get; }
 		IQualified From { get; }
 
+		ScopeCategories Scope { get; }
+
 		bool IsEquivalentTo(IIdentity identity);
 	}
 }

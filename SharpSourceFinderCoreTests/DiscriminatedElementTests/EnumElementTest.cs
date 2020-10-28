@@ -111,8 +111,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			AttachName(sample, "Sample");
 
 			var expected = new QualifiedElement();
-			_ = new IdentityElement(expected, IdentityCategories.Namespace, NameSpaceA);
-			_ = new IdentityElement(expected, IdentityCategories.Enum, "Sample");
+			_ = new IdentityElement(expected, ScopeCategories.Public,IdentityCategories.Namespace, NameSpaceA);
+			_ = new IdentityElement(expected, ScopeCategories.Public,IdentityCategories.Enum, "Sample");
 
 			yield return (sample, expected);
 		}
@@ -122,7 +122,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 
 		protected override
-			IEnumerable<(EnumElement sample, Stack<(IdentityCategories category, string identity)> expected)>
+			IEnumerable<(EnumElement sample, Stack<(ScopeCategories scope,IdentityCategories category, string identity)> expected)>
 			GenerateAggregateIdentitiesSample()
 		{
 			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
@@ -131,8 +131,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var sample = new EnumElement(ns, ScopeCategories.Public);
 			AttachName(sample, "Sample");
 
-			var stack = new Stack<(IdentityCategories, string)>();
-			stack.Push((IdentityCategories.Enum, "Sample"));
+			var stack = new Stack<(ScopeCategories,IdentityCategories, string)>();
+			stack.Push((ScopeCategories.Public,IdentityCategories.Enum, "Sample"));
 
 			yield return (sample, stack);
 		}

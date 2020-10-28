@@ -331,7 +331,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 
 		protected abstract
-			IEnumerable<(T sample, Stack<(IdentityCategories category, string identity)>
+			IEnumerable<(T sample, Stack<(ScopeCategories scope,IdentityCategories category, string identity)>
 				expected)> GenerateAggregateIdentitiesSample();
 
 		[Fact]
@@ -339,8 +339,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		{
 			GenerateAggregateIdentitiesSample().Any().IsTrue();
 
-			var actual = new Stack<(IdentityCategories category, string identity)>();
-			foreach ((IDiscriminatedElement sample, Stack<(IdentityCategories category, string identity)> expected) in
+			var actual = new Stack<(ScopeCategories scope,IdentityCategories category, string identity)>();
+			foreach ((IDiscriminatedElement sample, Stack<(ScopeCategories scope,IdentityCategories category, string identity)> expected) in
 				GenerateAggregateIdentitiesSample())
 			{
 				actual.Count.Is(0);
@@ -358,7 +358,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 					// ReSharper restore UseDeconstruction
 #pragma warning restore IDE0042 // 変数の宣言を分解
 
-
+					a.scope.Is(e.scope);
 					a.category.Is(e.category);
 					a.identity.Is(e.identity);
 				}
