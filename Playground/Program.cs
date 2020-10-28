@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.CodeAnalysis.CSharp;
 using Tokeiya3.SharpSourceFinderCore;
+using Xunit;
 
 namespace Playground
 {
@@ -10,6 +11,17 @@ namespace Playground
 	{
 		static void Main()
 		{
+			var ns = new NameSpaceElement();
+			var q = new QualifiedElement(ns);
+			_ = new IdentityElement(q, "Name");
+
+			var cls = new ClassElement(ns, ScopeCategories.Internal, false, false, false, false, false);
+			q = new QualifiedElement(cls);
+			_ = new IdentityElement(q, "InternalClass");
+
+
+			var qualified = cls.GetQualifiedName();
+
 		}
 
 		private static void NewMethod()

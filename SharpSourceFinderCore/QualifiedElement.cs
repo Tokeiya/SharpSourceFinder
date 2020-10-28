@@ -83,7 +83,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public override void AggregateIdentities(Stack<(ScopeCategories scope, IdentityCategories category, string identity)> accumulator)
 		{
-			foreach (var elem in TypedChildren.Reverse()) accumulator.Push((ScopeCategories.Public, elem.Category, elem.Name));
+			foreach (var elem in TypedChildren.Reverse()) accumulator.Push((elem.Scope, elem.Category, elem.Name));
 		}
 
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)

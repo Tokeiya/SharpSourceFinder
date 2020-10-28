@@ -212,10 +212,10 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		{
 			var sample = new QualifiedElement();
 			_ = new IdentityElement(sample,ScopeCategories.Public, IdentityCategories.Namespace, "NameSpace");
-			_ = new IdentityElement(sample,ScopeCategories.Internal, IdentityCategories.Class, "Class");
+			_ = new IdentityElement(sample,ScopeCategories.Internal, IdentityCategories.Class, "InternalClass");
 
 			var expected = new Stack<(ScopeCategories,IdentityCategories, string)>();
-			expected.Push((ScopeCategories.Internal,IdentityCategories.Class, "Class"));
+			expected.Push((ScopeCategories.Internal,IdentityCategories.Class, "InternalClass"));
 			expected.Push((ScopeCategories.Public,IdentityCategories.Namespace, "NameSpace"));
 
 			yield return (sample, expected);

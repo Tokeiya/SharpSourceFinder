@@ -10,37 +10,40 @@ namespace Tokeiya3.SharpSourceFinderCore
 	{
 		public IdentityElement(QualifiedElement from,ScopeCategories scope, IdentityCategories category, string name) : base(from)
 		{
-			if (!category.IsDefined()) throw new ArgumentException($"{nameof(category)} is unexpected value");
+			if (!category.IsDefined()) throw new ArgumentException($"{nameof(category)}:{category} is unexpected value");
+			if (!scope.IsDefined()) throw new ArgumentException($"{nameof(scope)}:{scope} is unexpected value.");
 			Category = category;
 			Name = name;
+			Scope = scope;
 		}
 
 		public IdentityElement(QualifiedElement parent, string name) : base(parent)
 		{
 			var piv = parent.Parent;
-			IdentityCategories? cat = default;
+			(ScopeCategories scope, IdentityCategories category)? attr = default;
 
 			while (!(piv is ImaginaryRoot))
 			{
-				cat = piv switch
+				attr = piv switch
 				{
-					NameSpaceElement _ => IdentityCategories.Namespace,
-					ClassElement _ => IdentityCategories.Class,
-					StructElement _ => IdentityCategories.Struct,
-					InterfaceElement _ => IdentityCategories.Interface,
-					EnumElement _ => IdentityCategories.Enum,
-					DelegateElement _ => IdentityCategories.Delegate,
+					NameSpaceElement _ => (ScopeCategories.Public,IdentityCategories.Namespace),
+					ClassElement cls => (cls.Scope,IdentityCategories.Class),
+					StructElement str => (str.Scope,IdentityCategories.Struct),
+					InterfaceElement iface => (iface.Scope,IdentityCategories.Interface),
+					EnumElement e => (e.Scope,IdentityCategories.Enum),
+					DelegateElement d => (d.Scope,IdentityCategories.Delegate),
 					_ => null
 				};
 
 				piv = piv.Parent;
 
-				if (cat is null) continue;
+				if (attr is null) continue;
 				break;
 			}
 
 			Name = name;
-			Category = cat ?? throw new CategoryNotFoundException(name);
+			Category = attr?.category ?? throw new CategoryNotFoundException(name);
+			Scope = attr.Value.scope;
 		}
 
 		public int Order { get; internal set; }
@@ -52,7 +55,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public IQualified From => (IQualified) Parent;
 
 		public bool IsEquivalentTo(IIdentity identity) =>
-			(Name == identity.Name && Category == identity.Category && Order == identity.Order);
+			(Name == identity.Name && Scope == identity.Scope && Category == identity.Category &&
+			 Order == identity.Order);
 
 		public override QualifiedElement GetQualifiedName()
 		{
