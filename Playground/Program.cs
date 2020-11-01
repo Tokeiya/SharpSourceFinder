@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using FastEnumUtility;
 using Microsoft.CodeAnalysis.CSharp;
 using Tokeiya3.SharpSourceFinderCore;
 using Tokeiya3.StringManipulator;
@@ -12,9 +14,76 @@ namespace Playground
 {
 	class Program
 	{
+		public static string Encode(byte value)
+		{
+			if((value&8)!=0)
+			{
+				if((value&4)!=0)
+				{
+					if ((value & 2) != 0)
+					{
+						if ((value & 1) != 0) return "++++";
+						else return "+++-";
+					}
+					else
+					{
+						if ((value & 1) != 0) return "++-+";
+						else return "++--";
+					}
+				}
+				else
+				{
+					if ((value & 2) != 0)
+					{
+						if ((value & 1) != 0) return "+-++";
+						else return "+-+-";
+					}
+					else
+					{
+						if ((value & 1) != 0) return "+--+";
+						else return "+---";
+					}
+				}
+			}
+			else
+			{
+				if ((value & 4) != 0)
+				{
+					if ((value & 2) != 0)
+					{
+						if ((value & 1) != 0) return "-+++";
+						else return "-++-";
+					}
+					else
+					{
+						if ((value & 1) != 0) return "-+-+";
+						else return "-+--";
+					}
+				}
+				else
+				{
+					if ((value & 2) != 0)
+					{
+						if ((value & 1) != 0) return "--++";
+						else return "--+-";
+					}
+					else
+					{
+						if ((value & 1) != 0) return "---+";
+						else return "----";
+					}
+				}
+			}
+
+		}
+
+
 		static void Main()
 		{
-			NewMethod();
+			for (byte i = 0; i < 16; i++)
+			{
+				Console.WriteLine($"{i:00}:{Encode(i)}");
+			}
 		}
 
 		static StringBuilder bld = new StringBuilder();
@@ -34,15 +103,15 @@ namespace Playground
 				bld.Append('.');
 			}
 
-			yield return (parent, bld.ToString());
+			//yield return (parent, bld.Extract(..^1).ToString());
 		}
 
 		private static void NewMethod()
 		{
 			var builder = new DiscriminatedElementTreeBuilder();
-			using var wtr = new StreamWriter(@"C:\Users\net_s\OneDrive\LinqPad\RuntimeNamespace.tsv");
+			using var wtr = new StreamWriter(@"C:\Users\net_s\OneDrive\LinqPad\WinformsNamespace.tsv");
 
-			foreach (var file in Directory.EnumerateFiles(@"C:\Repos\runtime", "*.cs", SearchOption.AllDirectories))
+			foreach (var file in Directory.EnumerateFiles(@"C:\Repos\winforms", "*.cs", SearchOption.AllDirectories))
 				try
 				{
 					Console.WriteLine(file);
@@ -60,7 +129,7 @@ namespace Playground
 				{
 					Console.WriteLine();
 					Console.WriteLine(e);
-					Console.ReadLine();
+					//Console.ReadLine();
 				}
 		}
 	}
