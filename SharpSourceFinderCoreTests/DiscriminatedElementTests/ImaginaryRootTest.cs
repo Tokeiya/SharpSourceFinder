@@ -69,7 +69,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		[Fact]
 		public void AggregateIdentitiesTest()
 		{
-			var stack = new Stack<(IdentityCategories, string)>();
+			var stack = new Stack<(ScopeCategories, IdentityCategories, string)>();
 			ImaginaryRoot.Root.AggregateIdentities(stack);
 
 			stack.IsEmpty();

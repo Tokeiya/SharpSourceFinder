@@ -150,8 +150,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			_ = new IdentityElement(q, "Hoge");
 
 			var expected = new QualifiedElement();
-			_ = new IdentityElement(expected, IdentityCategories.Namespace, "Foo");
-			_ = new IdentityElement(expected, IdentityCategories.Class, "Hoge");
+			_ = new IdentityElement(expected, ScopeCategories.Public,IdentityCategories.Namespace, "Foo");
+			_ = new IdentityElement(expected, ScopeCategories.Public, IdentityCategories.Class, "Hoge");
 
 			yield return (sample, expected);
 		}
@@ -161,7 +161,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 
 
 		protected override
-			IEnumerable<(ClassElement sample, Stack<(IdentityCategories category, string identity)> expected)>
+			IEnumerable<(ClassElement sample, Stack<(ScopeCategories scope,IdentityCategories category, string identity)> expected)>
 			GenerateAggregateIdentitiesSample()
 		{
 			var storage = new PhysicalStorage(PathA);
@@ -173,8 +173,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			q = new QualifiedElement(sample);
 			_ = new IdentityElement(q, "Hoge");
 
-			var expected = new Stack<(IdentityCategories, string)>();
-			expected.Push((IdentityCategories.Class, "Hoge"));
+			var expected = new Stack<(ScopeCategories,IdentityCategories, string)>();
+			expected.Push((ScopeCategories.Public,IdentityCategories.Class, "Hoge"));
 
 			yield return (sample, expected);
 		}
@@ -212,7 +212,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var sample = new ClassElement(ns, ScopeCategories.Public, false, false, false, false, false);
 
 			var expected = new QualifiedElement();
-			_ = new IdentityElement(expected, IdentityCategories.Class, "Error");
+			_ = new IdentityElement(expected, ScopeCategories.Public,IdentityCategories.Class, "Error");
 
 			yield return (sample, expected);
 		}

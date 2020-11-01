@@ -1,10 +1,8 @@
 using System;
 using System.Linq;
-using System.Reflection;
 using ChainingAssertion;
 using Tokeiya3.SharpSourceFinderCore.DataControl;
 using Xunit;
-using Xunit.Abstractions;
 using static Xunit.Assert;
 
 namespace SharpSourceFinderCoreTests.DataControl
@@ -69,7 +67,6 @@ namespace SharpSourceFinderCoreTests.DataControl
 
 				if (i > 0) samples[i].AheadElement.IsSameReferenceAs(samples[i - 1]);
 				else samples[i].AheadElement.IsNull();
-
 			}
 		}
 
@@ -77,7 +74,6 @@ namespace SharpSourceFinderCoreTests.DataControl
 		[Fact]
 		public void GotoAhead()
 		{
-
 			var target = new OrderController<string>(4);
 			var samples = Enumerable.Range(0, 4)
 				.Select(i => target.Register((3 - i).ToString()).added).Reverse().ToArray();
@@ -92,7 +88,6 @@ namespace SharpSourceFinderCoreTests.DataControl
 
 				if (behind == -1) samples[idx].BehindElement.IsNull();
 				else samples[idx].BehindElement.IsSameReferenceAs(samples[behind]);
-				
 			}
 
 
@@ -114,7 +109,7 @@ namespace SharpSourceFinderCoreTests.DataControl
 			verify(3, 2, -1);
 
 
-			target = new OrderController<string>(2); 
+			target = new OrderController<string>(2);
 
 			//h-0-1-t
 			samples = Enumerable.Range(0, 2)
@@ -129,19 +124,17 @@ namespace SharpSourceFinderCoreTests.DataControl
 			target.GotoAhead(samples[1]);
 			verify(1, -1, 0);
 			verify(0, 1, -1);
-
 		}
 
 		[Trait("TestLayer", TraitName)]
 		[Fact]
 		public void BubbleUp()
 		{
-
 			var target = new OrderController<string>(4);
 			var samples = Enumerable.Range(0, 4)
 				.Select(i => target.Register((3 - i).ToString()).added).Reverse().ToArray();
 
-			void verify(int idx, int ahead,int behind)
+			void verify(int idx, int ahead, int behind)
 			{
 				var actual = samples[idx];
 				actual.Value.Is(idx.ToString());
@@ -157,8 +150,8 @@ namespace SharpSourceFinderCoreTests.DataControl
 			target.BubbleUp(samples[2]);
 			//h-0-2-1-3-h
 
-			verify(0,  -1, 2);
-			verify(2,  0, 1);
+			verify(0, -1, 2);
+			verify(2, 0, 1);
 			verify(1, 2, 3);
 			verify(3, 1, -1);
 
@@ -170,25 +163,19 @@ namespace SharpSourceFinderCoreTests.DataControl
 			verify(3, 1, -1);
 
 
-
 			target = new OrderController<string>(2);
 			samples = Enumerable.Range(0, 2)
 				.Select(i => target.Register((1 - i).ToString()).added).Reverse().ToArray();
 
 			target.BubbleUp(samples[1]);
 
-			verify(1,  -1, 0);
-			verify(0,  1, -1);
+			verify(1, -1, 0);
+			verify(0, 1, -1);
 
 			target.BubbleUp(samples[1]);
 
 			verify(1, -1, 0);
 			verify(0, 1, -1);
-
-
 		}
-
-
-
 	}
 }

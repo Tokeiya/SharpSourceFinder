@@ -34,8 +34,8 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var sample = new QualifiedElement();
 			var expected = new[]
 			{
-				new IdentityElement(sample, IdentityCategories.Namespace, "Hoge"),
-				new IdentityElement(sample, IdentityCategories.Namespace, "Piyo")
+				new IdentityElement(sample, ScopeCategories.Public,IdentityCategories.Namespace, "Hoge"),
+				new IdentityElement(sample, ScopeCategories.Public,IdentityCategories.Namespace, "Piyo")
 			};
 
 			yield return (sample, expected);
@@ -61,9 +61,9 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var y = new QualifiedElement();
 			var z = new QualifiedElement();
 
-			_ = new IdentityElement(x, IdentityCategories.Namespace, "Foo");
-			_ = new IdentityElement(y, IdentityCategories.Namespace, "Foo");
-			_ = new IdentityElement(z, IdentityCategories.Namespace, "Foo");
+			_ = new IdentityElement(x, ScopeCategories.Public,IdentityCategories.Namespace, "Foo");
+			_ = new IdentityElement(y,ScopeCategories.Public, IdentityCategories.Namespace, "Foo");
+			_ = new IdentityElement(z,ScopeCategories.Public, IdentityCategories.Namespace, "Foo");
 
 			yield return (x, y, z);
 
@@ -89,16 +89,24 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var x = new QualifiedElement();
 			var y = new QualifiedElement();
 
-			_ = new IdentityElement(x, IdentityCategories.Class, "Hoge");
-			_ = new IdentityElement(y, IdentityCategories.Delegate, "Hoge");
+			_ = new IdentityElement(x,ScopeCategories.Public, IdentityCategories.Class, "Hoge");
+			_ = new IdentityElement(y,ScopeCategories.Public, IdentityCategories.Delegate, "Hoge");
 			yield return (x, y);
 
 			x = new QualifiedElement();
 			y = new QualifiedElement();
 
-			_ = new IdentityElement(x, IdentityCategories.Namespace, "Hoge");
-			_ = new IdentityElement(y, IdentityCategories.Namespace, "hoge");
+			_ = new IdentityElement(x,ScopeCategories.Public, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(y,ScopeCategories.Public, IdentityCategories.Namespace, "hoge");
 			yield return (x, y);
+
+			x = new QualifiedElement();
+			y = new QualifiedElement();
+
+			_ = new IdentityElement(x, ScopeCategories.Public, IdentityCategories.Class, "Hoge");
+			_ = new IdentityElement(y, ScopeCategories.Internal, IdentityCategories.Class, "Hoge");
+			yield return (x, y);
+
 		}
 
 		[Trait("TestLayer", nameof(QualifiedElement))]
@@ -108,11 +116,11 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var x = new QualifiedElement();
 			var y = new QualifiedElement();
 
-			_ = new IdentityElement(x, IdentityCategories.Namespace, "Foo");
-			_ = new IdentityElement(y, IdentityCategories.Namespace, "Foo");
+			_ = new IdentityElement(x,ScopeCategories.Public, IdentityCategories.Namespace, "Foo");
+			_ = new IdentityElement(y,ScopeCategories.Public, IdentityCategories.Namespace, "Foo");
 
-			_ = new IdentityElement(x, IdentityCategories.Namespace, "Bar");
-			_ = new IdentityElement(y, IdentityCategories.Namespace, "Hoge");
+			_ = new IdentityElement(x,ScopeCategories.Public, IdentityCategories.Namespace, "Bar");
+			_ = new IdentityElement(y,ScopeCategories.Public, IdentityCategories.Namespace, "Hoge");
 
 			x.IsEquivalentTo(y, 1).IsTrue();
 			y.IsEquivalentTo(x, 1).IsTrue();

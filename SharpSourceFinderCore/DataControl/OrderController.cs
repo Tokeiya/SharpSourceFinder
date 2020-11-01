@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Tokeiya3.SharpSourceFinderCore.DataControl
 {
-	internal class OrderController<T> where T:class
+	internal class OrderController<T> where T : class
 	{
 		private OrderControlElement<T> _head;
 		private OrderControlElement<T> _tail;
@@ -30,7 +30,7 @@ namespace Tokeiya3.SharpSourceFinderCore.DataControl
 
 		public int Size { get; }
 
-		public (OrderControlElement<T> added,T? removed) Register(T value)
+		public (OrderControlElement<T> added, T? removed) Register(T value)
 		{
 			var removed = _tail.Value;
 			var tmp = _tail;
@@ -52,7 +52,7 @@ namespace Tokeiya3.SharpSourceFinderCore.DataControl
 
 		public void BubbleUp(OrderControlElement<T> element)
 		{
-			if(element.AheadElement is null) return;
+			if (element.AheadElement is null) return;
 
 			element.MoveToAhead(element.AheadElement);
 			if (element.AheadElement is null) _head = element;

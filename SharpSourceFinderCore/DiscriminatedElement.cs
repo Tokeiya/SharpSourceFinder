@@ -15,9 +15,9 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		protected DiscriminatedElement() => Parent = ImaginaryRoot.Root;
 
-		protected static ObjectPool<Stack<(IdentityCategories category, string name)>> StackPool { get; }
-			= new DefaultObjectPool<Stack<(IdentityCategories category, string name)>>(
-				new DefaultPooledObjectPolicy<Stack<(IdentityCategories category, string name)>>());
+		protected static ObjectPool<Stack<(ScopeCategories scope, IdentityCategories category, string name)>> StackPool { get; }
+			= new DefaultObjectPool<Stack<(ScopeCategories scope,IdentityCategories category, string name)>>(
+				new DefaultPooledObjectPolicy<Stack<(ScopeCategories scope,IdentityCategories category, string name)>>());
 
 		public IDiscriminatedElement Parent { get; }
 
@@ -64,7 +64,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 		public abstract QualifiedElement GetQualifiedName();
 
-		public abstract void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator);
+		public abstract void AggregateIdentities(Stack<(ScopeCategories scope, IdentityCategories category, string identity)> accumulator);
 
 
 		public abstract bool IsLogicallyEquivalentTo(IDiscriminatedElement other);

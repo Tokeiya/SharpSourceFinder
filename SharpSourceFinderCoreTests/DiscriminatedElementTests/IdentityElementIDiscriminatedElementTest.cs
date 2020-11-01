@@ -45,10 +45,10 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override IEnumerable<(IdentityElement x, IdentityElement y)> GenerateLogicallyInEquivalentSample()
 		{
 			var qx = new QualifiedElement();
-			var x = new IdentityElement(qx, IdentityCategories.Delegate, "Hoge");
+			var x = new IdentityElement(qx, ScopeCategories.Public,IdentityCategories.Delegate, "Hoge");
 
 			var qy = new QualifiedElement();
-			var y = new IdentityElement(qy, IdentityCategories.Class, "Hoge");
+			var y = new IdentityElement(qy, ScopeCategories.Public,IdentityCategories.Class, "Hoge");
 
 			yield return (x, y);
 		}
@@ -87,7 +87,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		protected override IEnumerable<(IdentityElement sample, IDiscriminatedElement expected)> GenerateParentSample()
 		{
 			var expected = new QualifiedElement();
-			var sample = new IdentityElement(expected, IdentityCategories.Class, "Hoge");
+			var sample = new IdentityElement(expected,ScopeCategories.Public, IdentityCategories.Class, "Hoge");
 
 			yield return (sample, expected);
 		}
@@ -140,7 +140,7 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			var sample = new IdentityElement(q, "Identity");
 
 			var expected = new QualifiedElement();
-			_ = new IdentityElement(expected, IdentityCategories.Namespace, "Identity");
+			_ = new IdentityElement(expected,ScopeCategories.Public, IdentityCategories.Namespace, "Identity");
 
 			yield return (sample, expected);
 		}
@@ -149,15 +149,15 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 			actual.IsEquivalentTo(expected).IsTrue();
 
 		protected override
-			IEnumerable<(IdentityElement sample, Stack<(IdentityCategories category, string identity)> expected)>
+			IEnumerable<(IdentityElement sample, Stack<(ScopeCategories scope,IdentityCategories category, string identity)> expected)>
 			GenerateAggregateIdentitiesSample()
 		{
 			var ns = new NameSpaceElement(new PhysicalStorage(PathA));
 			var q = new QualifiedElement(ns);
 			var sample = new IdentityElement(q, "Identity");
 
-			var expected = new Stack<(IdentityCategories, string)>();
-			expected.Push((IdentityCategories.Namespace, "Identity"));
+			var expected = new Stack<(ScopeCategories,IdentityCategories, string)>();
+			expected.Push((ScopeCategories.Public,IdentityCategories.Namespace, "Identity"));
 
 			yield return (sample, expected);
 		}
@@ -167,10 +167,10 @@ namespace SharpSourceFinderCoreTests.DiscriminatedElementTests
 		public void RegisterChildTest()
 		{
 			var q = new QualifiedElement();
-			var sample = new IdentityElement(q, IdentityCategories.Struct, "Foo");
+			var sample = new IdentityElement(q, ScopeCategories.Public,IdentityCategories.Struct, "Foo");
 
 			Assert.Throws<InvalidOperationException>(() =>
-				sample.RegisterChild(new IdentityElement(q, IdentityCategories.Struct, "foo")));
+				sample.RegisterChild(new IdentityElement(q, ScopeCategories.Public,IdentityCategories.Struct, "foo")));
 		}
 	}
 }

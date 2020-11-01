@@ -37,7 +37,7 @@ namespace Tokeiya3.SharpSourceFinderCore
 		public QualifiedElement GetQualifiedName() =>
 			throw new NotSupportedException($"{nameof(ImaginaryRoot)} isn't support this method or property.");
 
-		public void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
+		public void AggregateIdentities(Stack<(ScopeCategories scope, IdentityCategories category, string identity)> accumulator)
 		{
 		}
 

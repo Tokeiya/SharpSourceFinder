@@ -38,8 +38,8 @@ namespace Tokeiya3.SharpSourceFinderCore
 
 				while (stack.Count != 0)
 				{
-					var (category, name) = stack.Pop();
-					_ = new IdentityElement(ret, category, name);
+					var (scope,category, name) = stack.Pop();
+					_ = new IdentityElement(ret, scope,category, name);
 				}
 
 				return ret;
@@ -51,9 +51,9 @@ namespace Tokeiya3.SharpSourceFinderCore
 			}
 		}
 
-		public override void AggregateIdentities(Stack<(IdentityCategories category, string identity)> accumulator)
+		public override void AggregateIdentities(Stack<(ScopeCategories scope, IdentityCategories category, string identity)> accumulator)
 		{
-			foreach (var elem in Identity.Identities) accumulator.Push((elem.Category, elem.Name));
+			foreach (var elem in Identity.Identities) accumulator.Push((elem.Scope,elem.Category, elem.Name));
 		}
 
 		public override bool IsLogicallyEquivalentTo(IDiscriminatedElement other)

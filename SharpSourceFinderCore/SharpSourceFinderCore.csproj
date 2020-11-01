@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="DataControl\OneWayCache.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Remove="IDiscriminatedElement.cs~RF1beed8c2.TMP" />
 	</ItemGroup>
 
