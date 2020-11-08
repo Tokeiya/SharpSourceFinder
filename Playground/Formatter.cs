@@ -152,7 +152,7 @@ namespace Playground
 				writeField(isAbstract, bld);
 				writeField(isSealed, bld);
 				writeField(fullQualified, bld);
-				bld.Append(parent);
+				writeField(parent, bld);
 
 				writer.WriteLine(bld.Extract(..^1).ToString());
 
