@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.CodeAnalysis.CSharp;
 using Npgsql;
 using NpgsqlTypes;
 using Tokeiya3.SharpSourceFinderCore;
@@ -15,20 +16,21 @@ namespace Playground
 		public Record(string record)
 		{
 			var ary = record.Split('\t');
-			if (ary.Length != 11) throw new ArgumentException("Unexpected record format.");
+			if (ary.Length != 12) throw new ArgumentException("Unexpected record format.");
 
 			StoragePath = ary[0];
 
 			ScopeAsString = ary[1];
 			IdentityAsString = ary[2];
-			Name = ary[3];
-			IsUnsafe = bool.Parse(ary[4]);
-			IsPartial = bool.Parse(ary[5]);
-			IsStatic = bool.Parse(ary[6]);
-			IsAbstract = bool.Parse(ary[7]);
-			IsSealed = bool.Parse(ary[8]);
-			FullQualified = ary[9];
-			ParentQualified = ary[10];
+			Depth = int.Parse(ary[3]);
+			Name = ary[4];
+			IsUnsafe = bool.Parse(ary[5]);
+			IsPartial = bool.Parse(ary[6]);
+			IsStatic = bool.Parse(ary[7]);
+			IsAbstract = bool.Parse(ary[8]);
+			IsSealed = bool.Parse(ary[9]);
+			FullQualified = ary[10];
+			ParentQualified = ary[11];
 		}
 
 		public string StoragePath { get; }
@@ -61,6 +63,7 @@ namespace Playground
 
 		public string IdentityAsString { get; }
 
+		public int Depth { get; }
 		public string Name { get; }
 		public bool IsUnsafe { get; }
 		public bool IsPartial { get; }
@@ -74,14 +77,24 @@ namespace Playground
 	}
 	class Program
 	{
-		//storage_path	scope	type	name	is_unsafe	is_partial	is_static	is_abstract	is_sealed	full_qualified	parent_qualified
-		
+		//storage_path	scope	type	depth	name	
+		//is_unsafe	is_partial	is_static	is_abstract	is_sealed	full_qualified	parent_qualified
 
+		static void WriteTsv(string sourcePath,string outputPath)
+		{
+			using var writer = new StreamWriter(outputPath);
+
+			foreach (var file in Directory.EnumerateFiles(sourcePath,"*.cs", SearchOption.AllDirectories))
+			{
+				Console.WriteLine(file);
+				Formatter.Write(file, writer);
+			}
+		}
 
 		static void BulkInsert(NpgsqlConnection conn,string path)
 		{
 			using var writer = conn.BeginBinaryImport(
-				"copy runtime_raw(storage_path,scope,entity_type,name,is_unsafe,is_partial,is_static,is_abstract,is_sealed,full_qualified,parent) from stdin(format binary)");
+				"copy raw_runtime(storage_path,scope,entity_type,depth,name,is_unsafe,is_partial,is_static,is_abstract,is_sealed,full_qualified,parent) from stdin(format binary)");
 
 
 			var cnt = 0;
@@ -97,6 +110,7 @@ namespace Playground
 				writer.Write(cursor.StoragePath);
 				writer.Write(cursor.ScopeAsString);
 				writer.Write(cursor.IdentityAsString);
+				writer.Write(cursor.Depth, NpgsqlDbType.Integer);
 				writer.Write(cursor.Name);
 				writer.Write(cursor.IsUnsafe, NpgsqlDbType.Boolean);
 				writer.Write(cursor.IsPartial, NpgsqlDbType.Boolean);
@@ -114,13 +128,18 @@ namespace Playground
 
 		static void Main()
 		{
+			//WriteTsv(@"C:\Repos\runtime", @"C:\Users\net_s\OneDrive\LinqPad\runtime.tsv");
+			var bld = new NpgsqlConnectionStringBuilder
+			{
+				Host = "127.0.0.1",
+				Username = "tokeiya3",
+				Database = "recursive_survey"
+			};
 
+			using var connection = new NpgsqlConnection(bld.ToString());
+			connection.Open();
 
-			using var con = new NpgsqlConnection("Host=192.168.2.102;Username=tokeiya3;Database=sharp_source_finder");
-			con.Open();
-
-			BulkInsert(con, "G:\\runtime.tsv");
-
+			BulkInsert(connection, @"C:\Users\net_s\OneDrive\LinqPad\runtime.tsv");
 		}
 	}
 }

@@ -110,7 +110,7 @@ namespace Playground
 			}
 		}
 
-		static void GenerateRecord(string filepath, ScopeCategories scope, IdentityCategories entityCategory,
+		static void GenerateRecord(string filepath, ScopeCategories scope, IdentityCategories entityCategory,int depth,
 			string name, bool isUnsafe, bool isPartial, bool isStatic, bool isAbstract, bool isSealed,
 			string fullQualified, string parent,StreamWriter writer)
 		{
@@ -145,6 +145,7 @@ namespace Playground
 				writeField(filepath, bld);
 				writeField(encodeScope(scope), bld);
 				writeField(encodeCategory(entityCategory), bld);
+				writeField(depth, bld);
 				writeField(name, bld);
 				writeField(isUnsafe, bld);
 				writeField(isPartial, bld);
@@ -165,9 +166,9 @@ namespace Playground
 
 		static void GenerateRecord(string filePath, NameSpaceElement element, StreamWriter writer)
 		{
-			static void proc(string path, string name, IEnumerable<IIdentity> identity,
+			static void proc(string path, string name, IEnumerable<IIdentity> identity,int depth,
 				IEnumerable<IIdentity> parent, StreamWriter wtr) => GenerateRecord(path, ScopeCategories.Public,
-				IdentityCategories.Namespace, name, false, true, false, false, false, GenerateQualifiedText(identity),
+				IdentityCategories.Namespace,depth, name, false, true, false, false, false, GenerateQualifiedText(identity),
 				GenerateQualifiedText(parent), wtr);
 
 			var identities = element.Identity.Identities;
@@ -180,7 +181,7 @@ namespace Playground
 
 			for (int i = 0; i < identities.Count; i++)
 			{
-				proc(filePath, identities[i].Name, parent.Concat(identities.Take(i + 1)),
+				proc(filePath, identities[i].Name, parent.Concat(identities.Take(i + 1)),i+1,
 					parent.Concat(identities.Take(i)), writer);
 			}
 
@@ -202,7 +203,7 @@ namespace Playground
 			var tmp = element.GetQualifiedName().Identities;
 
 
-			GenerateRecord(filePath, element.Scope, cat, element.Identity.Identities[0].Name, element.IsUnsafe,
+			GenerateRecord(filePath, element.Scope, cat,tmp.Count, element.Identity.Identities[0].Name, element.IsUnsafe,
 				element.IsPartial, element.IsStatic, element.IsAbstract, element.IsSealed, GenerateQualifiedText(tmp), GenerateQualifiedText(tmp.Take(tmp.Count - 1)), writer);
 		}
 
@@ -210,7 +211,7 @@ namespace Playground
 
 		public static void Write(string filePath,StreamWriter writer)
 		{
-			//storage_path	scope	type	name	is_unsafe	is_partial	is_static	is_abstract	is_sealed	full_qualified	parent_qualified
+			//storage_path	scope	type	depth	name	is_unsafe	is_partial	is_static	is_abstract	is_sealed	full_qualified	parent_qualified
 			var bld = TreeBuilderPool.Get();
 
 
