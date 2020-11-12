@@ -128,18 +128,18 @@ namespace Playground
 
 		static void Main()
 		{
-			//WriteTsv(@"C:\Repos\runtime", @"C:\Users\net_s\OneDrive\LinqPad\runtime.tsv");
+			//WriteTsv(@"H:\runtime", @"G:\runtime.tsv");
 			var bld = new NpgsqlConnectionStringBuilder
 			{
-				Host = "127.0.0.1",
+				Host = "192.168.2.102",
 				Username = "tokeiya3",
-				Database = "recursive_survey"
+				Database = "sharp_source_finder"
 			};
 
 			using var connection = new NpgsqlConnection(bld.ToString());
 			connection.Open();
 
-			BulkInsert(connection, @"C:\Users\net_s\OneDrive\LinqPad\runtime.tsv");
+			BulkInsert(connection, @"G:\runtime.tsv");
 		}
 	}
 }
