@@ -1,24 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<RootNamespace>Tokeiya3.SharpSourceFinderCore</RootNamespace>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <Compile Remove="DataControl\OneWayCache.cs" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<None Remove="IDiscriminatedElement.cs~RF1beed8c2.TMP" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FastEnum" Version="1.5.3" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.7.0" />
-		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="3.1.9" />
-		<PackageReference Include="Npgsql" Version="4.1.5" />
+		<PackageReference Include="FastEnum" Version="1.5.4" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0-5.final" />
+		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="5.0.0" />
+		<PackageReference Include="Npgsql" Version="5.0.0-preview1" />
 		<PackageReference Include="StringManipulator" Version="0.1.1" />
 	</ItemGroup>
 

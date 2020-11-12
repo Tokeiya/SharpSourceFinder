@@ -1,4 +1,0 @@
-﻿namespace NameSpace.Hoge.Moge
-{
-
-}

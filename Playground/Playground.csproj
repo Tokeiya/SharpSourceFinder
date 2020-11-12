@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
@@ -15,18 +15,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="ParseSample.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="ParseSample.cs">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="FastEnum" Version="1.5.3" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.7.0" />
+		<PackageReference Include="FastEnum" Version="1.5.4" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0-5.final" />
 		<PackageReference Include="StringManipulator" Version="0.1.1" />
 	</ItemGroup>
 

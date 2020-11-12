@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
@@ -11,49 +11,14 @@
 	  <Compile Remove="EquivalentTestHelperTest.cs" />
 	  <Compile Remove="InspectionOfEquatabilityTester.cs" />
 	  <Compile Remove="Mock.cs" />
-	  <Compile Remove="Samples\ClassSamples.cs" />
-	  <Compile Remove="Samples\DelegateSamples.cs" />
-	  <Compile Remove="Samples\EnumSamples.cs" />
-	  <Compile Remove="Samples\InterfaceSamples.cs" />
-	  <Compile Remove="Samples\MultiNameSpace.cs" />
-	  <Compile Remove="Samples\NameSpaceOnly.cs" />
-	  <Compile Remove="Samples\NestedNamespace.cs" />
-	  <Compile Remove="Samples\StructSamples.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="Samples\ClassSamples.cs">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Samples\DelegateSamples.cs">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Samples\EnumSamples.cs">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Samples\InterfaceSamples.cs">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Samples\MultiNameSpace.cs">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Samples\NameSpaceOnly.cs">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Samples\NestedNamespace.cs">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Samples\StructSamples.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="ChainingAssertion.Core.Xunit" Version="1.1.0" />
-		<PackageReference Include="FastEnum" Version="1.5.3" />
+		<PackageReference Include="FastEnum" Version="1.5.4" />
 		<PackageReference Include="JetBrains.DotMemoryUnit" Version="3.1.20200127.214830" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
-		<PackageReference Include="System.Interactive" Version="4.1.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.0-preview-20201020-06" />
+		<PackageReference Include="System.Interactive" Version="5.0.0" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
 		  <PrivateAssets>all</PrivateAssets>
